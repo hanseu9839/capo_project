@@ -11,9 +11,10 @@ services: #이 항목 밑에 실행하려는 컨테이너들을 정의
       MYSQL_ROOT_HOST: '%' # MYSQL HOST
       MYSQL_ROOT_PASSWORD: "@Q1w2e3r4" # MYSQL 패스퉈읃 설정 옵션
       TZ: "Asia/Seoul"
-    command: tail -f /dev/null # 명령어 실행
+    command:  # 명령어 실행
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+      - --tail -f /dev/null
     volumes:
       - /home/ubuntu/docker/data/mysql:/var/lib/mysql # -v 옵션 (디렉토리 마운트 설정)
 
