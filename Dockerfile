@@ -1,4 +1,4 @@
-FROM ubuntu:22.0.4
+FROM openjdk:11-jdk
 LABEL maintainer="hanseu9839@gmail.com"
 ARG JAR_FILE=build/libs/project-0.0.1-SNAPSHOT.jar
 ADD ${JAR_FILE} docker-realworld.jar
