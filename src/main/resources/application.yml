@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    default: dev # 기본 환경 설정을 dev로 설정한다.
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://129.154.62.23:3306/real_world?serverTimezone=UTC&characterEncoding=UTF-8 # 추후 암호화 예정
+    username: real_world
+    password: 1234 # 추후 encrypt를 사용하여 암호화할 예정
+
+  jpa:
+      open-in-view: false
+      show-sql: true
+      hibernate:
+        format_sql: true
+        ddl-auto: create
+
+  logging:
+    level:
+      org:
+        hibernate:
+          SQL: DEBUG
+          type:
+            descriptor:
+              sql:
+                BasicBinder: TRACE
+
+
