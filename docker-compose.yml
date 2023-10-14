@@ -1,16 +1,5 @@
 version: "3" # 파일 규격 버전
 services: #이 항목 밑에 실행하려는 컨테이너들을 정의
-  web:
-    container_name: nginx #컨테이너 이름
-    image: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - real_world
-    networks:
-      - real_world_network
   mysql: # 서비스 명
     image: mysql/mysql-server:8.0.23 #사용할 이미지
     container_name: real_world # 컨테이너 이름 설정
