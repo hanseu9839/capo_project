@@ -4,7 +4,7 @@ COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-RUN chmod +x ./gradlew
+RUN chmod+x ./gradlew
 RUN ./gradlew bootJar
 
 FROM --platform=linux/amd64 eclipse-temurin:17
