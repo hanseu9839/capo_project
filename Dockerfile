@@ -1,14 +1,5 @@
-FROM --platform=linux/amd64 eclipse-temurin:17 AS builder
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
-RUN chmod+x ./gradlew
-RUN ./gradlew bootJar
-
 FROM --platform=linux/amd64 eclipse-temurin:17
-COPY --from=builder build/libs/*.jar photoCard.jar
-
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/photoCard.jar"]
+LABEL maintainer="hanseu9839@gmail.com"
+ARG JAR_FILE=build/libs/project-0.0.1-SNAPSHOT.jar
+ADD ${JAR_FILE} docker-realworld.jar
+ENTRYPOINT ["java","-Dspring.profiles.active=dev","-Djava.security.egd=file:/dev/./urandom","-jar","docker-realworld.jar"]
