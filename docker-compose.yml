@@ -1,5 +1,42 @@
 version: "3" # 파일 규격 버전
 services: #이 항목 밑에 실행하려는 컨테이너들을 정의
+  back:
+     build:
+       dockerfile: Dockerfile
+     restart: always
+     ports:
+       - 8080:8080
+
+  front:
+    build:
+      context: ../PhotocardTradeProject
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3000:80
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./usr/bin/certbot/conf:/etc/letsencrypt
+      - ./usr/bin/certbot/www:/var/www/cerbot
+    environment:
+      - VIRTUAL_HOST=photocard.site
+      - TZ=Asia/Seoul
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./usr/bin/certbot/conf:/etc/letsencrypt
+      - ./usr/bin/certbot/www:/var/www/cerbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
   mysql: # 서비스 명
     image: mysql/mysql-server:8.0.23 #사용할 이미지
     container_name: real_world # 컨테이너 이름 설정
