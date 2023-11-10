@@ -1,5 +1,14 @@
 FROM eclipse-temurin:17
-LABEL maintainer="hanseu9839@gmail.com"
-ARG JAR_FILE=build/libs/project-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} docker-realworld.jar
-ENTRYPOINT ["java","-Dspring.profiles.active=dev","-Djava.security.egd=file:/dev/./urandom","-jar","docker-realworld.jar"]
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJar
+
+FROM eclipse-temurin:17
+COPY --from=builder build/libs/project-0.0.1-SNAPSHOT.jar photocard.jar
+
+ENTRYPOINT ["java","-Dspring.profiles.active=dev","-Djava.security.egd=file:/dev/./urandom","-jar","/photocard.jar"]
+VOLUME /tmp
