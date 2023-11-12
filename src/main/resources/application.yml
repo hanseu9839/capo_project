@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    default: dev # 기본 환경 설정을 dev로 설정한다.
+    default: local # 기본 환경 설정을 dev로 설정한다.
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

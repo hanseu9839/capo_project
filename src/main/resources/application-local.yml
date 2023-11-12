@@ -1,0 +1,11 @@
+server:
+  address: 129.154.62.23ß
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    hibernate:
+      ddl-auto: update
