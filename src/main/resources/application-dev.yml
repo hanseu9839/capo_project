@@ -3,6 +3,7 @@ spring:
     activate:
       on-profile: dev
   jpa:
+    generate-ddl: true
     hibernate:
       ddl-auto: update
     properties:

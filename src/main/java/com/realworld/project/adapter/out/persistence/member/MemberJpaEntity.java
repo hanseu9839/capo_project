@@ -2,23 +2,25 @@ package com.realworld.project.adapter.out.persistence.member;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Table(name="USER")
 @Entity
 @EqualsAndHashCode
 @NoArgsConstructor
 @Getter @Setter
-@IdClass(MemberPK.class)
-public class MemberJpaEntity implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class MemberJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userSeq;
 
-    @Id
     private String userId;
 
     private String phoneNumber;
@@ -27,13 +29,25 @@ public class MemberJpaEntity implements Serializable {
 
     private String delYn;
 
-    private Date regDt;
+    @LastModifiedDate
+    private LocalDateTime regDt;
 
-    private Date createDt;
+    @CreatedDate
+    private LocalDateTime createDt;
 
     @Builder
-    public MemberJpaEntity(Long userSeq, String userId, String phoneNumber, String userEmail, String delYn, Date regDt, Date createDt){
+    public MemberJpaEntity(Long userSeq, String userId, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt){
         this.userSeq = userSeq;
+        this.userId = userId;
+        this.phoneNumber = phoneNumber;
+        this.userEmail = userEmail;
+        this.delYn = delYn;
+        this.regDt = regDt;
+        this.createDt = createDt;
+    }
+
+    @Builder
+    public MemberJpaEntity(String userId, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt){
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;

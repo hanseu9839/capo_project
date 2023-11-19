@@ -1,26 +1,25 @@
 package com.realworld.project.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Member {
     private Long userSeq;
     private String userId;
     private String phoneNumber;
     private String userEmail;
-    private Date regDt;
-    private Date createDt;
+    private LocalDateTime regDt;
+    private LocalDateTime createDt;
     private String delYn;
 
     @Builder
-    public Member(Long userSeq, String userId, String phoneNumber, String userEmail, Date regDt, Date createDt, String delYn){
+    public Member(Long userSeq, String userId, String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn){
         this.userSeq = userSeq;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
