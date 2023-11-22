@@ -39,6 +39,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'mysql:mysql-connector-java:8.0.23'
+	//spring security 설정 완료
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	ext['spring-security.version']='6.2.0'
 }
 
 tasks.named('test') {
