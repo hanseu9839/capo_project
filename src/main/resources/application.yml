@@ -21,6 +21,8 @@ spring:
   logging:
     level:
       org:
+        springframework:
+          security: TRACE
         hibernate:
           type:
             descriptor:
