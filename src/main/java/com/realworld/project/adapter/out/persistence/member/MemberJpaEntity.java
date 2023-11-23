@@ -31,7 +31,6 @@ public class MemberJpaEntity {
     private String delYn;
 
     @LastModifiedDate
-    @Column(name="")
     private LocalDateTime regDt;
 
     @CreatedDate
