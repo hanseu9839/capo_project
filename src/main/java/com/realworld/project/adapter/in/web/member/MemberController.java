@@ -1,6 +1,7 @@
 package com.realworld.project.adapter.in.web.member;
 
 import com.realworld.project.application.port.in.PostMemberUseCase;
+import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.common.utils.response.CommonUtil;
 import com.realworld.project.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,12 @@ public class MemberController {
         return "test";
     }
    @PostMapping("/member")
-    public ResponseEntity memberRegister(@RequestBody Member member){
+    public ResponseEntity memberRegister(@RequestBody MemberDTO memberDto){
 
-        if(CommonUtil.isEmpty(member)){
+        if(CommonUtil.isEmpty(memberDto)){
 
         }
-        postMemberUseCase.saveMember(member);
+        postMemberUseCase.saveMember(memberDto);
         return ResponseEntity.ok(200);
     }
 }
