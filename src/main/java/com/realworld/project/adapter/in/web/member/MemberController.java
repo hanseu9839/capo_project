@@ -17,11 +17,7 @@ public class MemberController {
 
     private final PostMemberUseCase postMemberUseCase;
 
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
-   @PostMapping("/member")
+    @PostMapping("/member")
     public ResponseEntity memberRegister(@RequestBody MemberDTO memberDto){
 
         if(CommonUtil.isEmpty(memberDto)){
