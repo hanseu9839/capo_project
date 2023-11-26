@@ -14,6 +14,7 @@ public class MemberMapper {
                     .createDt(entity.getCreateDt())
                     .regDt(entity.getRegDt())
                     .delYn(entity.getDelYn())
+                    .authority(entity.getAuthority())
                     .build();
     }
 
@@ -21,10 +22,12 @@ public class MemberMapper {
         return MemberJpaEntity.builder()
                             .userId(domain.getUserId())
                             .userEmail(domain.getUserEmail())
+                            .password(domain.getPassword())
                             .phoneNumber(domain.getPhoneNumber())
                             .createDt(domain.getCreateDt())
                             .regDt(domain.getRegDt())
                             .delYn(domain.getDelYn())
+                            .authority(domain.getAuthority())
                             .build();
     }
 }
