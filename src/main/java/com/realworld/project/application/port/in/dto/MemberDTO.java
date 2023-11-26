@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class MemberDTO {
     private Long userSeq;
     private String userId;
+    private String password;
     private String phoneNumber;
     private String userEmail;
     private LocalDateTime regDt;
@@ -18,9 +19,10 @@ public class MemberDTO {
     private String delYn;
 
     @Builder
-    public MemberDTO(Long userSeq, String userId, String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn){
+    public MemberDTO(Long userSeq, String userId, String password,String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn){
         this.userSeq = userSeq;
         this.userId = userId;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
         this.regDt = regDt;

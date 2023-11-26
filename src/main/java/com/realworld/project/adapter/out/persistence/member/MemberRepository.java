@@ -1,8 +1,10 @@
 package com.realworld.project.adapter.out.persistence.member;
 
+import com.realworld.project.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository extends JpaRepository<MemberJpaEntity, Long> {
+import java.util.Optional;
 
+public interface MemberRepository extends JpaRepository<MemberJpaEntity, Long> {
 
 }
