@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -34,6 +35,5 @@ public class Member {
         this.delYn = delYn;
         this.authority = authority;
     }
-
 
 }
