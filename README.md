@@ -1,6 +1,3 @@
-# realworld
-real world project
-
 # photocard.site:8080
 # photocard.site:3030 
 
