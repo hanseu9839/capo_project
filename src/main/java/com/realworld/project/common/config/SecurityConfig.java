@@ -15,6 +15,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CorsFilter corsFilter;
-    String[] excludeURI = new String[] {"/photocard/api/v1/member", "/photocard/api/v1/login", "/photocard/api/v1/**"};
+    String[] excludeURI = new String[] {"/photocard/api/v1/login", "/photocard/api/v1/member", "/photocard/api/v1/**"};
     // 비밀번호 암호화
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,9 +48,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .headers(headers->
-                        headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()))
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+                //.headers(headers->
+                //        headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()))
+                //.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(authenticationManager-> authenticationManager
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                         .accessDeniedHandler(new JwtAccessDeniedHandler()))
@@ -59,5 +63,20 @@ public class SecurityConfig {
                 )
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/photocard/api/*/*", configuration);
+        return source;
     }
 }
