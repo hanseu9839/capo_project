@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 public class MemberMapper {
     public Member toDomain(MemberJpaEntity entity){
         return Member.builder()
+                    .userSeq(entity.getUserSeq())
+                    .password(entity.getPassword())
                     .userId(entity.getUserId())
                     .userEmail(entity.getUserEmail())
                     .phoneNumber(entity.getPhoneNumber())

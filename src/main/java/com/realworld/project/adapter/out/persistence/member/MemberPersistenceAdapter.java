@@ -26,8 +26,8 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     }
 
     @Override
-    public Member findByUserId(String userId) {
-        Member member = memberMapper.toDomain(repository.findByUserId(userId));
+    public Optional<Member> findByUserId(String userId) {
+        Optional<Member> member = Optional.ofNullable(memberMapper.toDomain(repository.findByUserId(userId)));
         return member;
     }
 
