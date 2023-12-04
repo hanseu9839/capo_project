@@ -20,10 +20,6 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
         repository.save(entity);
     }
 
-    @Override
-    public Token login(Member member) {
-        return null;
-    }
 
     @Override
     public Optional<Member> findByUserId(String userId) {
