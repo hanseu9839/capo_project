@@ -1,5 +1,6 @@
 package com.realworld.project.common.config.jwt;
 
+import com.realworld.project.application.port.in.dto.TokenDTO;
 import com.realworld.project.domain.Token;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -43,11 +44,10 @@ public class JwtTokenProvider{
      * @param authentication
      * @return TokenInfo : 토큰정보
      */
-    public Token createToken(Authentication authentication){
+    public TokenDTO createToken(Authentication authentication){
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());
-
         long now = (new Date()).getTime();
         Date accessValidity = new Date(now + ACCESS_TOKEN_VALIDATION_SECOND);
         Date refreshValidity = new Date(now + REFRESH_TOKEN_VALIDATION_SECOND);
@@ -55,18 +55,18 @@ public class JwtTokenProvider{
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITY_KEY, authorities)
-                .signWith(SignatureAlgorithm.ES256, key)
+                .signWith(SignatureAlgorithm.HS256, key)
                 .setExpiration(accessValidity)
                 .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
                                     .setExpiration(refreshValidity)
-                                    .signWith(SignatureAlgorithm.ES256, key)
+                                    .signWith(SignatureAlgorithm.HS256, key)
                                     .compact();
 
         // TokenInfo 생성
-        return Token.builder()
+        return TokenDTO.builder()
                         .grantType(BEARER)
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
