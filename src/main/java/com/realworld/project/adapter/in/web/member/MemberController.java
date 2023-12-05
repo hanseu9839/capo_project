@@ -2,6 +2,7 @@ package com.realworld.project.adapter.in.web.member;
 
 import com.realworld.project.application.port.in.Member.GetMemberUseCase;
 import com.realworld.project.application.port.in.Member.PostMemberUseCase;
+import com.realworld.project.application.port.in.Token.PostTokenUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.dto.TokenDTO;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
@@ -17,9 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
-    private final JwtTokenProvider jwtTokenProvider;
     private final PostMemberUseCase postMemberUseCase;
-    private final GetMemberUseCase memberUseCase;
+    private final PostTokenUseCase postTokenUseCase;
     @PostMapping("/member")
     public CommonApiResponse memberRegister(@RequestBody MemberDTO memberDto){
 
@@ -36,5 +36,11 @@ public class MemberController {
         return CommonApiResponse.createSuccess(tokenDto);
     }
 
+    @PostMapping("/reissue")
+    public CommonApiResponse reissue(@RequestBody TokenDTO tokenDto){
+        log.info("TokenDTO : {} ", tokenDto.getRefreshToken());
+        postTokenUseCase.reissue(tokenDto);
 
+        return CommonApiResponse.createSuccessWithNoContent();
+    }
 }

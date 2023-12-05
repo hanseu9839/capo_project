@@ -2,10 +2,12 @@ package com.realworld.project.application.port.in.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class TokenDTO {
     private String userId;
     private String grantType;

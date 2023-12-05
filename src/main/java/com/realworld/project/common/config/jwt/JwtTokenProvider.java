@@ -79,9 +79,10 @@ public class JwtTokenProvider{
      * @return
      */
     public Authentication getAuthentication(String accessToken){
+        log.info("get Authentication : {}", accessToken);
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-
+        log.info("auth"+claims.get("auth"));
         if(claims.get("auth") == null) {
             throw new RuntimeException("Token without credential.");
         }
@@ -123,6 +124,8 @@ public class JwtTokenProvider{
      * @return
      */
     private Claims parseClaims(String accessToken){
+        log.info("parseClaims accessToken : {} ", accessToken);
+        log.info("parseClaims key : {} ", key);
         try{
             return Jwts.parserBuilder()
                         .setSigningKey(key)

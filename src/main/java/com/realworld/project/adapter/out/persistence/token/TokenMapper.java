@@ -9,7 +9,7 @@ public class TokenMapper {
         return Token.builder()
                 .grantType(tokenJpaEntity.getGrantType())
                 .accessToken(tokenJpaEntity.getAccessToken())
-                .refreshToken(tokenJpaEntity.getRefeshToken())
+                .refreshToken(tokenJpaEntity.getRefreshToken())
                 .userId(tokenJpaEntity.getUserId())
                 .build();
     }
@@ -18,7 +18,7 @@ public class TokenMapper {
         return TokenJpaEntity.builder()
                             .grantType(token.getGrantType())
                             .accessToken(token.getAccessToken())
-                            .refeshToken(token.getRefreshToken())
+                            .refreshToken(token.getRefreshToken())
                             .userId(token.getUserId())
                             .build();
     }

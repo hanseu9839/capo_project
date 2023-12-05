@@ -18,19 +18,19 @@ public class TokenJpaEntity implements Serializable {
     private String userId;
     private String grantType;
     String accessToken;
-    String refeshToken;
+    String refreshToken;
 
     @Builder
-    public TokenJpaEntity(String userId,String grantType, String accessToken, String refeshToken){
+    public TokenJpaEntity(String userId,String grantType, String accessToken, String refreshToken){
         this.userId = userId;
         this.grantType = grantType;
         this.accessToken = accessToken;
-        this.refeshToken = refeshToken;
+        this.refreshToken = refreshToken;
     }
 
-    public TokenJpaEntity updateToken(String accessToken, String refeshToken){
+    public TokenJpaEntity updateToken(String accessToken, String refreshToken){
         this.accessToken = accessToken;
-        this.refeshToken = refeshToken;
+        this.refreshToken = refreshToken;
         return this;
     }
 }

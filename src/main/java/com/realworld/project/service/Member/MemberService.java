@@ -2,12 +2,14 @@ package com.realworld.project.service.Member;
 
 import com.realworld.project.application.port.in.Member.GetMemberUseCase;
 import com.realworld.project.application.port.in.Member.PostMemberUseCase;
+import com.realworld.project.application.port.in.Token.PostTokenUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.dto.TokenDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
+import com.realworld.project.common.utils.response.CommonApiResponse;
 import com.realworld.project.domain.Authority;
 import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
@@ -35,7 +37,7 @@ import java.util.Optional;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class MemberService implements PostMemberUseCase , GetMemberUseCase , UserDetailsService {
+public class MemberService implements PostMemberUseCase , GetMemberUseCase , PostTokenUseCase, UserDetailsService {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final CommandTokenPort commandTokenPort;
@@ -45,6 +47,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Use
     @Transactional
     @Override
     public void saveMember(MemberDTO memberDto) {
+
         Member member = Member.builder()
                             .userId(memberDto.getUserId())
                             .password(passwordEncoder.encode(memberDto.getPassword()))
@@ -56,6 +59,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Use
         commandMemberPort.saveMember(member);
     }
 
+    @Transactional
     @Override
     public TokenDTO login(MemberDTO memberDTO) {
         String userId = memberDTO.getUserId();
@@ -123,5 +127,22 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Use
           Collections.singleton(grantedAuthority)
         );
     }
+    @Transactional
+    @Override
+    public CommonApiResponse reissue(TokenDTO tokenDto) {
+        if(!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())){
+            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+        }
 
+        // 2. Access Token에서 Member ID 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenDto.getAccessToken());
+
+        log.info("authentication == {}", authentication.getName());
+        // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
+        Token token = Token.builder()
+                            .userId(authentication.getName())
+                            .refreshToken(tokenDto.getRefreshToken())
+                            .build();
+        return CommonApiResponse.createSuccessWithNoContent();
+    }
 }
