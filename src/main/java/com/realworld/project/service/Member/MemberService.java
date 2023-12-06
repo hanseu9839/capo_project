@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -44,6 +45,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CommonApiResponse commonApiResponse;
     @Transactional
     @Override
     public void saveMember(MemberDTO memberDto) {
@@ -129,7 +131,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
     }
     @Transactional
     @Override
-    public CommonApiResponse reissue(TokenDTO tokenDto) {
+    public ResponseEntity reissue(TokenDTO tokenDto) {
         if(!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())){
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
         }
@@ -143,6 +145,6 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
                             .userId(authentication.getName())
                             .refreshToken(tokenDto.getRefreshToken())
                             .build();
-        return CommonApiResponse.createSuccessWithNoContent();
+        return commonApiResponse.success();
     }
 }
