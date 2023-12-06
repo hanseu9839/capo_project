@@ -18,6 +18,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> exceptionHandler(Exception e){
         e.printStackTrace();
-        return commonApiResponse.error("오류가 발생하였습니다.");
+        return commonApiResponse.error(e.getMessage());
     }
 }
