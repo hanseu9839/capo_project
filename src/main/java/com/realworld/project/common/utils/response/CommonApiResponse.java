@@ -59,7 +59,7 @@ public class CommonApiResponse {
                     HttpStatus.OK);
         }
         else if (status.equals(ERROR_STATUS)) {
-            return new ResponseEntity<>(ErrorCode.builder()
+            return new ResponseEntity<>(ErroredBody.builder()
                     .status(status)
                     .message(message)
                     .build(),
@@ -273,7 +273,15 @@ public class CommonApiResponse {
         private String message;
         private T data;
     }
-
+    @Builder
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class ErroredBody{
+        private String status;
+        private String message;
+    }
     /**
      * 페이징 정보가 포함된 응답 객체의 바디
      * @param <T>
