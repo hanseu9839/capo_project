@@ -1,5 +1,6 @@
 package com.realworld.project.adapter.in.web.member;
 
+import com.realworld.project.application.port.in.Member.GetMemberUseCase;
 import com.realworld.project.application.port.in.Member.PostMemberUseCase;
 import com.realworld.project.application.port.in.Token.PostTokenUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
@@ -20,14 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
     private final PostMemberUseCase postMemberUseCase;
+    private final GetMemberUseCase getMemberUseCase;
     private final PostTokenUseCase postTokenUseCase;
     @PostMapping("/member")
     public ResponseEntity<?> memberRegister(@RequestBody MemberDTO memberDto){
         postMemberUseCase.saveMember(memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
-                .result(memberDto)
-                .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
-                .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
+                .result_code(SuccessCode.INSERT_SUCCESS.getStatus())
+                .result_msg(SuccessCode.INSERT_SUCCESS.getMessage())
                 .build(), HttpStatus.OK);
     }
 
@@ -36,8 +37,8 @@ public class MemberController {
         TokenDTO tokenDto =postMemberUseCase.login(memberDTO);
         return new ResponseEntity<>(ApiResponse.builder()
                 .result(tokenDto)
-                .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
-                .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
+                .result_code(SuccessCode.SELECT_SUCCESS.getStatus())
+                .result_msg(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build(),HttpStatus.OK);
     }
 
@@ -48,5 +49,16 @@ public class MemberController {
         return postTokenUseCase.reissue(tokenDto);
     }
 
+    @GetMapping("/duplication-check/user-id")
+    public ResponseEntity<?> userIdDuplicationCheck(@RequestBody MemberDTO memberDTO){
+        log.info("memberDTO : {} ", memberDTO.getUserId());
+        boolean exists = getMemberUseCase.existsByUserId(memberDTO.getUserId());
+
+        return new ResponseEntity<>(ApiResponse.builder()
+                .result(exists)
+                .result_code(SuccessCode.SELECT_SUCCESS.getStatus())
+                .result_msg(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build(),HttpStatus.OK);
+    }
 
 }
