@@ -4,10 +4,11 @@ import com.realworld.project.application.port.in.Member.PostMemberUseCase;
 import com.realworld.project.application.port.in.Token.PostTokenUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.dto.TokenDTO;
-import com.realworld.project.common.utils.response.CommonApiResponse;
-import com.realworld.project.common.utils.response.CommonUtil;
+import com.realworld.project.common.response.ApiResponse;
+import com.realworld.project.common.utils.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,23 +17,23 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
-    private final CommonApiResponse commonApiResponse;
+    private final ApiResponse apiResponse;
     private final PostMemberUseCase postMemberUseCase;
     private final PostTokenUseCase postTokenUseCase;
     @PostMapping("/member")
     public ResponseEntity<?> memberRegister(@RequestBody MemberDTO memberDto){
-
-        if(CommonUtil.isEmpty(memberDto)){
-
-        }
         postMemberUseCase.saveMember(memberDto);
-        return commonApiResponse.success(memberDto);
+        return new ResponseEntity<>(ApiResponse.builder()
+                .result(memberDto)
+                .resultCode(200)
+                .resultMsg("회원가입 성공")
+                .build(), HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO){
         TokenDTO tokenDto =postMemberUseCase.login(memberDTO);
-        return commonApiResponse.success(tokenDto);
+        return apiResponse.success(tokenDto);
     }
 
     @PostMapping("/reissue")

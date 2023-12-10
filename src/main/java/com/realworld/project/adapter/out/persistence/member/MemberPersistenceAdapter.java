@@ -2,13 +2,17 @@ package com.realworld.project.adapter.out.persistence.member;
 
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
+import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
+import com.realworld.project.common.utils.CommonUtil;
 import com.realworld.project.domain.Member;
-import com.realworld.project.domain.Token;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Optional;
-
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPort {
@@ -23,7 +27,14 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
 
     @Override
     public Optional<Member> findByUserId(String userId) {
-        Optional<Member> member = Optional.ofNullable(memberMapper.toDomain(repository.findByUserId(userId)));
+        Optional<Member> member = null;
+        try{
+            member = Optional.ofNullable(memberMapper.toDomain(repository.findByUserId(userId)));
+        } catch (Exception e){
+            log.info("CustomLoginException");
+            throw new CustomLoginExceptionHandler(e.getMessage(),ErrorCode.LOGIN_REQUEST_ERROR);
+        }
+
         return member;
     }
 

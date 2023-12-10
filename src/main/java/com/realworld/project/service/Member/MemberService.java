@@ -9,7 +9,7 @@ import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
-import com.realworld.project.common.utils.response.CommonApiResponse;
+import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.domain.Authority;
 import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
@@ -45,7 +45,6 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CommonApiResponse commonApiResponse;
     @Transactional
     @Override
     public void saveMember(MemberDTO memberDto) {
@@ -145,6 +144,6 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
                             .userId(authentication.getName())
                             .refreshToken(tokenDto.getRefreshToken())
                             .build();
-        return commonApiResponse.success();
+        return ApiResponse.success();
     }
 }
