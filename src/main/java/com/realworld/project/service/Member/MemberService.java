@@ -8,6 +8,9 @@ import com.realworld.project.application.port.in.dto.TokenDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
+import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.config.exception.CustomJwtExceptionHandler;
+import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.domain.Authority;
@@ -66,6 +69,12 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
         String userId = memberDTO.getUserId();
         String password = memberDTO.getPassword();
 
+        Optional<Member> member = findByUserId(userId);
+
+        //비밀번호가 불 일치할 경우
+        if(!password.equals(member.get().getPassword())){
+            throw new CustomLoginExceptionHandler(ErrorCode.LOGIN_REQUEST_ERROR);
+        }
         // 받아온 유저네임과 패스워드를 이용해 UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
 
@@ -132,7 +141,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
     @Override
     public ResponseEntity reissue(TokenDTO tokenDto) {
         if(!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())){
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+            throw new CustomJwtExceptionHandler(ErrorCode.JWT_TOKEN_REQUEST_ERROR);
         }
 
         // 2. Access Token에서 Member ID 가져오기

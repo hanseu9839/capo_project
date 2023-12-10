@@ -1,5 +1,6 @@
 package com.realworld.project.common.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.validation.FieldError;
 import java.util.List;
 
 @Component
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 @Builder
@@ -37,6 +39,7 @@ public class ApiResponse<T> {
     public ResponseEntity<?> success(final T result){
         return new ResponseEntity<>(ApiResponse.builder()
                 .result(result)
+                .resultCode(200)
                 .resultMsg("empty")
                 .build(), HttpStatus.OK);
     }
@@ -44,7 +47,6 @@ public class ApiResponse<T> {
     public static ResponseEntity<?> success(){
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(200)
-                .resultMsg("empty")
-                .build(), HttpStatus.OK);
+                .resultMsg("empty"),HttpStatus.OK);
     }
 }
