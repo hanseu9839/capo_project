@@ -1,4 +1,4 @@
-package com.realworld.project.common.utils.response;
+package com.realworld.project.common.utils;
 
 import java.util.List;
 import java.util.Map;

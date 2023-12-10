@@ -1,13 +1,11 @@
 package com.realworld.project.adapter.out.persistence.member;
 
+import com.realworld.project.domain.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name="USER")
@@ -24,6 +22,8 @@ public class MemberJpaEntity {
 
     private String userId;
 
+    private String password;
+
     private String phoneNumber;
 
     private String userEmail;
@@ -36,8 +36,11 @@ public class MemberJpaEntity {
     @CreatedDate
     private LocalDateTime createDt;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     @Builder
-    public MemberJpaEntity(Long userSeq, String userId, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt){
+    public MemberJpaEntity(Long userSeq, String userId, String password,String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority){
         this.userSeq = userSeq;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
@@ -45,6 +48,8 @@ public class MemberJpaEntity {
         this.delYn = delYn;
         this.regDt = regDt;
         this.createDt = createDt;
+        this.authority = authority;
+        this.password = password;
     }
 
     @Builder
