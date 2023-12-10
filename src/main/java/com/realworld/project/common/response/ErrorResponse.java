@@ -1,5 +1,6 @@
 package com.realworld.project.common.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.project.common.Code.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 public class ErrorResponse {
     private int status;     // 에러 상태 코드

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // 사용자 잘못된 요청
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
+    // Token 오류
+    JWT_TOKEN_REQUEST_ERROR(400,"Refresh Token이 유효하지 않습니다."),
     // 잘못된 서버 요청
     BAD_REQUEST_ERROR(400,"Bad Request Exception"),
     // @RequestBody 데이터 미 존재
@@ -15,6 +17,7 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(400,"Invalid Type Value"),
     // Request Parameter 로 데이터가 전달되지 않을 경우
     MISSING_REQUEST_PARAMETER_ERROR(400,"Missing Servlet RequestParameter Exception"),
+
     // 입력/출력 값이 유효하지 않음
     IO_ERROR(400,"I/O Exception"),
     // JSON 파싱 실패

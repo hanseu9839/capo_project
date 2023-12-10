@@ -139,7 +139,7 @@ public class GlobalExceptionHandler {
      */
     protected ResponseEntity<ErrorResponse> handleAllException(Exception ex){
         log.error("Exception", ex);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERVAL_SERVER_ERROR, ex.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERVAL_SERVER_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -151,7 +151,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomLoginExceptionHandler.class)
     protected ResponseEntity<ErrorResponse> handleLoginCustomException(CustomLoginExceptionHandler ex){
         log.error("Exception",ex);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_REQUEST_ERROR, ex.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_REQUEST_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 토큰 값 오류
+     */
+    @ExceptionHandler(CustomJwtExceptionHandler.class)
+    protected ResponseEntity<ErrorResponse> handleJwtCustomException(CustomJwtExceptionHandler ex){
+        log.error("Exception", ex);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.JWT_TOKEN_REQUEST_ERROR, ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
