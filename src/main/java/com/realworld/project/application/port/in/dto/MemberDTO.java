@@ -1,5 +1,7 @@
 package com.realworld.project.application.port.in.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -8,14 +10,22 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberDTO {
+    @JsonProperty("user_seq")
     private Long userSeq;
+    @JsonProperty("user_id")
     private String userId;
     private String password;
+    @JsonProperty("phone_number")
     private String phoneNumber;
+    @JsonProperty("user_email")
     private String userEmail;
+    @JsonProperty("reg_dt")
     private LocalDateTime regDt;
+    @JsonProperty("create_dt")
     private LocalDateTime createDt;
+    @JsonProperty("del_yn")
     private String delYn;
 
     @Builder
