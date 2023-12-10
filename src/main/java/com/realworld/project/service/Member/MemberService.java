@@ -34,6 +34,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -71,8 +72,8 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
 
         Optional<Member> member = findByUserId(userId);
 
-        //비밀번호가 불 일치할 경우
-        if(!password.equals(member.get().getPassword())){
+        //비밀번호가 불일치할 경우
+        if(!passwordEncoder.matches(password,member.get().getPassword())){
             throw new CustomLoginExceptionHandler(ErrorCode.LOGIN_REQUEST_ERROR);
         }
         // 받아온 유저네임과 패스워드를 이용해 UsernamePasswordAuthenticationToken
