@@ -4,6 +4,7 @@ package com.realworld.project.common.config.exception;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.Code.ResultErrorMsgCode;
 import com.realworld.project.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -150,10 +151,17 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(CustomLoginExceptionHandler.class)
     protected ResponseEntity<ErrorResponse> handleLoginCustomException(CustomLoginExceptionHandler ex){
-        log.error("Exception",ex);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_REQUEST_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+        log.error("LoginCustomException",ex);
+        if(ex.getMessage().equals(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg())){
+            final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_DUPLICATION_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }else{
+            final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_REQUEST_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+
     }
 
     /**

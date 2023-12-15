@@ -9,8 +9,10 @@ import com.realworld.project.common.Code.ResultMsgCode;
 import com.realworld.project.common.Code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.common.utils.CommonUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,8 @@ public class MemberController {
     public ResponseEntity<?> memberRegister(@RequestBody MemberDTO memberDto){
         postMemberUseCase.saveMember(memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
-                .result_code(SuccessCode.INSERT_SUCCESS.getStatus())
-                .result_msg(SuccessCode.INSERT_SUCCESS.getMessage())
+                .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
+                .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
                 .build(), HttpStatus.OK);
     }
 
@@ -37,8 +39,8 @@ public class MemberController {
         TokenDTO tokenDto =postMemberUseCase.login(memberDTO);
         return new ResponseEntity<>(ApiResponse.builder()
                 .result(tokenDto)
-                .result_code(SuccessCode.SELECT_SUCCESS.getStatus())
-                .result_msg(SuccessCode.SELECT_SUCCESS.getMessage())
+                .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
+                .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build(),HttpStatus.OK);
     }
 
@@ -49,15 +51,15 @@ public class MemberController {
         return postTokenUseCase.reissue(tokenDto);
     }
 
-    @GetMapping("/duplication-check/user-id")
-    public ResponseEntity<?> userIdDuplicationCheck(@RequestBody MemberDTO memberDTO){
-        log.info("memberDTO : {} ", memberDTO.getUserId());
-        boolean exists = getMemberUseCase.existsByUserId(memberDTO.getUserId());
+    @GetMapping("/duplication-check/user-id/{user_id}")
+    public ResponseEntity<?> userIdDuplicationCheck(@PathVariable("user_id") String userId, HttpServletResponse response){
+        log.info("memberDTO : {} ", userId);
+        boolean exists = getMemberUseCase.existsByUserId(userId);
 
         return new ResponseEntity<>(ApiResponse.builder()
                 .result(exists)
-                .result_code(SuccessCode.SELECT_SUCCESS.getStatus())
-                .result_msg(SuccessCode.SELECT_SUCCESS.getMessage())
+                .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
+                .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build(),HttpStatus.OK);
     }
 
