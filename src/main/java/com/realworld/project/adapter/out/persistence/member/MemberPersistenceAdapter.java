@@ -3,6 +3,7 @@ package com.realworld.project.adapter.out.persistence.member;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.Code.ResultErrorMsgCode;
 import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
 import com.realworld.project.common.utils.CommonUtil;
 import com.realworld.project.domain.Member;
@@ -20,6 +21,9 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     private final MemberRepository repository;
     @Override
     public void saveMember(Member member) {
+        if(existsByUserId(member.getUserId()) || existsByUserEmail(member.getUserEmail())){
+            throw new CustomLoginExceptionHandler(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg(),ErrorCode.LOGIN_DUPLICATION_ERROR);
+        }
         MemberJpaEntity entity = memberMapper.toEntity(member);
         repository.save(entity);
     }

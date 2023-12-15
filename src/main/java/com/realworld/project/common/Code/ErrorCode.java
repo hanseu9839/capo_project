@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // 사용자 잘못된 요청
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
+    //
+    LOGIN_DUPLICATION_ERROR(409, "이미 존재하는 아이디 또는 이메일 입니다."),
     // Token 오류
     JWT_TOKEN_REQUEST_ERROR(400,"Refresh Token이 유효하지 않습니다."),
     // 잘못된 서버 요청
@@ -38,6 +40,7 @@ public enum ErrorCode {
 
     // @RequestBody 및 @RequestParam, @PathVariable 값이 유효하지 않음
     NOT_VALID_HEADER_ERROR(404,"Header에 데이터가 존재하지 않는 경우"),
+
 
     // 서버가 처리 할 방법을 모르는 경우 발생
     INTERVAL_SERVER_ERROR(500,"Internal Server Error Exception"),

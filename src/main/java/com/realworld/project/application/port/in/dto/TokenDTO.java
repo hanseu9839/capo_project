@@ -12,13 +12,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TokenDTO {
-    @JsonProperty("user-id")
+    @JsonProperty("user_id")
     private String userId;
-    @JsonProperty("grant-type")
+    @JsonProperty("grant_type")
     private String grantType;
-    @JsonProperty("access-token")
+    @JsonProperty("access_token")
     private String accessToken;
-    @JsonProperty("refresh-token")
+    @JsonProperty("refresh_token")
     private String refreshToken;
 
     @Builder
