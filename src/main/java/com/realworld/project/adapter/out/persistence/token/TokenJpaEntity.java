@@ -1,16 +1,19 @@
 package com.realworld.project.adapter.out.persistence.token;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
 
 @Table(name="TOKEN")
 @NoArgsConstructor
 @Getter @Setter
+@DynamicUpdate
 @Entity
 public class TokenJpaEntity implements Serializable {
     @Id
