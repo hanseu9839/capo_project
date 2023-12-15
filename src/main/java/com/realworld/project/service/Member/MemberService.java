@@ -1,5 +1,7 @@
 package com.realworld.project.service.Member;
 
+import com.realworld.project.adapter.out.persistence.token.TokenJpaEntity;
+import com.realworld.project.adapter.out.persistence.token.TokenRepository;
 import com.realworld.project.application.port.in.Member.GetMemberUseCase;
 import com.realworld.project.application.port.in.Member.PostMemberUseCase;
 import com.realworld.project.application.port.in.Token.PostTokenUseCase;
@@ -8,7 +10,9 @@ import com.realworld.project.application.port.in.dto.TokenDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
+import com.realworld.project.application.port.out.token.LoadTokenPort;
 import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.Code.SuccessCode;
 import com.realworld.project.common.config.exception.CustomJwtExceptionHandler;
 import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
@@ -20,6 +24,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -46,6 +51,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final CommandTokenPort commandTokenPort;
+    private final LoadTokenPort loadTokenPort;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -147,13 +153,29 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase , Pos
 
         // 2. Access Token에서 Member ID 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenDto.getAccessToken());
+        TokenDTO tokenDTO =  jwtTokenProvider.createToken(authentication);
 
-        log.info("authentication == {}", authentication.getName());
+        Optional<TokenJpaEntity> getToken = loadTokenPort.findByUserId(authentication.getName());
+        getToken.ifPresent(value ->{
+            value.setAccessToken(tokenDTO.getAccessToken());
+            value.setRefreshToken(tokenDTO.getRefreshToken());
+        });
+
+
+        log.info("token AccessToken {}", getToken.get().getAccessToken());
+        log.info("token RefreshToken {}", getToken.get().getRefreshToken());
+        log.info("authentication {}", authentication.getName());
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         Token token = Token.builder()
                             .userId(authentication.getName())
+                            .accessToken(tokenDTO.getAccessToken())
                             .refreshToken(tokenDto.getRefreshToken())
                             .build();
-        return ApiResponse.success();
+
+        return new ResponseEntity(ApiResponse.builder()
+                .result(token)
+                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
+                .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
+                .build(), HttpStatus.OK);
     }
 }

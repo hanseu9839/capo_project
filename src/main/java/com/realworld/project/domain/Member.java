@@ -1,5 +1,8 @@
 package com.realworld.project.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -11,6 +14,8 @@ import java.util.Optional;
 @Getter
 @Setter
 @ToString
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 public class Member {
     private Long userSeq;

@@ -1,5 +1,6 @@
 package com.realworld.project.adapter.out.persistence.member;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.project.domain.Authority;
 import jakarta.persistence.*;
 import lombok.*;
