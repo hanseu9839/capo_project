@@ -1,6 +1,5 @@
 package com.realworld.project.adapter.out.persistence.member;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.project.domain.Authority;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,11 +8,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
-@Table(name="USER")
+@Table(name="user")
 @Entity
 @EqualsAndHashCode
 @NoArgsConstructor
 @Getter @Setter
+@IdClass(MemberPK.class)
 @EntityListeners(AuditingEntityListener.class)
 public class MemberJpaEntity {
 
@@ -21,12 +21,14 @@ public class MemberJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userSeq;
 
+    @Id
     private String userId;
 
     private String password;
 
     private String phoneNumber;
 
+    @Id
     private String userEmail;
 
     private String delYn;
