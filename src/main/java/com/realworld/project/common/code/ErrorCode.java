@@ -1,10 +1,12 @@
-package com.realworld.project.common.Code;
+package com.realworld.project.common.code;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
+
+    // 잘못된 이메일 요청
+    EMAIL_REQUEST_ERROR(400, "존재 하지 않는 이메일입니다."),
     // 사용자 잘못된 요청
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
     //

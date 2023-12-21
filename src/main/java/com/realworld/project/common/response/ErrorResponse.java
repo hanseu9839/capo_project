@@ -3,7 +3,7 @@ package com.realworld.project.common.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.code.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;

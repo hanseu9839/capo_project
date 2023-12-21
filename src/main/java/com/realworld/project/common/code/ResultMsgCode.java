@@ -1,4 +1,4 @@
-package com.realworld.project.common.Code;
+package com.realworld.project.common.code;
 
 public enum ResultMsgCode {
     LOGIN_SUCCESS_MSG("로그인 성공"),

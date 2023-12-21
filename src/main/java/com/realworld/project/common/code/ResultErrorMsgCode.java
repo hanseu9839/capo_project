@@ -1,4 +1,4 @@
-package com.realworld.project.common.Code;
+package com.realworld.project.common.code;
 
 import lombok.Getter;
 
