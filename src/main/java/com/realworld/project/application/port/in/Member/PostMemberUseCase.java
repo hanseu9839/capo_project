@@ -1,4 +1,4 @@
-package com.realworld.project.application.port.in.Member;
+package com.realworld.project.application.port.in.member;
 
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.dto.TokenDTO;
