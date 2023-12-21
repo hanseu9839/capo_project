@@ -3,8 +3,8 @@ package com.realworld.project.common.config.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.realworld.project.common.Code.ErrorCode;
-import com.realworld.project.common.Code.ResultErrorMsgCode;
+import com.realworld.project.common.code.ErrorCode;
+import com.realworld.project.common.code.ResultErrorMsgCode;
 import com.realworld.project.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -171,6 +171,14 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleJwtCustomException(CustomJwtExceptionHandler ex){
         log.error("Exception", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.JWT_TOKEN_REQUEST_ERROR, ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomMailExceptionHandler.class)
+    protected  ResponseEntity<ErrorResponse> handleMailCustomException(CustomMailExceptionHandler ex){
+        log.error("Exception", ex);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.EMAIL_REQUEST_ERROR, ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

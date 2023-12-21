@@ -1,6 +1,6 @@
 package com.realworld.project.common.config.exception;
 
-import com.realworld.project.common.Code.ErrorCode;
+import com.realworld.project.common.code.ErrorCode;
 import lombok.Getter;
 
 public class CustomJwtExceptionHandler extends RuntimeException{
