@@ -22,7 +22,7 @@ public class MemberController {
     private final GetMemberUseCase getMemberUseCase;
 
     @PostMapping("/member")
-    public ResponseEntity<?> memberRegister(@RequestBody MemberDTO memberDto){
+    public ResponseEntity<ApiResponse> memberRegister(@RequestBody MemberDTO memberDto){
         postMemberUseCase.saveMember(memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
@@ -31,7 +31,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<ApiResponse> login(@RequestBody MemberDTO memberDTO){
         TokenDTO tokenDto =postMemberUseCase.login(memberDTO);
         return new ResponseEntity<>(ApiResponse.builder()
                 .result(tokenDto)
@@ -43,7 +43,7 @@ public class MemberController {
 
 
     @GetMapping("/duplication-check/user-id/{user_id}")
-    public ResponseEntity<?> userIdDuplicationCheck(@PathVariable("user_id") String userId, HttpServletResponse response){
+    public ResponseEntity<ApiResponse> userIdDuplicationCheck(@PathVariable("user_id") String userId, HttpServletResponse response){
         log.info("memberDTO : {} ", userId);
         boolean exists = getMemberUseCase.existsByUserId(userId);
 

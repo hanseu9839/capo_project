@@ -6,5 +6,7 @@ import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
 public interface GetMailUseCase {
-    AuthMail emailAuth(String email) throws MessagingException, UnsupportedEncodingException;
+    AuthMail emailAuth(String userEmail) throws MessagingException, UnsupportedEncodingException;
+
+    void emailAuthCheck(String userEmail,String authNumber);
 }

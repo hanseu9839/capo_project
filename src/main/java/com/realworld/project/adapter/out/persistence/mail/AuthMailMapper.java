@@ -10,7 +10,6 @@ public class AuthMailMapper {
                         .userEmail(entity.getUserEmail())
                         .authNumber(entity.getAuthNumber())
                         .regDt(entity.getRegDt())
-                        .createDt(entity.getCreateDt())
                         .build();
     }
 
@@ -18,7 +17,6 @@ public class AuthMailMapper {
         return AuthMailJpaEntity.builder()
                                 .userEmail(authMail.getUserEmail())
                                 .authNumber(authMail.getAuthNumber())
-                                .createDt(authMail.getCreateDt())
                                 .regDt(authMail.getRegDt())
                                 .build();
     }

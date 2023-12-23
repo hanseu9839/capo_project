@@ -1,14 +1,12 @@
 package com.realworld.project.service.mail;
 
 import com.realworld.project.adapter.out.persistence.mail.AuthMailJpaEntity;
-import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.mail.GetMailUseCase;
 import com.realworld.project.application.port.out.mail.CommandAuthMailPort;
-import com.realworld.project.application.port.out.member.LoadMemberPort;
+import com.realworld.project.application.port.out.mail.LoadAuthMailPort;
 import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.config.exception.CustomMailExceptionHandler;
 import com.realworld.project.domain.AuthMail;
-import com.realworld.project.domain.Member;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -20,6 +18,10 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 
@@ -28,8 +30,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class AuthMailService implements GetMailUseCase {
     private final JavaMailSender javaMailSender;
-    private final LoadMemberPort loadMemberPort;
     private final CommandAuthMailPort commandAuthMailPort;
+    private final LoadAuthMailPort loadAuthMailPort;
     @Value("${spring.mail.username}")
     private String from;
     @Override
@@ -51,11 +53,30 @@ public class AuthMailService implements GetMailUseCase {
         Optional<AuthMailJpaEntity> target= commandAuthMailPort.saveEmailAuth(authMail);
 
         if(target.isPresent()){
-            return authMail;
+            AuthMail authMailTarget = AuthMail.builder()
+                                                .userEmail(target.get().getUserEmail())
+                                                .authNumber(target.get().getAuthNumber())
+                                                .regDt(target.get().getRegDt())
+                                                .build();
+            return authMailTarget;
         }  else {
             throw new CustomMailExceptionHandler(ErrorCode.EMAIL_REQUEST_ERROR);
         }
 
+    }
+
+    @Override
+    public void emailAuthCheck(String userEmail, String authNumber) {
+        // authMail에 있는 Mail정보 가져오기
+        Optional<AuthMailJpaEntity> target = loadAuthMailPort.findByUserEmail(userEmail);
+        AuthMail authMail = null;
+
+        log.info("regDate : {} ",target.get().getRegDt());
+        if(target.isPresent()){
+            expiredAuthEmailCheck(target.get().getRegDt());
+        } else{
+            throw new CustomMailExceptionHandler(ErrorCode.EMAIL_REQUEST_ERROR);
+        }
     }
 
     public String createKey() {
@@ -98,5 +119,15 @@ public class AuthMailService implements GetMailUseCase {
         mimeMessage.setFrom(new InternetAddress(from,"PhotoCard_Admin"));
 
         return mimeMessage;
+    }
+
+    public void expiredAuthEmailCheck(LocalDateTime regDt){
+        LocalDateTime nowDate = LocalDateTime.now();
+        Duration diff = Duration.between(regDt.toLocalTime(), nowDate.toLocalTime());
+        log.info("minutes diff : {}", diff.toMinutes());
+        if(diff.toMinutes() < 0 || diff.toMinutes() > 30){
+            throw new CustomMailExceptionHandler(ErrorCode.EMAIL_EXPIRED_ERROR);
+        }
+
     }
 }

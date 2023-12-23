@@ -10,7 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
 
-@Table(name="TOKEN")
+@Table(name="token")
 @NoArgsConstructor
 @Getter @Setter
 @DynamicUpdate
