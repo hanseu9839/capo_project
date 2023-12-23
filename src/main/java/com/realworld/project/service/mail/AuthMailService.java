@@ -1,14 +1,12 @@
 package com.realworld.project.service.mail;
 
 import com.realworld.project.adapter.out.persistence.mail.AuthMailJpaEntity;
-import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.mail.GetMailUseCase;
 import com.realworld.project.application.port.out.mail.CommandAuthMailPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.config.exception.CustomMailExceptionHandler;
 import com.realworld.project.domain.AuthMail;
-import com.realworld.project.domain.Member;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -51,11 +49,21 @@ public class AuthMailService implements GetMailUseCase {
         Optional<AuthMailJpaEntity> target= commandAuthMailPort.saveEmailAuth(authMail);
 
         if(target.isPresent()){
-            return authMail;
+            AuthMail authMailTarget = AuthMail.builder()
+                                                .userEmail(target.get().getUserEmail())
+                                                .authNumber(target.get().getAuthNumber())
+                                                .regDt(target.get().getRegDt())
+                                                .build();
+            return authMailTarget;
         }  else {
             throw new CustomMailExceptionHandler(ErrorCode.EMAIL_REQUEST_ERROR);
         }
 
+    }
+
+    @Override
+    public AuthMail emailAuthCheck(String userEmail) {
+        return null;
     }
 
     public String createKey() {

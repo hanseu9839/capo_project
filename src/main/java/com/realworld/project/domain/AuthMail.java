@@ -20,17 +20,15 @@ public class AuthMail {
     String userEmail;
     String authNumber;
     LocalDateTime regDt;
-    LocalDateTime createDt;
     @Builder
     public AuthMail(String userEmail,String authNumber) {
         this.userEmail = userEmail;
         this.authNumber = authNumber;
     }
     @Builder
-    public AuthMail(String userEmail, String authNumber, LocalDateTime regDt, LocalDateTime createDt){
+    public AuthMail(String userEmail, String authNumber, LocalDateTime regDt){
         this.userEmail = userEmail;
         this.authNumber = authNumber;
         this.regDt = regDt;
-        this.createDt = createDt;
     }
 }

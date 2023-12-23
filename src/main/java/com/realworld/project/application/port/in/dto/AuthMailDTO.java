@@ -20,8 +20,7 @@ public class AuthMailDTO {
     String authNumber;
     @JsonProperty("reg_dt")
     LocalDateTime regDt;
-    @JsonProperty("create_dt")
-    LocalDateTime createDt;
+
     @Builder
     public AuthMailDTO(String userEmail, String authNumber){
         this.userEmail = userEmail;
@@ -29,10 +28,9 @@ public class AuthMailDTO {
     }
 
     @Builder
-    public AuthMailDTO(String userEmail, String authNumber, LocalDateTime regDt, LocalDateTime createDt){
+    public AuthMailDTO(String userEmail, String authNumber, LocalDateTime regDt){
         this.userEmail = userEmail;
         this.authNumber = authNumber;
         this.regDt = regDt;
-        this.createDt = createDt;
     }
 }
