@@ -31,9 +31,11 @@ public class AuthMailController {
                 .build(), HttpStatus.OK);
     }
 
-    @GetMapping("/auth/email")
-    public ResponseEntity<ApiResponse> emailAuthNumber(@RequestParam String userEmail){
-        getMailUseCase.emailAuthCheck(userEmail);
-        return null;
+    @GetMapping("/auth/email/{auth_number}")
+    public ResponseEntity<ApiResponse> emailAuthNumber(@RequestParam("user_email") String userEmail, @PathVariable("auth_number") String authNumber){
+        getMailUseCase.emailAuthCheck(userEmail, authNumber);
+        return new ResponseEntity<>(ApiResponse.builder()
+                .resultCode(200)
+                .build(), HttpStatus.OK);
     }
 }

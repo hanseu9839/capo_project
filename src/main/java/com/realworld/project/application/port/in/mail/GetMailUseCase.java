@@ -8,5 +8,5 @@ import java.io.UnsupportedEncodingException;
 public interface GetMailUseCase {
     AuthMail emailAuth(String userEmail) throws MessagingException, UnsupportedEncodingException;
 
-    AuthMail emailAuthCheck(String authNumber);
+    void emailAuthCheck(String userEmail,String authNumber);
 }
