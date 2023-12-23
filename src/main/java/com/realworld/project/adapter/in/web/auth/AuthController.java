@@ -2,6 +2,7 @@ package com.realworld.project.adapter.in.web.auth;
 
 import com.realworld.project.application.port.in.token.PostTokenUseCase;
 import com.realworld.project.application.port.in.dto.TokenDTO;
+import com.realworld.project.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final PostTokenUseCase postTokenUseCase;
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@RequestBody TokenDTO tokenDto){
+    public ResponseEntity<ApiResponse> reissue(@RequestBody TokenDTO tokenDto){
         log.info("TokenDTO : {} ", tokenDto.getRefreshToken());
 
         return postTokenUseCase.reissue(tokenDto);
