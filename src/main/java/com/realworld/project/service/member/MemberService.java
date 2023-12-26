@@ -10,7 +10,9 @@ import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
 import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
+import com.realworld.project.common.config.exception.CustomSaveMemberExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
+import com.realworld.project.common.utils.CommonUtil;
 import com.realworld.project.domain.Authority;
 import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
@@ -43,7 +45,9 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     @Transactional
     @Override
     public void saveMember(MemberDTO memberDto) {
-
+        if(!CommonUtil.passwordValidationCheck(memberDto.getPassword())){
+            throw new CustomSaveMemberExceptionHandler(ErrorCode.PASSWORD_REQUEST_ERROR);
+        }
         Member member = Member.builder()
                             .userId(memberDto.getUserId())
                             .password(passwordEncoder.encode(memberDto.getPassword()))

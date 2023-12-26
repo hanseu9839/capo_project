@@ -22,6 +22,8 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(400,"Invalid Type Value"),
     // Request Parameter 로 데이터가 전달되지 않을 경우
     MISSING_REQUEST_PARAMETER_ERROR(400,"Missing Servlet RequestParameter Exception"),
+    // 패스워드 오류
+    PASSWORD_REQUEST_ERROR(400, "패스워드 형식이 올바르지 않습니다."),
 
     // 입력/출력 값이 유효하지 않음
     IO_ERROR(400,"I/O Exception"),
