@@ -19,9 +19,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 
@@ -67,6 +65,8 @@ public class AuthMailService implements GetMailUseCase {
 
     @Override
     public void emailAuthCheck(String userEmail, String authNumber) {
+
+        String targetAuthNumber = authNumber;
         // authMail에 있는 Mail정보 가져오기
         Optional<AuthMailJpaEntity> target = loadAuthMailPort.findByUserEmail(userEmail);
         AuthMail authMail = null;
@@ -74,6 +74,7 @@ public class AuthMailService implements GetMailUseCase {
         log.info("regDate : {} ",target.get().getRegDt());
         if(target.isPresent()){
             expiredAuthEmailCheck(target.get().getRegDt());
+            authNumberCheck(targetAuthNumber, target.get().getAuthNumber());
         } else{
             throw new CustomMailExceptionHandler(ErrorCode.EMAIL_REQUEST_ERROR);
         }
@@ -128,6 +129,11 @@ public class AuthMailService implements GetMailUseCase {
         if(diff.toMinutes() < 0 || diff.toMinutes() > 30){
             throw new CustomMailExceptionHandler(ErrorCode.EMAIL_EXPIRED_ERROR);
         }
+    }
 
+    public void authNumberCheck(String targetAuthNumber, String authNumber){
+        if(!targetAuthNumber.equals(authNumber)){
+            throw new CustomMailExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
+        }
     }
 }

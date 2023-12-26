@@ -182,4 +182,12 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CustomSaveMemberExceptionHandler.class)
+    protected  ResponseEntity<ErrorResponse> handleSaveMemberCustomException(CustomSaveMemberExceptionHandler ex){
+
+        final  ErrorResponse response = ErrorResponse.of(ErrorCode.PASSWORD_REQUEST_ERROR, ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
