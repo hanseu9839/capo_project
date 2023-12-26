@@ -7,7 +7,7 @@ public enum ErrorCode {
     // 인증 시간 만료
     EMAIL_EXPIRED_ERROR(408, "이메일 인증 시간이 만료되었습니다."),
     // 잘못된 이메일 요청
-    EMAIL_REQUEST_ERROR(400, "시스템 에러입니다. 이메일 인증을 다시 요청해주세요."),
+    EMAIL_REQUEST_ERROR(400, "이메일 인증을 다시 시도해주세요."),
     // 사용자 잘못된 요청
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
     //

@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
+import static com.realworld.project.common.code.ErrorCode.EMAIL_REQUEST_ERROR;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -58,7 +60,7 @@ public class AuthMailService implements GetMailUseCase {
                                                 .build();
             return authMailTarget;
         }  else {
-            throw new CustomMailExceptionHandler(ErrorCode.EMAIL_REQUEST_ERROR);
+            throw new CustomMailExceptionHandler(EMAIL_REQUEST_ERROR);
         }
 
     }
@@ -66,17 +68,19 @@ public class AuthMailService implements GetMailUseCase {
     @Override
     public void emailAuthCheck(String userEmail, String authNumber) {
 
-        String targetAuthNumber = authNumber;
+
         // authMail에 있는 Mail정보 가져오기
         Optional<AuthMailJpaEntity> target = loadAuthMailPort.findByUserEmail(userEmail);
         AuthMail authMail = null;
 
-        log.info("regDate : {} ",target.get().getRegDt());
+
         if(target.isPresent()){
             expiredAuthEmailCheck(target.get().getRegDt());
-            authNumberCheck(targetAuthNumber, target.get().getAuthNumber());
+
+            authNumberCheck(authNumber,target.get().getAuthNumber());
+
         } else{
-            throw new CustomMailExceptionHandler(ErrorCode.EMAIL_REQUEST_ERROR);
+            throw new CustomMailExceptionHandler(EMAIL_REQUEST_ERROR);
         }
     }
 
@@ -102,7 +106,7 @@ public class AuthMailService implements GetMailUseCase {
             }
         }
 
-        return key.toString();
+        return key.toString().toLowerCase();
     }
 
     public MimeMessage createMessage(String email, String authKey) throws UnsupportedEncodingException, MessagingException {
@@ -131,9 +135,10 @@ public class AuthMailService implements GetMailUseCase {
         }
     }
 
-    public void authNumberCheck(String targetAuthNumber, String authNumber){
-        if(!targetAuthNumber.equals(authNumber)){
+    public void authNumberCheck(String authNumber,String target){
+        if(!target.equals(authNumber)){
             throw new CustomMailExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }
     }
+
 }
