@@ -25,9 +25,7 @@ public class AuthMailController {
         log.info("mail : {} ", mailDto.getUserEmail());
         AuthMail authMail = getMailUseCase.emailAuth(mailDto.getUserEmail());
         return new ResponseEntity<>(ApiResponse.builder()
-                .result(authMail)
                 .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
-                .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
                 .build(), HttpStatus.OK);
     }
 
