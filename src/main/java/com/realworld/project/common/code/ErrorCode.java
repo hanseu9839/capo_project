@@ -4,6 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+
+    // 아이디
+    VALIDATION_USERID_ERROR(400,"아이디 형식이 올바르지 않습니다."),
+    // 존재하지 않는 이메일
+    NOT_EXISTS_EMAIL(400, "존재하지 않는 이메일입니다."),
+    // 이메일 인증 중복
+    EMAIL_DUPLICATION_ERROR(400, "이메일이 중복되었습니다."),
     // 인증 시간 만료
     EMAIL_EXPIRED_ERROR(408, "이메일 인증 시간이 만료되었습니다."),
     // 잘못된 이메일 요청
@@ -11,7 +18,7 @@ public enum ErrorCode {
     // 사용자 잘못된 요청
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
     //
-    LOGIN_DUPLICATION_ERROR(409, "이미 존재하는 아이디 또는 이메일 입니다."),
+    LOGIN_DUPLICATION_ERROR(400, "이미 존재하는 아이디 또는 이메일 입니다."),
     // Token 오류
     JWT_TOKEN_REQUEST_ERROR(400,"Refresh Token이 유효하지 않습니다."),
     // 잘못된 서버 요청

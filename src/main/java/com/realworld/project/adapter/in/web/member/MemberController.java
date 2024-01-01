@@ -6,12 +6,17 @@ import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.dto.TokenDTO;
 import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
+import com.realworld.project.domain.Member;
+import com.realworld.project.domain.Token;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/photocard/api/v1")
@@ -22,7 +27,7 @@ public class MemberController {
     private final GetMemberUseCase getMemberUseCase;
 
     @PostMapping("/member")
-    public ResponseEntity<ApiResponse> memberRegister(@RequestBody MemberDTO memberDto){
+    public ResponseEntity<ApiResponse> memberRegister(@RequestBody @Valid MemberDTO memberDto){
         postMemberUseCase.saveMember(memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
@@ -32,9 +37,9 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody MemberDTO memberDTO){
-        TokenDTO tokenDto =postMemberUseCase.login(memberDTO);
+        Token token =postMemberUseCase.login(memberDTO);
         return new ResponseEntity<>(ApiResponse.builder()
-                .result(tokenDto)
+                .result(token)
                 .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
                 .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build(),HttpStatus.OK);
@@ -54,4 +59,34 @@ public class MemberController {
                 .build(),HttpStatus.OK);
     }
 
+    @GetMapping("/profile/{user_id}")
+    public ResponseEntity<ApiResponse> profile(@PathVariable("user_id") String userId){
+        log.info("userId : {} " ,userId);
+        Member member = getMemberUseCase.getProfile(userId);
+
+        return new ResponseEntity<>(ApiResponse.builder()
+                                                .result(member)
+                                                .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
+                                                .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
+                                                .build(), HttpStatus.OK);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<ApiResponse> profileChange(@RequestBody MemberDTO memberDTO){
+        Member target = postMemberUseCase.profileChange(memberDTO);
+        return new ResponseEntity<>(ApiResponse.builder()
+                                                .result(target)
+                                                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
+                                                .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
+                                              .build(),HttpStatus.OK );
+    }
+
+    @PostMapping("/password-change")
+    public ResponseEntity<ApiResponse> passwordChange(@RequestBody @Valid MemberDTO memberDto){
+        postMemberUseCase.passwordChange(memberDto);
+        return new ResponseEntity<>(ApiResponse.builder()
+                                                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
+                                                .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
+                                                .build(), HttpStatus.OK);
+    }
 }

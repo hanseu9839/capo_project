@@ -183,10 +183,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CustomSaveMemberExceptionHandler.class)
-    protected  ResponseEntity<ErrorResponse> handleSaveMemberCustomException(CustomSaveMemberExceptionHandler ex){
-
-        final  ErrorResponse response = ErrorResponse.of(ErrorCode.PASSWORD_REQUEST_ERROR, ex.getMessage());
+    @ExceptionHandler(CustomMemberExceptionHandler.class)
+    protected  ResponseEntity<ErrorResponse> handleMemberCustomException(CustomMemberExceptionHandler ex){
+        log.error("Exception", ex);
+        ErrorResponse response = null;
+        if(ex.getMessage().equals(ErrorCode.NOT_EXISTS_EMAIL.getMessage()))
+            response = ErrorResponse.of(ErrorCode.NOT_EXISTS_EMAIL, ex.getMessage());
+        else if(ex.getMessage().equals(ErrorCode.PASSWORD_REQUEST_ERROR.getMessage()))
+            response = ErrorResponse.of(ErrorCode.PASSWORD_REQUEST_ERROR, ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
