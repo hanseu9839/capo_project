@@ -4,6 +4,7 @@ import com.realworld.project.adapter.out.persistence.mail.AuthMailJpaEntity;
 import com.realworld.project.application.port.in.mail.GetMailUseCase;
 import com.realworld.project.application.port.out.mail.CommandAuthMailPort;
 import com.realworld.project.application.port.out.mail.LoadAuthMailPort;
+import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.config.exception.CustomMailExceptionHandler;
 import com.realworld.project.domain.AuthMail;
@@ -32,6 +33,7 @@ public class AuthMailService implements GetMailUseCase {
     private final JavaMailSender javaMailSender;
     private final CommandAuthMailPort commandAuthMailPort;
     private final LoadAuthMailPort loadAuthMailPort;
+    private final LoadMemberPort loadMemberPort;
     @Value("${spring.mail.username}")
     private String from;
     @Override
@@ -71,8 +73,11 @@ public class AuthMailService implements GetMailUseCase {
 
         // authMail에 있는 Mail정보 가져오기
         Optional<AuthMailJpaEntity> target = loadAuthMailPort.findByUserEmail(userEmail);
-        AuthMail authMail = null;
-
+        boolean exists = loadMemberPort.existsByUserEmail(userEmail);
+        // 이메일 중복체크
+        if(exists){
+            throw new CustomMailExceptionHandler(ErrorCode.EMAIL_DUPLICATION_ERROR);
+        }
 
         if(target.isPresent()){
             expiredAuthEmailCheck(target.get().getRegDt());

@@ -28,6 +28,21 @@ public class Member {
     private String delYn;
     @Enumerated(EnumType.STRING)
     private Authority authority;
+    private String nickname;
+    @Builder
+    public Member(Long userSeq, String userId, String password,String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn, Authority authority, String nickname){
+        this.userSeq = userSeq;
+        this.userId = userId;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.userEmail = userEmail;
+        this.regDt = regDt;
+        this.createDt = createDt;
+        this.delYn = delYn;
+        this.authority = authority;
+        this.nickname = nickname;
+    }
+
     @Builder
     public Member(Long userSeq, String userId, String password,String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn, Authority authority){
         this.userSeq = userSeq;

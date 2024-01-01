@@ -27,11 +27,12 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     }
 
 
+
     @Override
-    public Optional<Member> findByUserId(String userId) {
-        Optional<Member> member = null;
+    public Optional<MemberJpaEntity> findByUserId(String userId) {
+        Optional<MemberJpaEntity> member = null;
         try{
-            member = Optional.ofNullable(memberMapper.toDomain(repository.findByUserId(userId)));
+            member = Optional.ofNullable(repository.findByUserId(userId));
         } catch (Exception e){
             e.printStackTrace();
             throw e;
@@ -40,9 +41,10 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
         return member;
     }
 
+
     @Override
     public Optional<MemberJpaEntity> findByUserEmail(String userEmail) {
-        Optional<MemberJpaEntity> member = null;
+       Optional<MemberJpaEntity> member= null;
         try{
             member = repository.findByUserEmail(userEmail);
         } catch(Exception e){

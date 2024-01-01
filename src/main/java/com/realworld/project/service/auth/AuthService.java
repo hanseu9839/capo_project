@@ -1,5 +1,6 @@
 package com.realworld.project.service.auth;
 
+import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.adapter.out.persistence.token.TokenJpaEntity;
 import com.realworld.project.application.port.in.token.PostTokenUseCase;
 import com.realworld.project.application.port.in.dto.TokenDTO;
@@ -48,7 +49,7 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
     }
 
     // DB 에 User 값이 존재하면 UserDetails 객체로 만들어서 리턴
-    private UserDetails createUserDetails(Member member){
+    private UserDetails createUserDetails(MemberJpaEntity member){
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
         log.info("Collections.singleton : {}", Collections.singleton(grantedAuthority));
         log.info("member getUserId : {} ", member.getUserId());
