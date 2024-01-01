@@ -1,6 +1,7 @@
 package com.realworld.project.service.member;
 
 
+import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.application.port.in.member.PostMemberUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
@@ -10,7 +11,7 @@ import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
 import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
-import com.realworld.project.common.config.exception.CustomSaveMemberExceptionHandler;
+import com.realworld.project.common.config.exception.CustomMemberExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.common.utils.CommonUtil;
 import com.realworld.project.domain.Authority;
@@ -25,6 +26,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -46,13 +48,19 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     @Override
     public void saveMember(MemberDTO memberDto) {
         if(!CommonUtil.passwordValidationCheck(memberDto.getPassword())){
-            throw new CustomSaveMemberExceptionHandler(ErrorCode.PASSWORD_REQUEST_ERROR);
+            throw new CustomMemberExceptionHandler(ErrorCode.PASSWORD_REQUEST_ERROR);
         }
+        if(!CommonUtil.userIdValidationCheck(memberDto.getUserId())){
+            throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_USERID_ERROR);
+        }
+
+        ;
         Member member = Member.builder()
                             .userId(memberDto.getUserId())
                             .password(passwordEncoder.encode(memberDto.getPassword()))
                             .phoneNumber(memberDto.getPhoneNumber())
                             .userEmail(memberDto.getUserEmail())
+                            .nickname(CommonUtil.createNickname())
                             .delYn("N")
                             .authority(Authority.ROLE_USER)
                             .build();
@@ -61,11 +69,11 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
 
     @Transactional
     @Override
-    public TokenDTO login(MemberDTO memberDTO) {
+    public Token login(MemberDTO memberDTO) {
         String userId = memberDTO.getUserId();
         String password = memberDTO.getPassword();
 
-        Optional<Member> member = findByUserId(userId);
+        Optional<MemberJpaEntity> member = findByUserId(userId);
 
         //비밀번호가 불일치할 경우
         if(!passwordEncoder.matches(password,member.get().getPassword())){
@@ -90,7 +98,43 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
         log.info("token : {} ", token.getUserId());
         commandTokenPort.saveToken(token);
 
-        return tokenDTO;
+        return token;
+    }
+    @Transactional
+    @Override
+    public void passwordChange(MemberDTO memberDto) {
+        Optional<MemberJpaEntity> member = loadMemberPort.findByUserEmail(memberDto.getUserEmail());
+        if(member.isPresent()){
+            if(!StringUtils.isEmpty(memberDto.getPassword())) member.get().setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        } else{
+            throw new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_EMAIL);
+        }
+
+    }
+
+    @Override
+    public Member profileChange(MemberDTO memberDto) {
+        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(memberDto.getUserId());
+        if(member.isPresent()){
+            if(!StringUtils.isEmpty(memberDto.getNickname())) member.get().setNickname(memberDto.getNickname());
+            if(!StringUtils.isEmpty(memberDto.getUserEmail())) member.get().setUserEmail(memberDto.getUserEmail());
+            if(!StringUtils.isEmpty(memberDto.getPhoneNumber())) member.get().setPhoneNumber(memberDto.getPhoneNumber());
+        } else {
+            throw new CustomMemberExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
+        }
+
+        Member target = Member.builder()
+                            .userEmail(member.get().getUserEmail())
+                            .nickname(member.get().getNickname())
+                            .userId(member.get().getUserId())
+                            .phoneNumber(member.get().getPhoneNumber())
+                            .build();
+        return target;
+    }
+
+    public Optional<MemberJpaEntity> findByUserEmail(String userEmail){
+        Optional<MemberJpaEntity> member = loadMemberPort.findByUserEmail(userEmail);
+        return member;
     }
 
     /**
@@ -99,8 +143,8 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
      * @return
      */
     @Override
-    public Optional<Member> findByUserId(String userId) {
-        Optional<Member> member = loadMemberPort.findByUserId(userId);
+    public Optional<MemberJpaEntity> findByUserId(String userId) {
+        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
         return member;
     }
 
@@ -112,6 +156,17 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     @Override
     public boolean existsByUserId(String userId) {
         return loadMemberPort.existsByUserId(userId);
+    }
+
+    @Override
+    public Member getProfile(String userId) {
+        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
+        Member target = Member.builder()
+                .nickname(member.get().getNickname())
+                .phoneNumber(member.get().getPhoneNumber())
+                .userEmail(member.get().getUserEmail())
+                .build();
+        return target;
     }
 
 
