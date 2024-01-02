@@ -31,7 +31,6 @@ import org.springframework.util.StringUtils;
 import java.util.Optional;
 
 @Slf4j
-@Primary
 @Service
 @RequiredArgsConstructor
 public class MemberService implements PostMemberUseCase , GetMemberUseCase{
@@ -93,43 +92,13 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
                             .refreshToken(tokenDTO.getRefreshToken())
                             .grantType(tokenDTO.getGrantType())
                             .userId(userId)
+                            .nickname(member.get().getNickname())
                             .build();
 
         log.info("token : {} ", token.getUserId());
         commandTokenPort.saveToken(token);
 
         return token;
-    }
-    @Transactional
-    @Override
-    public void passwordChange(MemberDTO memberDto) {
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserEmail(memberDto.getUserEmail());
-        if(member.isPresent()){
-            if(!StringUtils.isEmpty(memberDto.getPassword())) member.get().setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        } else{
-            throw new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_EMAIL);
-        }
-
-    }
-
-    @Override
-    public Member profileChange(MemberDTO memberDto) {
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(memberDto.getUserId());
-        if(member.isPresent()){
-            if(!StringUtils.isEmpty(memberDto.getNickname())) member.get().setNickname(memberDto.getNickname());
-            if(!StringUtils.isEmpty(memberDto.getUserEmail())) member.get().setUserEmail(memberDto.getUserEmail());
-            if(!StringUtils.isEmpty(memberDto.getPhoneNumber())) member.get().setPhoneNumber(memberDto.getPhoneNumber());
-        } else {
-            throw new CustomMemberExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
-        }
-
-        Member target = Member.builder()
-                            .userEmail(member.get().getUserEmail())
-                            .nickname(member.get().getNickname())
-                            .userId(member.get().getUserId())
-                            .phoneNumber(member.get().getPhoneNumber())
-                            .build();
-        return target;
     }
 
     public Optional<MemberJpaEntity> findByUserEmail(String userEmail){
@@ -158,16 +127,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
         return loadMemberPort.existsByUserId(userId);
     }
 
-    @Override
-    public Member getProfile(String userId) {
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
-        Member target = Member.builder()
-                .nickname(member.get().getNickname())
-                .phoneNumber(member.get().getPhoneNumber())
-                .userEmail(member.get().getUserEmail())
-                .build();
-        return target;
-    }
+
 
 
 }

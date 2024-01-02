@@ -70,7 +70,6 @@ public class AuthMailService implements GetMailUseCase {
     @Override
     public void emailAuthCheck(String userEmail, String authNumber) {
 
-
         // authMail에 있는 Mail정보 가져오기
         Optional<AuthMailJpaEntity> target = loadAuthMailPort.findByUserEmail(userEmail);
         boolean exists = loadMemberPort.existsByUserEmail(userEmail);
@@ -81,9 +80,7 @@ public class AuthMailService implements GetMailUseCase {
 
         if(target.isPresent()){
             expiredAuthEmailCheck(target.get().getRegDt());
-
             authNumberCheck(authNumber,target.get().getAuthNumber());
-
         } else{
             throw new CustomMailExceptionHandler(EMAIL_REQUEST_ERROR);
         }

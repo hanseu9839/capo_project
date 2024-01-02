@@ -95,4 +95,9 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                 .build(), HttpStatus.OK);
     }
+
+    @Override
+    public void deleteToken(String token) {
+
+    }
 }
