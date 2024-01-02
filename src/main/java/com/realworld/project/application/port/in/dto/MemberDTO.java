@@ -34,6 +34,28 @@ public class MemberDTO {
     @JsonProperty("del_yn")
     private String delYn;
     private String nickname;
+    @JsonProperty("current_password")
+    private String currentPassword;
+    @JsonProperty("new_password")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$",
+            message = "올바르지 않는 비밀번호입니다.")
+    private String newPassword;
+
+    @Builder
+    public MemberDTO(Long userSeq, String userId, String password,String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn, String nickname, String currentPassword, String newPassword){
+        this.userSeq = userSeq;
+        this.userId = userId;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.userEmail = userEmail;
+        this.regDt = regDt;
+        this.createDt = createDt;
+        this.delYn = delYn;
+        this.nickname = nickname;
+        this.currentPassword = currentPassword;
+        this.newPassword = newPassword;
+    }
+
 
     @Builder
     public MemberDTO(Long userSeq, String userId, String password,String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn, String nickname){

@@ -4,7 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-
+    // 유저 아이디가 존재하지 않은 경우
+    NOT_EXISTS_USERID(400, "존재하지 않는 아이디입니다."),
+    // 비밀번호가 올바르지 않습니다.
+    VALIDATION_PASSWORD_ERROR(400,"비밀번호가 올바르지 않습니다."),
     // 아이디
     VALIDATION_USERID_ERROR(400,"아이디 형식이 올바르지 않습니다."),
     // 존재하지 않는 이메일
@@ -19,8 +22,16 @@ public enum ErrorCode {
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
     //
     LOGIN_DUPLICATION_ERROR(400, "이미 존재하는 아이디 또는 이메일 입니다."),
+    // TOKEN 만료
+    JWT_TOKEN_EXPIRED_ERROR(401, "토큰이 만료되었습니다."),
+    // 변조된 토큰
+    JWT_WRONG_TYPE_TOKEN_ERROR(401, "변조된 토큰입니다."),
     // Token 오류
-    JWT_TOKEN_REQUEST_ERROR(400,"Refresh Token이 유효하지 않습니다."),
+    JWT_TOKEN_REQUEST_ERROR(401,"토큰이 유효하지 않습니다."),
+    // 토큰 오류
+    JWT_UNKNOWN_ERROR(401, "토큰이 존재하지 않습니다."),
+    // 변조된 토큰
+    UNSUPPORTED_TOKEN_ERROR(401, "변조된 토큰입니다."),
     // 잘못된 서버 요청
     BAD_REQUEST_ERROR(400,"Bad Request Exception"),
     // @RequestBody 데이터 미 존재
