@@ -29,7 +29,7 @@ public class JwtTokenProvider{
     private final Key key;
 
     // 30분
-    private final long ACCESS_TOKEN_VALIDATION_SECOND = 60 * 30;
+    private final long ACCESS_TOKEN_VALIDATION_SECOND =  30 * 60 * 1000;
 
     // 1일
     private final long REFRESH_TOKEN_VALIDATION_SECOND = 24 * 60 * 60 * 1000;
@@ -51,6 +51,8 @@ public class JwtTokenProvider{
         long now = (new Date()).getTime();
         Date accessValidity = new Date(now + ACCESS_TOKEN_VALIDATION_SECOND);
         Date refreshValidity = new Date(now + REFRESH_TOKEN_VALIDATION_SECOND);
+        log.info("accessValidity : {}", accessValidity);
+        log.info("refreshValidity : {}", refreshValidity);
         // Access Token 생성
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
