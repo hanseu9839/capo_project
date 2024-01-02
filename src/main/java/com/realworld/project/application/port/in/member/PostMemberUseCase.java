@@ -9,6 +9,4 @@ import com.realworld.project.domain.Token;
 public interface PostMemberUseCase {
     void saveMember(MemberDTO memberDto);
     Token login(MemberDTO memberDto);
-    void passwordChange(MemberDTO memberDto);
-    Member profileChange(MemberDTO memberDTO);
 }

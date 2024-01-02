@@ -3,19 +3,24 @@ package com.realworld.project.adapter.in.web.member;
 import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.application.port.in.member.PostMemberUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
-import com.realworld.project.application.port.in.dto.TokenDTO;
+import com.realworld.project.application.port.in.token.PostTokenUseCase;
 import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Arrays;
 import java.util.Optional;
 
 @RestController
@@ -25,7 +30,7 @@ import java.util.Optional;
 public class MemberController {
     private final PostMemberUseCase postMemberUseCase;
     private final GetMemberUseCase getMemberUseCase;
-
+    private final PostTokenUseCase postTokenUseCase;
     @PostMapping("/member")
     public ResponseEntity<ApiResponse> memberRegister(@RequestBody @Valid MemberDTO memberDto){
         postMemberUseCase.saveMember(memberDto);
@@ -45,7 +50,13 @@ public class MemberController {
                 .build(),HttpStatus.OK);
     }
 
-
+    @PostMapping("/member/logout")
+    public ResponseEntity<ApiResponse> logout(HttpServletRequest request, HttpServletResponse response){
+        log.info("request getHeader {} ",request.getHeader(HttpHeaders.AUTHORIZATION));
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ")[1];
+        postTokenUseCase.deleteToken(token);
+        return new ResponseEntity<>(ApiResponse.builder().build(), HttpStatus.OK);
+    }
 
     @GetMapping("/duplication-check/user-id/{user_id}")
     public ResponseEntity<ApiResponse> userIdDuplicationCheck(@PathVariable("user_id") String userId, HttpServletResponse response){
@@ -57,36 +68,5 @@ public class MemberController {
                 .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
                 .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build(),HttpStatus.OK);
-    }
-
-    @GetMapping("/profile/{user_id}")
-    public ResponseEntity<ApiResponse> profile(@PathVariable("user_id") String userId){
-        log.info("userId : {} " ,userId);
-        Member member = getMemberUseCase.getProfile(userId);
-
-        return new ResponseEntity<>(ApiResponse.builder()
-                                                .result(member)
-                                                .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
-                                                .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
-                                                .build(), HttpStatus.OK);
-    }
-
-    @PostMapping("/profile")
-    public ResponseEntity<ApiResponse> profileChange(@RequestBody MemberDTO memberDTO){
-        Member target = postMemberUseCase.profileChange(memberDTO);
-        return new ResponseEntity<>(ApiResponse.builder()
-                                                .result(target)
-                                                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
-                                                .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
-                                              .build(),HttpStatus.OK );
-    }
-
-    @PostMapping("/password-change")
-    public ResponseEntity<ApiResponse> passwordChange(@RequestBody @Valid MemberDTO memberDto){
-        postMemberUseCase.passwordChange(memberDto);
-        return new ResponseEntity<>(ApiResponse.builder()
-                                                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
-                                                .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
-                                                .build(), HttpStatus.OK);
     }
 }

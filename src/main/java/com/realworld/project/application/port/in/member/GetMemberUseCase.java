@@ -9,5 +9,5 @@ public interface GetMemberUseCase {
     Optional<MemberJpaEntity> findByUserId(String userId);
     boolean existsByUserEmail(String userEmail);
     boolean existsByUserId(String userId);
-    Member getProfile(String userId);
+
 }
