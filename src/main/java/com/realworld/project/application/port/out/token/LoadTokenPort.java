@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface LoadTokenPort {
     Optional<TokenJpaEntity> findByUserId(String userId);
+    void deleteToken(String userId);
+
 }

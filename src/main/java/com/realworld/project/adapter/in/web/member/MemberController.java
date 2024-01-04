@@ -51,11 +51,13 @@ public class MemberController {
     }
 
     @PostMapping("/member/logout")
-    public ResponseEntity<ApiResponse> logout(HttpServletRequest request, HttpServletResponse response){
-        log.info("request getHeader {} ",request.getHeader(HttpHeaders.AUTHORIZATION));
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ")[1];
-        postTokenUseCase.deleteToken(token);
-        return new ResponseEntity<>(ApiResponse.builder().build(), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> logout(@AuthenticationPrincipal User user){
+        log.info("userName : {} ", user.getUsername());
+        //postTokenUseCase.deleteToken(token);
+        postTokenUseCase.deleteToken(user.getUsername());
+        return new ResponseEntity<>(ApiResponse.builder()
+                .resultCode(200)
+                .build(), HttpStatus.OK);
     }
 
     @GetMapping("/duplication-check/user-id/{user_id}")

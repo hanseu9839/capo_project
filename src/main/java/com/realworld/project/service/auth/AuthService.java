@@ -12,7 +12,6 @@ import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.config.exception.CustomJwtExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.common.response.ApiResponse;
-import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +36,7 @@ import java.util.Optional;
 public class AuthService implements PostTokenUseCase, UserDetailsService {
     private final LoadMemberPort loadMemberPort;
     private final LoadTokenPort loadTokenPort;
+    private final CommandTokenPort commandTokenPort;
     private final JwtTokenProvider jwtTokenProvider;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -97,7 +97,7 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
     }
 
     @Override
-    public void deleteToken(String token) {
-
+    public void deleteToken(String userId) {
+        loadTokenPort.deleteToken(userId);
     }
 }
