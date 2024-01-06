@@ -30,7 +30,6 @@ public class MemberJpaEntity {
 
     private String phoneNumber;
 
-    @Id
     private String userEmail;
 
     private String delYn;

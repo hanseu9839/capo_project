@@ -14,6 +14,4 @@ public class MemberPK implements Serializable {
     private Long userSeq;
     @Column(name="user_id")
     private String userId;
-    @Column(name="user_email")
-    private String userEmail;
 }

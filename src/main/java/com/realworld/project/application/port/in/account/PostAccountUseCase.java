@@ -5,5 +5,5 @@ import com.realworld.project.domain.Member;
 
 public interface PostAccountUseCase {
     void passwordUpdate(MemberDTO memberDto, String userId);
-    Member emailUpdate(MemberDTO memberDto);
+    Member emailUpdate(String userId, MemberDTO memberDto);
 }

@@ -1,9 +1,11 @@
 package com.realworld.project.adapter.in.web.account;
 
+import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.account.GetAccountUseCase;
 import com.realworld.project.application.port.in.account.PostAccountUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.mail.GetMailUseCase;
+import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.domain.Member;
@@ -15,11 +17,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/photocard/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
+    private final GetMemberUseCase getMemberUseCase;
     private final PostAccountUseCase postAccountUseCase;
     private final GetAccountUseCase getAccountUseCase;
     private final GetMailUseCase getMailUseCase;
@@ -44,9 +49,9 @@ public class AccountController {
     }
 
     @PatchMapping("/member/email")
-    public ResponseEntity<ApiResponse> emailUpdate(@RequestBody MemberDTO memberDto){
+    public ResponseEntity<ApiResponse> emailUpdate(@AuthenticationPrincipal User user, @RequestBody MemberDTO memberDto){
         getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), memberDto.getAuthNumber());
-        Member target = postAccountUseCase.emailUpdate(memberDto);
+        Member target = postAccountUseCase.emailUpdate(user.getUsername(), memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .result(target)
                                                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
