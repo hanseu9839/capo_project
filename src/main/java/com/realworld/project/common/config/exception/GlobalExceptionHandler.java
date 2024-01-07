@@ -191,7 +191,8 @@ public class GlobalExceptionHandler {
             response = ErrorResponse.of(ErrorCode.NOT_EXISTS_EMAIL, ex.getMessage());
         else if(ex.getMessage().equals(ErrorCode.PASSWORD_REQUEST_ERROR.getMessage()))
             response = ErrorResponse.of(ErrorCode.PASSWORD_REQUEST_ERROR, ex.getMessage());
-
+        else if(ex.getMessage().equals(ErrorCode.VALIDATION_PASSWORD_ERROR.getMessage()))
+            response = ErrorResponse.of(ErrorCode.VALIDATION_PASSWORD_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

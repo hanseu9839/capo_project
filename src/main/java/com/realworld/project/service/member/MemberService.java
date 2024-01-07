@@ -20,14 +20,11 @@ import com.realworld.project.domain.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import java.util.Optional;
 
 @Slf4j
@@ -101,6 +98,18 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
         return token;
     }
 
+    @Override
+    public void remove(MemberJpaEntity entity) {
+        commandMemberPort.userRemove(entity);
+
+
+    }
+
+    @Override
+    public void saveBackupMember(Member member) {
+        commandMemberPort.saveBackup(member);
+    }
+
     public Optional<MemberJpaEntity> findByUserEmail(String userEmail){
         Optional<MemberJpaEntity> member = loadMemberPort.findByUserEmail(userEmail);
         return member;
@@ -126,8 +135,4 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     public boolean existsByUserId(String userId) {
         return loadMemberPort.existsByUserId(userId);
     }
-
-
-
-
 }
