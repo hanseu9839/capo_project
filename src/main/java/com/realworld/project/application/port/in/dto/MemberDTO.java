@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Builder
 public class MemberDTO {
     @JsonProperty("user_seq")
     private Long userSeq;
@@ -40,7 +39,8 @@ public class MemberDTO {
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$",
             message = "올바르지 않는 비밀번호입니다.")
     private String newPassword;
-
+    @JsonProperty("auth_number")
+    private String authNumber;
     @Builder
     public MemberDTO(Long userSeq, String userId, String password,String phoneNumber, String userEmail, LocalDateTime regDt, LocalDateTime createDt, String delYn, String nickname, String currentPassword, String newPassword){
         this.userSeq = userSeq;

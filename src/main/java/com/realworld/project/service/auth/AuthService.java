@@ -12,7 +12,6 @@ import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.config.exception.CustomJwtExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.common.response.ApiResponse;
-import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +36,7 @@ import java.util.Optional;
 public class AuthService implements PostTokenUseCase, UserDetailsService {
     private final LoadMemberPort loadMemberPort;
     private final LoadTokenPort loadTokenPort;
+    private final CommandTokenPort commandTokenPort;
     private final JwtTokenProvider jwtTokenProvider;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,12 +70,12 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
 
         // 2. Access Token에서 Member ID 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenDto.getAccessToken());
-        TokenDTO tokenDTO =  jwtTokenProvider.createToken(authentication);
+        TokenDTO target =  jwtTokenProvider.createToken(authentication);
 
         Optional<TokenJpaEntity> getToken = loadTokenPort.findByUserId(authentication.getName());
         getToken.ifPresent(value ->{
-            value.setAccessToken(tokenDTO.getAccessToken());
-            value.setRefreshToken(tokenDTO.getRefreshToken());
+            value.setAccessToken(target.getAccessToken());
+            value.setRefreshToken(target.getRefreshToken());
         });
 
 
@@ -85,8 +85,8 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         Token token = Token.builder()
                 .userId(authentication.getName())
-                .accessToken(tokenDTO.getAccessToken())
-                .refreshToken(tokenDto.getRefreshToken())
+                .accessToken(target.getAccessToken())
+                .refreshToken(target.getRefreshToken())
                 .build();
 
         return new ResponseEntity(ApiResponse.builder()
@@ -97,7 +97,7 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
     }
 
     @Override
-    public void deleteToken(String token) {
-
+    public void deleteToken(String userId) {
+        loadTokenPort.deleteToken(userId);
     }
 }

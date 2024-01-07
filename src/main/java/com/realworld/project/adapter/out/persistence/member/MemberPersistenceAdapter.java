@@ -5,6 +5,7 @@ import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.code.ResultErrorMsgCode;
 import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
+import com.realworld.project.domain.Authority;
 import com.realworld.project.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPort {
     private final MemberMapper memberMapper;
     private final MemberRepository repository;
+    private final BackUpMemberRepository backRepository;
     @Override
     public void saveMember(Member member) {
         if(existsByUserId(member.getUserId()) || existsByUserEmail(member.getUserEmail())){
@@ -63,6 +65,27 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     @Override
     public boolean existsByUserId(String userId) {
         return repository.existsByUserId(userId);
+    }
+
+    @Override
+    public void userRemove(MemberJpaEntity entity) {
+        repository.delete(entity);
+    }
+
+    @Override
+    public void saveBackup(Member member) {
+        BackUpMemberJpaEntity entity = BackUpMemberJpaEntity.builder()
+                                                            .authority(Authority.ROLE_USER)
+                                                            .userId(member.getUserId())
+                                                            .phoneNumber(member.getPhoneNumber())
+                                                            .userEmail(member.getUserEmail())
+                                                            .delYn("N")
+                                                            .password(member.getPassword())
+                                                            .nickname(member.getNickname())
+                                                            .createDt(member.getCreateDt())
+                                                            .regDt(member.getRegDt())
+                                                            .build();
+        backRepository.save(entity);
     }
 
 }

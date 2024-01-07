@@ -6,5 +6,5 @@ import org.springframework.http.ResponseEntity;
 public interface PostTokenUseCase {
     ResponseEntity reissue(TokenDTO tokenDto);
 
-    void deleteToken(String token);
+    void deleteToken(String userId);
 }

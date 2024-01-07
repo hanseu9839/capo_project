@@ -20,8 +20,6 @@ public class AuthController {
     public ResponseEntity<ApiResponse> reissue(HttpServletRequest request, HttpServletResponse response){
         String accessToken = request.getHeader("AccessToken");
         String refreshToken = request.getHeader("RefreshToken");
-        log.info("accessToken {} ",accessToken);
-        log.info("refreshToken {}",refreshToken);
 
         TokenDTO tokenDto = TokenDTO.builder()
                                     .accessToken(accessToken)

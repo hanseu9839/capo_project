@@ -66,8 +66,14 @@ public class AccountService implements GetAccountUseCase, PostAccountUseCase {
         }
 
     }
+    @Transactional
     @Override
-    public Member emailUpdate(MemberDTO memberDto) {
-        return null;
+    public Member emailUpdate(String userId,MemberDTO memberDto) {
+        Optional<MemberJpaEntity> target = loadMemberPort.findByUserId(userId);
+        target.ifPresent(member-> member.setUserEmail(memberDto.getUserEmail()));
+        Member member = Member.builder()
+                            .userEmail(target.get().getUserEmail())
+                            .build();
+        return member;
     }
 }

@@ -25,4 +25,12 @@ public class TokenPersistenceAdapter implements CommandTokenPort, LoadTokenPort 
 
     @Override
     public Optional<TokenJpaEntity> findByUserId(String userId){ return tokenRepository.findByUserId(userId); }
+
+    @Override
+    public void deleteToken(String userId) {
+        TokenJpaEntity entity = TokenJpaEntity.builder()
+                                    .userId(userId)
+                                    .build();
+        tokenRepository.delete(entity);
+    }
 }
