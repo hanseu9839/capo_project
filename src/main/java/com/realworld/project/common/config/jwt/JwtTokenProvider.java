@@ -25,14 +25,13 @@ public class JwtTokenProvider{
     private static final String AUTHORITY_KEY = "auth";
     private static final String BEARER = "Bearer";
 
-
     private final Key key;
 
     // 30분
     private final long ACCESS_TOKEN_VALIDATION_SECOND =  30 * 60 * 1000;
 
-    // 1일
-    private final long REFRESH_TOKEN_VALIDATION_SECOND = 30 * 24 * 60 * 60 * 1000;
+    // 2주
+    private final long REFRESH_TOKEN_VALIDATION_SECOND = 14 * 24 * 60 * 60 * 1000;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
@@ -51,6 +50,7 @@ public class JwtTokenProvider{
         long now = (new Date()).getTime();
         Date accessValidity = new Date(now + ACCESS_TOKEN_VALIDATION_SECOND);
         Date refreshValidity = new Date(now + REFRESH_TOKEN_VALIDATION_SECOND);
+
         log.info("accessValidity : {}", accessValidity);
         log.info("refreshValidity : {}", refreshValidity);
         // Access Token 생성
@@ -63,6 +63,8 @@ public class JwtTokenProvider{
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
+                                    .setSubject(authentication.getName())
+                                    .claim(AUTHORITY_KEY, authorities)
                                     .setExpiration(refreshValidity)
                                     .signWith(SignatureAlgorithm.HS256, key)
                                     .compact();

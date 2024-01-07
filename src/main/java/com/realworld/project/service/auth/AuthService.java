@@ -70,12 +70,12 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
 
         // 2. Access Token에서 Member ID 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenDto.getAccessToken());
-        TokenDTO tokenDTO =  jwtTokenProvider.createToken(authentication);
+        TokenDTO target =  jwtTokenProvider.createToken(authentication);
 
         Optional<TokenJpaEntity> getToken = loadTokenPort.findByUserId(authentication.getName());
         getToken.ifPresent(value ->{
-            value.setAccessToken(tokenDTO.getAccessToken());
-            value.setRefreshToken(tokenDTO.getRefreshToken());
+            value.setAccessToken(target.getAccessToken());
+            value.setRefreshToken(target.getRefreshToken());
         });
 
 
@@ -85,8 +85,8 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         Token token = Token.builder()
                 .userId(authentication.getName())
-                .accessToken(tokenDTO.getAccessToken())
-                .refreshToken(tokenDto.getRefreshToken())
+                .accessToken(target.getAccessToken())
+                .refreshToken(target.getRefreshToken())
                 .build();
 
         return new ResponseEntity(ApiResponse.builder()
