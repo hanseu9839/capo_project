@@ -32,7 +32,7 @@ public class JwtTokenProvider{
     private final long ACCESS_TOKEN_VALIDATION_SECOND =  30 * 60 * 1000;
 
     // 1일
-    private final long REFRESH_TOKEN_VALIDATION_SECOND = 24 * 60 * 60 * 1000;
+    private final long REFRESH_TOKEN_VALIDATION_SECOND = 30 * 24 * 60 * 60 * 1000;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
