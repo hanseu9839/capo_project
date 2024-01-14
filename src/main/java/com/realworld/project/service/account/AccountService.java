@@ -8,6 +8,7 @@ import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
 import com.realworld.project.common.code.ErrorCode;
+import com.realworld.project.common.config.exception.CustomLoginExceptionHandler;
 import com.realworld.project.common.config.exception.CustomMemberExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.domain.Member;
@@ -27,10 +28,7 @@ import java.util.Optional;
 public class AccountService implements GetAccountUseCase, PostAccountUseCase {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
-    private final CommandTokenPort commandTokenPort;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Member getAccount(String userId) {
@@ -45,22 +43,29 @@ public class AccountService implements GetAccountUseCase, PostAccountUseCase {
 
     @Transactional
     @Override
-    public void passwordUpdate(MemberDTO memberDto, String userId) {
+    public void updatePassword(MemberDTO memberDto, String userId) {
         String currentPassword = memberDto.getCurrentPassword();
         String newPassword = memberDto.getNewPassword();
-        log.info("userId : {} ", userId);
+
+        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
         log.info("new Password : {} ",newPassword);
         log.info("current Password:{} ",currentPassword);
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
 
-        // 현재 비밀번호 입력과 DB 비밀번호 비교 후 없으면 Exception
+        // 현재 비밀번호 입력과 DB 비밀번호 비교 후 없으면 일치하지 않으면 Exception
         if(!passwordEncoder.matches(currentPassword, member.get().getPassword())){
             throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_PASSWORD_ERROR);
         }
 
         // 존재하는 경우
         if(member.isPresent()){
-            if(!StringUtils.isEmpty(memberDto.getNewPassword())) member.get().setPassword(passwordEncoder.encode(newPassword));
+            if(!StringUtils.isEmpty(memberDto.getNewPassword())){
+                Member targetMember = Member.builder()
+                        .userId(userId)
+                        .password(passwordEncoder.encode(newPassword))
+                        .build();
+                long update = commandMemberPort.updatePassword(targetMember);
+                if(update < 0) throw new CustomLoginExceptionHandler(ErrorCode.FAIL_PASSWORD_CHANGE);
+            }
         } else{ // 존재하지 않으면 USER_ID와 매칭되는 값이 없음
             throw new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
         }

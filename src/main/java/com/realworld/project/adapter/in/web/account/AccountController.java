@@ -41,7 +41,7 @@ public class AccountController {
 
     @PatchMapping("/member/password")
     public ResponseEntity<ApiResponse> passwordUpdate(@AuthenticationPrincipal User user,@RequestBody MemberDTO memberDto){
-        postAccountUseCase.passwordUpdate(memberDto, user.getUsername());
+        postAccountUseCase.updatePassword(memberDto, user.getUsername());
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())

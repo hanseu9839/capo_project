@@ -10,6 +10,5 @@ import com.realworld.project.domain.Token;
 public interface PostMemberUseCase {
     void saveMember(MemberDTO memberDto);
     Token login(MemberDTO memberDto);
-    void remove(MemberJpaEntity entity);
-    void saveBackupMember(Member member);
+    void remove(String userId, String password);
 }
