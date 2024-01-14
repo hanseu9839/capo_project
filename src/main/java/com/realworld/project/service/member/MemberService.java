@@ -70,7 +70,9 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
         String password = memberDTO.getPassword();
 
         Optional<MemberJpaEntity> member = findByUserId(userId);
-
+        if(!member.isPresent()){
+            throw new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
+        }
         //비밀번호가 불일치할 경우
         if(!passwordEncoder.matches(password,member.get().getPassword())){
             throw new CustomLoginExceptionHandler(ErrorCode.LOGIN_REQUEST_ERROR);
@@ -99,16 +101,28 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     }
 
     @Override
-    public void remove(MemberJpaEntity entity) {
-        commandMemberPort.userRemove(entity);
+    public void remove(String userId, String password) {
+        Optional<MemberJpaEntity> targetMember = loadMemberPort.findByUserId(userId);
 
+        Member member = Member.builder()
+                                .userId(targetMember.get().getUserId())
+                                .authority(targetMember.get().getAuthority())
+                                .phoneNumber(targetMember.get().getPhoneNumber())
+                                .userEmail(targetMember.get().getUserEmail())
+                                .password(targetMember.get().getPassword())
+                                .nickname(targetMember.get().getNickname())
+                                .phoneNumber(targetMember.get().getPhoneNumber())
+                                .build();
 
+        if(passwordEncoder.matches(password, member.getPassword())){
+            commandMemberPort.userRemove(targetMember.get());
+            commandMemberPort.saveBackup(member);
+        } else {
+            throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_PASSWORD_ERROR);
+        }
     }
 
-    @Override
-    public void saveBackupMember(Member member) {
-        commandMemberPort.saveBackup(member);
-    }
+
 
     public Optional<MemberJpaEntity> findByUserEmail(String userEmail){
         Optional<MemberJpaEntity> member = loadMemberPort.findByUserEmail(userEmail);

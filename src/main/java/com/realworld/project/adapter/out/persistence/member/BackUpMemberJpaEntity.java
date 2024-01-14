@@ -1,5 +1,4 @@
 package com.realworld.project.adapter.out.persistence.member;
-
 import com.realworld.project.domain.Authority;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,3 +53,4 @@ public class BackUpMemberJpaEntity {
         this.nickname = nickname;
     }
 }
+
