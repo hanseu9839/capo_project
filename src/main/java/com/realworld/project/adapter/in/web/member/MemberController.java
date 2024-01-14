@@ -6,11 +6,8 @@ import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.application.port.in.member.PostMemberUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.token.PostTokenUseCase;
-import com.realworld.project.common.code.ErrorCode;
 import com.realworld.project.common.code.SuccessCode;
-import com.realworld.project.common.config.exception.CustomMemberExceptionHandler;
 import com.realworld.project.common.response.ApiResponse;
-import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -74,26 +71,9 @@ public class MemberController {
                 .build(),HttpStatus.OK);
     }
 
-    @PostMapping("/member/out")
+    @DeleteMapping("/member/out")
     public ResponseEntity<ApiResponse> userRemove(@AuthenticationPrincipal User user, @RequestBody MemberDTO memberDto){
-        Optional<MemberJpaEntity> targetMember = getMemberUseCase.findByUserId(user.getUsername());
-
-        Member member = Member.builder()
-                                .userId(targetMember.get().getUserId())
-                                .authority(targetMember.get().getAuthority())
-                                .phoneNumber(targetMember.get().getPhoneNumber())
-                                .userEmail(targetMember.get().getUserEmail())
-                                .password(targetMember.get().getPassword())
-                                .nickname(targetMember.get().getNickname())
-                                .phoneNumber(targetMember.get().getPhoneNumber())
-                                .build();
-
-        if(passwordEncoder.matches(memberDto.getPassword(), member.getPassword())){
-            postMemberUseCase.remove(targetMember.get());
-            postMemberUseCase.saveBackupMember(member);
-        } else{
-            throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_PASSWORD_ERROR);
-        }
+        postMemberUseCase.remove(user.getUsername(),memberDto.getPassword());
 
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.DELETE_SUCCESS.getMessage())
@@ -103,8 +83,6 @@ public class MemberController {
 
     @PatchMapping("/user/find-password/{auth_number}")
     public ResponseEntity<ApiResponse> findPassword(@AuthenticationPrincipal User user,@RequestBody MemberDTO memberDto, @PathVariable("auth_number") String authNumber){
-        Optional<MemberJpaEntity> targetMember = getMemberUseCase.findByUserId(user.getUsername());
-        getMailUseCase.emailAuthCheck(targetMember.get().getUserEmail(), authNumber);
 
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
@@ -122,5 +100,6 @@ public class MemberController {
                                                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
                                                .build(), HttpStatus.OK);
     }
+
 
 }

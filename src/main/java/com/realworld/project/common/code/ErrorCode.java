@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    // 비밀번호 변경에 실패한 경우
+    FAIL_PASSWORD_CHANGE(400,"패스워드 변경에 실패하였습니다."),
     // 유저 아이디가 존재하지 않은 경우
     NOT_EXISTS_USERID(400, "존재하지 않는 아이디입니다."),
     // 비밀번호가 올바르지 않습니다.
@@ -20,7 +22,7 @@ public enum ErrorCode {
     EMAIL_REQUEST_ERROR(400, "이메일 인증을 다시 시도해주세요."),
     // 사용자 잘못된 요청
     LOGIN_REQUEST_ERROR(400,"비밀번호 또는 아이디가 올바르지 않습니다."),
-    //
+    // 중복되는 아이디 이메일
     LOGIN_DUPLICATION_ERROR(400, "이미 존재하는 아이디 또는 이메일 입니다."),
     // TOKEN 만료
     JWT_TOKEN_EXPIRED_ERROR(401, "토큰이 만료되었습니다."),

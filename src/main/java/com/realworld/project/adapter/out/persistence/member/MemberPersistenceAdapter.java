@@ -1,5 +1,6 @@
 package com.realworld.project.adapter.out.persistence.member;
 
+import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.common.code.ErrorCode;
@@ -70,6 +71,13 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     @Override
     public void userRemove(MemberJpaEntity entity) {
         repository.delete(entity);
+    }
+
+    @Override
+    public long updatePassword(Member member) {
+        MemberJpaEntity memberJpaEntity = memberMapper.toEntity(member);
+        long update = repository.updatePassword(memberJpaEntity);
+        return update;
     }
 
     @Override
