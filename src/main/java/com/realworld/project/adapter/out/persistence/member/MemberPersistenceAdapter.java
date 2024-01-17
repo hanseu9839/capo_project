@@ -1,6 +1,5 @@
 package com.realworld.project.adapter.out.persistence.member;
 
-import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.common.code.ErrorCode;
@@ -32,7 +31,9 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
 
 
     @Override
-    public Optional<MemberJpaEntity> findByUserId(String userId) {
+    public Optional<Member> findByUserId(String userId) {
+
+
         Optional<MemberJpaEntity> member = null;
         try{
             member = Optional.ofNullable(repository.findByUserId(userId));
@@ -41,20 +42,23 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
             throw e;
         }
 
-        return member;
+        return Optional.ofNullable(memberMapper.toDomain(member.get()));
     }
 
 
     @Override
-    public Optional<MemberJpaEntity> findByUserEmail(String userEmail) {
-       Optional<MemberJpaEntity> member= null;
+    public Member findByUserEmail(String userEmail) {
+       MemberJpaEntity memberJpaEntity = MemberJpaEntity.builder()
+               .userEmail(userEmail)
+               .build();
+        MemberJpaEntity target= null;
         try{
-            member = repository.findByUserEmail(userEmail);
+            target = repository.findByUserEmail(memberJpaEntity);
         } catch(Exception e){
             e.printStackTrace();
             throw e;
         }
-
+        Member member = memberMapper.toDomain(target);
         return member;
     }
 
@@ -69,7 +73,8 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     }
 
     @Override
-    public void userRemove(MemberJpaEntity entity) {
+    public void userRemove(Member member) {
+        MemberJpaEntity entity = memberMapper.toEntity(member);
         repository.delete(entity);
     }
 
@@ -78,6 +83,12 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
         MemberJpaEntity memberJpaEntity = memberMapper.toEntity(member);
         long update = repository.updatePassword(memberJpaEntity);
         return update;
+    }
+
+    @Override
+    public long updateEmail(Member member) {
+        MemberJpaEntity memberJpaEntity = memberMapper.toEntity(member);
+        return repository.updateEmail(memberJpaEntity);
     }
 
     @Override
@@ -94,6 +105,13 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
                                                             .regDt(member.getRegDt())
                                                             .build();
         backRepository.save(entity);
+    }
+
+    @Override
+    public long nicknameUpdate(Member member) {
+        MemberJpaEntity entity = memberMapper.toEntity(member);
+
+        return repository.updateNickname(entity);
     }
 
 }

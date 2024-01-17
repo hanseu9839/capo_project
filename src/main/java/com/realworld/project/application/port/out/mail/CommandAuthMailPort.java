@@ -7,5 +7,5 @@ import com.realworld.project.domain.AuthMail;
 import java.util.Optional;
 
 public interface CommandAuthMailPort {
-    Optional<AuthMailJpaEntity> saveEmailAuth(AuthMail authMail);
+    Optional<AuthMail> saveEmailAuth(AuthMail authMail);
 }

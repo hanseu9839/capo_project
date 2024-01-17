@@ -6,7 +6,9 @@ import com.realworld.project.domain.Member;
 
 public interface CommandMemberPort {
     void saveMember(Member member);
-    void userRemove(MemberJpaEntity entity);
+    void userRemove(Member member);
     long updatePassword(Member member);
+    long updateEmail(Member member);
     void saveBackup(Member member);
+    long nicknameUpdate(Member member);
 }

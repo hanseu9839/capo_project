@@ -6,8 +6,9 @@ import com.realworld.project.domain.Member;
 import java.util.Optional;
 
 public interface GetMemberUseCase {
-    Optional<MemberJpaEntity> findByUserId(String userId);
+    Optional<Member> findByUserId(String userId);
     boolean existsByUserEmail(String userEmail);
     boolean existsByUserId(String userId);
+    Member findByUserEmail(String userEmail);
 
 }

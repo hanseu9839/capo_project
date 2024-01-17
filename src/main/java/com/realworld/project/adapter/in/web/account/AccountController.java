@@ -50,10 +50,10 @@ public class AccountController {
 
     @PatchMapping("/member/email")
     public ResponseEntity<ApiResponse> emailUpdate(@AuthenticationPrincipal User user, @RequestBody MemberDTO memberDto){
+        // 이메일 인증을 체크한다.
         getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), memberDto.getAuthNumber());
-        Member target = postAccountUseCase.emailUpdate(user.getUsername(), memberDto);
+        long updated = postAccountUseCase.updateEmail(user.getUsername(), memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
-                                                .result(target)
                                                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                                                 .build(), HttpStatus.OK);
