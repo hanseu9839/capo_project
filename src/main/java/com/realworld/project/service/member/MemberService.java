@@ -1,7 +1,6 @@
 package com.realworld.project.service.member;
 
 
-import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.application.port.in.member.PostMemberUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
@@ -52,6 +51,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
 
         ;
         Member member = Member.builder()
+                            .userSeq(memberDto.getUserSeq())
                             .userId(memberDto.getUserId())
                             .password(passwordEncoder.encode(memberDto.getPassword()))
                             .phoneNumber(memberDto.getPhoneNumber())
@@ -69,7 +69,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
         String userId = memberDTO.getUserId();
         String password = memberDTO.getPassword();
 
-        Optional<MemberJpaEntity> member = findByUserId(userId);
+        Optional<Member> member = findByUserId(userId);
         if(!member.isPresent()){
             throw new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
         }
@@ -102,7 +102,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
 
     @Override
     public void remove(String userId, String password) {
-        Optional<MemberJpaEntity> targetMember = loadMemberPort.findByUserId(userId);
+        Optional<Member> targetMember = loadMemberPort.findByUserId(userId);
 
         Member member = Member.builder()
                                 .userId(targetMember.get().getUserId())
@@ -124,8 +124,8 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
 
 
 
-    public Optional<MemberJpaEntity> findByUserEmail(String userEmail){
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserEmail(userEmail);
+    public Member findByUserEmail(String userEmail){
+        Member member = loadMemberPort.findByUserEmail(userEmail);
         return member;
     }
 
@@ -135,8 +135,9 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
      * @return
      */
     @Override
-    public Optional<MemberJpaEntity> findByUserId(String userId) {
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
+    public Optional<Member> findByUserId(String userId) {
+        Optional<Member> member = loadMemberPort.findByUserId(userId);
+
         return member;
     }
 

@@ -23,6 +23,7 @@ public class MemberMapper {
 
     public MemberJpaEntity toEntity(Member domain){
         return MemberJpaEntity.builder()
+                            .userSeq(domain.getUserSeq())
                             .userId(domain.getUserId())
                             .userEmail(domain.getUserEmail())
                             .password(domain.getPassword())

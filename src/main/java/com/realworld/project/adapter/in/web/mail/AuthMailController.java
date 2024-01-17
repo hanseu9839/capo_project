@@ -23,7 +23,7 @@ public class AuthMailController {
     @PostMapping("/auth/email")
     public ResponseEntity<ApiResponse> emailAuth(@RequestBody AuthMailDTO mailDto) throws MessagingException, UnsupportedEncodingException {
         log.info("mail : {} ", mailDto.getUserEmail());
-        AuthMail authMail = getMailUseCase.emailAuth(mailDto.getUserEmail());
+        getMailUseCase.emailAuth(mailDto.getUserEmail());
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
                 .build(), HttpStatus.OK);

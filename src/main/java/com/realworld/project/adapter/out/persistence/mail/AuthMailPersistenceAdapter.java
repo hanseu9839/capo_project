@@ -16,13 +16,13 @@ public class AuthMailPersistenceAdapter implements CommandAuthMailPort, LoadAuth
     private final AuthMailMapper authMailMapper;
     private final AuthMailRepository authMailRepository;
     @Override
-    public Optional<AuthMailJpaEntity> saveEmailAuth(AuthMail authMail) {
+    public Optional<AuthMail> saveEmailAuth(AuthMail authMail) {
         log.info("authMail : {} ", authMail.getAuthNumber());
         log.info("authMail : {} ", authMail.getUserEmail());
         AuthMailJpaEntity entity = authMailMapper.toEntity(authMail);
 
-        Optional<AuthMailJpaEntity> target = Optional.of(authMailRepository.save(entity));
-        return target;
+        AuthMail target = authMailMapper.toDomain(authMailRepository.save(entity));
+        return Optional.ofNullable(target);
     }
 
 

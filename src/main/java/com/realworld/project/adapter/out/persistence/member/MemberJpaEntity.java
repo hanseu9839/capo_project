@@ -10,20 +10,28 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Table(name="user")
-@Entity
 @EqualsAndHashCode
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
 @IdClass(MemberPK.class)
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
+@Entity
+@SequenceGenerator(
+        name = "USER_PK_SEQUENCE",
+        sequenceName = "USER_SEQ",
+        initialValue = 1,
+        allocationSize = 50
+)
 public class MemberJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_PK_SEQUENCE")
+    @Column(name="user_seq")
     private Long userSeq;
 
     @Id
+    @Column(name="user_id")
     private String userId;
 
     private String password;

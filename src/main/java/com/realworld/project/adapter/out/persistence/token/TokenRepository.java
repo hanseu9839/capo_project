@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface TokenRepository extends JpaRepository<TokenJpaEntity, Long> {
+public interface TokenRepository extends JpaRepository<TokenJpaEntity, Long>, TokenRepositoryCustom {
         Optional<TokenJpaEntity> findByUserId(String userId);
 
 }

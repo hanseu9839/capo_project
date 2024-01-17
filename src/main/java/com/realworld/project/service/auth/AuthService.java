@@ -12,6 +12,7 @@ import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.config.exception.CustomJwtExceptionHandler;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.common.response.ApiResponse;
+import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class AuthService implements PostTokenUseCase, UserDetailsService {
     }
 
     // DB 에 User 값이 존재하면 UserDetails 객체로 만들어서 리턴
-    private UserDetails createUserDetails(MemberJpaEntity member){
+    private UserDetails createUserDetails(Member member){
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
         log.info("Collections.singleton : {}", Collections.singleton(grantedAuthority));
         log.info("member getUserId : {} ", member.getUserId());

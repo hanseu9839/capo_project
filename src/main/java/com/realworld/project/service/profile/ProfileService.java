@@ -24,23 +24,19 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProfileService implements PostProfileUseCase, GetProfileUseCase {
-    private final LoadMemberPort loadMemberPort;
-
+    private final CommandMemberPort commandMemberPort;
     @Transactional
     @Override
     public Member nicknameUpdate(MemberDTO memberDto, String userId) {
-        log.info("userId {} ", userId);
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
-        if(member.isPresent()){
-            if(!StringUtils.isEmpty(memberDto.getNickname())) member.get().setNickname(memberDto.getNickname());
-        } else {
-            throw new CustomMemberExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
-        }
+        Member member = Member.builder()
+                            .nickname(memberDto.getNickname())
+                            .userId(userId)
+                            .build();
+        long update = -1;
+        if(!StringUtils.isEmpty(memberDto.getNickname())) update = commandMemberPort.nicknameUpdate(member);
 
-        Member target = Member.builder()
-                .nickname(member.get().getNickname())
-                .build();
-        log.info("nickname : {} ",target.getNickname());
-        return target;
+        if(update<0) throw new CustomMemberExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
+
+        return member;
     }
 }

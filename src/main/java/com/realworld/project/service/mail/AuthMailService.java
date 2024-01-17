@@ -52,7 +52,7 @@ public class AuthMailService implements GetMailUseCase {
                             .userEmail(userEmail)
                             .authNumber(authKey)
                             .build();
-        Optional<AuthMailJpaEntity> target= commandAuthMailPort.saveEmailAuth(authMail);
+        Optional<AuthMail> target= commandAuthMailPort.saveEmailAuth(authMail);
 
         if(target.isPresent()){
             AuthMail authMailTarget = AuthMail.builder()

@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/photocard/api/v1")
 @RequiredArgsConstructor
@@ -82,8 +81,8 @@ public class MemberController {
     }
 
     @PatchMapping("/user/find-password/{auth_number}")
-    public ResponseEntity<ApiResponse> findPassword(@AuthenticationPrincipal User user,@RequestBody MemberDTO memberDto, @PathVariable("auth_number") String authNumber){
-
+    public ResponseEntity<ApiResponse> findPassword(@RequestBody MemberDTO memberDto, @PathVariable("auth_number") String authNumber){
+        getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                                                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
@@ -91,10 +90,9 @@ public class MemberController {
     }
 
     @PatchMapping("/user/find-userId/{auth_number}")
-    public ResponseEntity<ApiResponse> findUserId(@RequestBody MemberDTO memberDto){
-        Optional<MemberJpaEntity> targetMember = getMemberUseCase.findByUserId(memberDto.getUserId());
-
-
+    public ResponseEntity<ApiResponse> findUserId(@RequestBody MemberDTO memberDto, @PathVariable("auth_number")String authNumber){
+        getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
+        getMemberUseCase.findByUserEmail(memberDto.getUserEmail());
         return new ResponseEntity<>(ApiResponse.builder()
                                                .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                                                .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())

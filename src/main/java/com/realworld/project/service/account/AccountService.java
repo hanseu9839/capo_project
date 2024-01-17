@@ -32,7 +32,7 @@ public class AccountService implements GetAccountUseCase, PostAccountUseCase {
 
     @Override
     public Member getAccount(String userId) {
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
+        Optional<Member> member = loadMemberPort.findByUserId(userId);
         Member target = Member.builder()
                 .nickname(member.get().getNickname())
                 .phoneNumber(member.get().getPhoneNumber())
@@ -47,7 +47,7 @@ public class AccountService implements GetAccountUseCase, PostAccountUseCase {
         String currentPassword = memberDto.getCurrentPassword();
         String newPassword = memberDto.getNewPassword();
 
-        Optional<MemberJpaEntity> member = loadMemberPort.findByUserId(userId);
+        Optional<Member> member = loadMemberPort.findByUserId(userId);
         log.info("new Password : {} ",newPassword);
         log.info("current Password:{} ",currentPassword);
 
@@ -73,12 +73,14 @@ public class AccountService implements GetAccountUseCase, PostAccountUseCase {
     }
     @Transactional
     @Override
-    public Member emailUpdate(String userId,MemberDTO memberDto) {
-        Optional<MemberJpaEntity> target = loadMemberPort.findByUserId(userId);
-        target.ifPresent(member-> member.setUserEmail(memberDto.getUserEmail()));
+    public long updateEmail(String userId,MemberDTO memberDto) {
         Member member = Member.builder()
-                            .userEmail(target.get().getUserEmail())
+                            .userId(userId)
+                            .userEmail(memberDto.getUserEmail())
                             .build();
-        return member;
+        long update = commandMemberPort.updateEmail(member);
+        return update;
     }
+
+
 }
