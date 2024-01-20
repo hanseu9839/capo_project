@@ -4,7 +4,6 @@ import com.realworld.project.application.port.in.dto.AuthMailDTO;
 import com.realworld.project.application.port.in.mail.GetMailUseCase;
 import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
-import com.realworld.project.domain.AuthMail;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +25,8 @@ public class AuthMailController {
         getMailUseCase.emailAuth(mailDto.getUserEmail());
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
-                .build(), HttpStatus.OK);
+                .build(), HttpStatus.CREATED);
     }
-
     @GetMapping("/auth/email/{auth_number}")
     public ResponseEntity<ApiResponse> emailAuthNumber(@RequestParam("user_email") String userEmail, @PathVariable("auth_number") String authNumber){
         getMailUseCase.emailAuthCheck(userEmail, authNumber);
