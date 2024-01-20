@@ -1,6 +1,5 @@
 package com.realworld.project.adapter.in.web.member;
 
-import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.mail.GetMailUseCase;
 import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.application.port.in.member.PostMemberUseCase;
@@ -19,7 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+
 @RestController
 @RequestMapping("/photocard/api/v1")
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class MemberController {
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
                 .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
-                .build(), HttpStatus.OK);
+                .build(), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -49,7 +48,7 @@ public class MemberController {
                 .build(),HttpStatus.OK);
     }
 
-    @PostMapping("/member/logout")
+    @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@AuthenticationPrincipal User user){
         log.info("userName : {} ", user.getUsername());
         //postTokenUseCase.deleteToken(token);
@@ -67,7 +66,7 @@ public class MemberController {
                 .result(exists)
                 .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
                 .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
-                .build(),HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
 
     @DeleteMapping("/member/out")
@@ -77,7 +76,7 @@ public class MemberController {
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.DELETE_SUCCESS.getMessage())
                                                 .resultCode(SuccessCode.DELETE_SUCCESS.getStatus())
-                                                .build(),HttpStatus.OK);
+                                                .build(), HttpStatus.OK);
     }
 
     @PatchMapping("/user/find-password/{auth_number}")
@@ -86,7 +85,7 @@ public class MemberController {
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                                                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
-                                                .build(),HttpStatus.OK);
+                                                .build(), HttpStatus.OK);
     }
 
     @PatchMapping("/user/find-userId/{auth_number}")
@@ -94,8 +93,8 @@ public class MemberController {
         getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
         getMemberUseCase.findByUserEmail(memberDto.getUserEmail());
         return new ResponseEntity<>(ApiResponse.builder()
-                                               .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
-                                               .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
+                                               .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
+                                               .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
                                                .build(), HttpStatus.OK);
     }
 

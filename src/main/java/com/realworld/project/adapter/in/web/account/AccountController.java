@@ -1,6 +1,5 @@
 package com.realworld.project.adapter.in.web.account;
 
-import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.account.GetAccountUseCase;
 import com.realworld.project.application.port.in.account.PostAccountUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;

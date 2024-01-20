@@ -1,10 +1,6 @@
 package com.realworld.project.adapter.in.web.profile;
 
-import com.realworld.project.application.port.in.account.GetAccountUseCase;
-import com.realworld.project.application.port.in.account.PostAccountUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
-import com.realworld.project.application.port.in.member.GetMemberUseCase;
-import com.realworld.project.application.port.in.member.PostMemberUseCase;
 import com.realworld.project.application.port.in.profile.PostProfileUseCase;
 import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
@@ -34,8 +30,7 @@ public class ProfileController {
                 .result(target)
                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
-                .build(), HttpStatus.OK );
+                .build(), HttpStatus.OK);
     }
-
 
 }

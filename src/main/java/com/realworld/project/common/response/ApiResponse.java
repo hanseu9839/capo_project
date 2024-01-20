@@ -52,6 +52,6 @@ public class ApiResponse<T> {
     public static ResponseEntity<?> success(){
         return new ResponseEntity<>(ApiResponse.builder()
                 .resultCode(200)
-                .resultMsg("empty"),HttpStatus.OK);
+                .resultMsg("empty"), HttpStatus.OK);
     }
 }
