@@ -12,6 +12,7 @@ import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,6 +68,7 @@ public class AuthMailService implements GetMailUseCase {
 
     }
 
+    @Transactional
     @Override
     public void emailAuthCheck(String userEmail, String authNumber) {
 

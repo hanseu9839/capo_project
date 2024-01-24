@@ -10,6 +10,7 @@ import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +70,7 @@ public class MemberController {
                 .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build(), HttpStatus.OK);
     }
-
+    @Transactional
     @DeleteMapping("/member/out")
     public ResponseEntity<ApiResponse> userRemove(@AuthenticationPrincipal User user, @RequestBody MemberDTO memberDto){
         postMemberUseCase.remove(user.getUsername(),memberDto.getPassword());
@@ -79,11 +80,11 @@ public class MemberController {
                                                 .resultCode(SuccessCode.DELETE_SUCCESS.getStatus())
                                                 .build(), HttpStatus.OK);
     }
-
+    @Transactional
     @PatchMapping("/user/find-password/{auth_number}")
     public ResponseEntity<ApiResponse> findPassword(@RequestBody MemberDTO memberDto, @PathVariable("auth_number") String authNumber){
         getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
-        postMemberUseCase.updatePassword(memberDto.getPassword());
+        postMemberUseCase.updatePassword(memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                                                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
@@ -97,9 +98,9 @@ public class MemberController {
         getMailUseCase.emailAuthCheck(userEmail, authNumber);
         Member member = getMemberUseCase.findByUserEmail(userEmail);
         return new ResponseEntity<>(ApiResponse.builder()
-                                                .result(member.getUserId())
-                                               .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
-                                               .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
+                                               .result(member.getUserId())
+                                               .resultMsg(SuccessCode.SELECT_SUCCESS.getMessage())
+                                               .resultCode(SuccessCode.SELECT_SUCCESS.getStatus())
                                                .build(), HttpStatus.OK);
     }
 
