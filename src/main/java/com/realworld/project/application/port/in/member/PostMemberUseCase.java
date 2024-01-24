@@ -11,5 +11,5 @@ public interface PostMemberUseCase {
     long saveMember(MemberDTO memberDto);
     Token login(MemberDTO memberDto);
     void remove(String userId, String password);
-    long updatePassword(String password);
+    long updatePassword(MemberDTO memberDTO);
 }

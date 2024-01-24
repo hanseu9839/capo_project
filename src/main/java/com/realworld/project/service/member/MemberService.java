@@ -106,7 +106,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
 
         return token;
     }
-
+    @Transactional
     @Override
     public void remove(String userId, String password) {
         Optional<Member> targetMember = loadMemberPort.findByUserId(userId);
@@ -128,12 +128,20 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
             throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_PASSWORD_ERROR);
         }
     }
-
+    @Transactional
     @Override
-    public long updatePassword(String password) {
-        
+    public long updatePassword(MemberDTO memberDTO) {
+        Member target =this.findByUserEmail(memberDTO.getUserEmail());
 
-        return 0;
+        Member targetMember = Member.builder()
+                .userId(target.getUserId())
+                .password(passwordEncoder.encode(memberDTO.getNewPassword()))
+                .build();
+
+        long update = commandMemberPort.updatePassword(targetMember);
+        if(update < 0) throw new CustomLoginExceptionHandler(ErrorCode.FAIL_PASSWORD_CHANGE);
+
+        return update;
     }
 
 
