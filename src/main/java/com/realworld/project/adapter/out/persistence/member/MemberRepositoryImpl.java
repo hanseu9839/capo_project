@@ -11,7 +11,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     @Override
     public MemberJpaEntity findByUserEmail(MemberJpaEntity memberJpaEntity) {
         QMemberJpaEntity member = QMemberJpaEntity.memberJpaEntity;
-        return jpaQueryFactory.selectFrom(member).where(member.userEmail.eq(memberJpaEntity.getUserId())).fetchOne();
+        return jpaQueryFactory.selectFrom(member).where(member.userEmail.eq(memberJpaEntity.getUserEmail())).fetchOne();
     }
 
     @Override
