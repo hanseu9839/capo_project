@@ -7,6 +7,7 @@ import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.in.token.PostTokenUseCase;
 import com.realworld.project.common.code.SuccessCode;
 import com.realworld.project.common.response.ApiResponse;
+import com.realworld.project.domain.Member;
 import com.realworld.project.domain.Token;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -82,17 +83,21 @@ public class MemberController {
     @PatchMapping("/user/find-password/{auth_number}")
     public ResponseEntity<ApiResponse> findPassword(@RequestBody MemberDTO memberDto, @PathVariable("auth_number") String authNumber){
         getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
+        postMemberUseCase.updatePassword(memberDto.getPassword());
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
                                                 .resultCode(SuccessCode.UPDATE_SUCCESS.getStatus())
                                                 .build(), HttpStatus.OK);
     }
 
-    @PatchMapping("/user/find-userId/{auth_number}")
-    public ResponseEntity<ApiResponse> findUserId(@RequestBody MemberDTO memberDto, @PathVariable("auth_number")String authNumber){
-        getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
-        getMemberUseCase.findByUserEmail(memberDto.getUserEmail());
+    @GetMapping("/user/find-userId/{auth_number}")
+    public ResponseEntity<ApiResponse> findUserId(@RequestParam("user_email") String userEmail, @PathVariable("auth_number")String authNumber){
+        log.info("userEmail : {}",userEmail);
+
+        getMailUseCase.emailAuthCheck(userEmail, authNumber);
+        Member member = getMemberUseCase.findByUserEmail(userEmail);
         return new ResponseEntity<>(ApiResponse.builder()
+                                                .result(member.getUserId())
                                                .resultMsg(SuccessCode.INSERT_SUCCESS.getMessage())
                                                .resultCode(SuccessCode.INSERT_SUCCESS.getStatus())
                                                .build(), HttpStatus.OK);

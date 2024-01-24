@@ -8,7 +8,8 @@ import com.realworld.project.domain.Token;
 
 
 public interface PostMemberUseCase {
-    void saveMember(MemberDTO memberDto);
+    long saveMember(MemberDTO memberDto);
     Token login(MemberDTO memberDto);
     void remove(String userId, String password);
+    long updatePassword(String password);
 }

@@ -19,6 +19,7 @@ import com.realworld.project.domain.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -28,7 +29,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
@@ -37,11 +37,19 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
-
+    @Autowired
+    public MemberService(CommandMemberPort commandMemberPort, LoadMemberPort loadMemberPort, CommandTokenPort commandTokenPort, PasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider){
+        this.commandMemberPort = commandMemberPort;
+        this.loadMemberPort = loadMemberPort;
+        this.commandTokenPort = commandTokenPort;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Transactional
     @Override
-    public void saveMember(MemberDTO memberDto) {
+    public long saveMember(MemberDTO memberDto) {
         if(!CommonUtil.passwordValidationCheck(memberDto.getPassword())){
             throw new CustomMemberExceptionHandler(ErrorCode.PASSWORD_REQUEST_ERROR);
         }
@@ -49,7 +57,6 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
             throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_USERID_ERROR);
         }
 
-        ;
         Member member = Member.builder()
                             .userSeq(memberDto.getUserSeq())
                             .userId(memberDto.getUserId())
@@ -60,7 +67,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
                             .delYn("N")
                             .authority(Authority.ROLE_USER)
                             .build();
-        commandMemberPort.saveMember(member);
+        return commandMemberPort.saveMember(member);
     }
 
     @Transactional
@@ -122,6 +129,12 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
         }
     }
 
+    @Override
+    public long updatePassword(String password) {
+        
+
+        return 0;
+    }
 
 
     public Member findByUserEmail(String userEmail){
@@ -150,4 +163,6 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
     public boolean existsByUserId(String userId) {
         return loadMemberPort.existsByUserId(userId);
     }
+
+
 }

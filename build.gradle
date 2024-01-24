@@ -36,9 +36,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'mysql:mysql-connector-java:8.0.23'
-	testImplementation 'org.springframework.security:spring-security-test'
+
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	//h2
@@ -52,6 +51,10 @@ dependencies {
 	//json
 	implementation 'com.google.code.gson:gson:2.8.7'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation group: 'org.mockito', name: 'mockito-all', version: '3.1.0'
 }
 
 tasks.named('test') {

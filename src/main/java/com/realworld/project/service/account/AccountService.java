@@ -15,6 +15,7 @@ import com.realworld.project.domain.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,11 +25,17 @@ import org.springframework.util.StringUtils;
 import java.util.Optional;
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AccountService implements GetAccountUseCase, PostAccountUseCase {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public AccountService(CommandMemberPort commandMemberPort, LoadMemberPort loadMemberPort, PasswordEncoder passwordEncoder){
+        this.commandMemberPort = commandMemberPort;
+        this.loadMemberPort = loadMemberPort;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Member getAccount(String userId) {

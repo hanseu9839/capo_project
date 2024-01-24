@@ -72,11 +72,6 @@ public class AuthMailService implements GetMailUseCase {
 
         // authMail에 있는 Mail정보 가져오기
         Optional<AuthMailJpaEntity> target = loadAuthMailPort.findByUserEmail(userEmail);
-        boolean exists = loadMemberPort.existsByUserEmail(userEmail);
-        // 이메일 중복체크
-        if(exists){
-            throw new CustomMailExceptionHandler(ErrorCode.EMAIL_DUPLICATION_ERROR);
-        }
 
         if(target.isPresent()){
             expiredAuthEmailCheck(target.get().getRegDt());
