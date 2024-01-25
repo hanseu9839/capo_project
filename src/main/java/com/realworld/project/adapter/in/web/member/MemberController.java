@@ -71,7 +71,7 @@ public class MemberController {
                 .build(), HttpStatus.OK);
     }
     @Transactional
-    @DeleteMapping("/member/out")
+    @DeleteMapping("/member")
     public ResponseEntity<ApiResponse> userRemove(@AuthenticationPrincipal User user, @RequestBody MemberDTO memberDto){
         postMemberUseCase.remove(user.getUsername(),memberDto.getPassword());
 
@@ -81,9 +81,9 @@ public class MemberController {
                                                 .build(), HttpStatus.OK);
     }
     @Transactional
-    @PatchMapping("/user/find-password/{auth_number}")
-    public ResponseEntity<ApiResponse> findPassword(@RequestBody MemberDTO memberDto, @PathVariable("auth_number") String authNumber){
-        getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), authNumber);
+    @PatchMapping("/user/find-password")
+    public ResponseEntity<ApiResponse> findPassword(@RequestBody MemberDTO memberDto){
+        getMailUseCase.emailAuthCheck(memberDto.getUserEmail(), memberDto.getAuthNumber());
         postMemberUseCase.updatePassword(memberDto);
         return new ResponseEntity<>(ApiResponse.builder()
                                                 .resultMsg(SuccessCode.UPDATE_SUCCESS.getMessage())
