@@ -1,6 +1,7 @@
 package com.realworld.project.service.member;
 
 
+import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.member.GetMemberUseCase;
 import com.realworld.project.application.port.in.member.PostMemberUseCase;
 import com.realworld.project.application.port.in.dto.MemberDTO;
@@ -49,7 +50,7 @@ public class MemberService implements PostMemberUseCase , GetMemberUseCase{
 
     @Transactional
     @Override
-    public long saveMember(MemberDTO memberDto) {
+    public MemberJpaEntity saveMember(MemberDTO memberDto) {
         if(!CommonUtil.passwordValidationCheck(memberDto.getPassword())){
             throw new CustomMemberExceptionHandler(ErrorCode.PASSWORD_REQUEST_ERROR);
         }

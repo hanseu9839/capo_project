@@ -5,7 +5,7 @@ import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.domain.Member;
 
 public interface CommandMemberPort {
-    long saveMember(Member member);
+    MemberJpaEntity saveMember(Member member);
     void userRemove(Member member);
     long updatePassword(Member member);
     long updateEmail(Member member);

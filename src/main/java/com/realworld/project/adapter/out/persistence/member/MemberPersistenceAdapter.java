@@ -20,12 +20,12 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     private final MemberRepository repository;
     private final BackUpMemberRepository backRepository;
     @Override
-    public long saveMember(Member member) {
+    public MemberJpaEntity saveMember(Member member) {
         if(existsByUserId(member.getUserId()) || existsByUserEmail(member.getUserEmail())){
             throw new CustomLoginExceptionHandler(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg(),ErrorCode.LOGIN_DUPLICATION_ERROR);
         }
         MemberJpaEntity entity = memberMapper.toEntity(member);
-        return repository.save(entity).getUserSeq();
+        return repository.save(entity)ß;
     }
 
 
