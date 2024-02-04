@@ -25,7 +25,7 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
             throw new CustomLoginExceptionHandler(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg(),ErrorCode.LOGIN_DUPLICATION_ERROR);
         }
         MemberJpaEntity entity = memberMapper.toEntity(member);
-        return repository.save(entity)ß;
+        return repository.save(entity);
     }
 
 

@@ -72,8 +72,8 @@ public class MemberServiceTest {
 
         // when
         MemberJpaEntity saveId = memberService.saveMember(member);
-        System.out.println(saveId);
-        System.out.println(member.getUserId());
+
+        assertEquals(member.getUserId(), saveId.getUserId());
     }
 
 }
