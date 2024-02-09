@@ -6,9 +6,11 @@ import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
 import com.realworld.project.application.port.out.token.CommandTokenPort;
+import com.realworld.project.common.config.QueryDslConfig;
 import com.realworld.project.common.config.SecurityConfig;
 import com.realworld.project.common.config.jwt.JwtTokenProvider;
 import com.realworld.project.service.member.MemberService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,14 +19,15 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @SpringBootTest
+@Import(QueryDslConfig.class)
 @ExtendWith(SpringExtension.class)
 public class MemberServiceTest {
     @Autowired
@@ -61,8 +64,8 @@ public class MemberServiceTest {
     @Test
     @DisplayName("회원가입 테스트")
     void saveMember() {
-        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
         //given
+        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
         MemberDTO member = MemberDTO.builder()
                 .userId("test8833")
                 .userEmail("hans983@naver.com")
@@ -76,4 +79,21 @@ public class MemberServiceTest {
         assertEquals(member.getUserId(), saveId.getUserId());
     }
 
+    @Test
+    @Transactional
+    @DisplayName("회원 비밀번호 변경")
+    void changePassword(){
+        // given
+        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
+        MemberDTO member = MemberDTO.builder()
+                                    .userEmail("hans983@naver.com")
+                                    .userId("seoung1234")
+                                    .newPassword("@Qwer1234")
+                                    .build();
+        // when
+        long updated = memberService.updatePassword(member);
+
+        //then
+        assertTrue(updated>0);
+    }
 }
