@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,7 +29,6 @@ public class MemberController {
     private final GetMemberUseCase getMemberUseCase;
     private final PostTokenUseCase postTokenUseCase;
     private final GetMailUseCase getMailUseCase;
-    private final PasswordEncoder passwordEncoder;
     @PostMapping("/member")
     public ResponseEntity<ApiResponse> memberRegister(@RequestBody @Valid MemberDTO memberDto){
         postMemberUseCase.saveMember(memberDto);

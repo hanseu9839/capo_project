@@ -12,6 +12,7 @@ import com.realworld.project.common.response.ApiResponse;
 import com.realworld.project.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,9 +26,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
+    @Autowired
     private final GetMemberUseCase getMemberUseCase;
+    @Autowired
     private final PostAccountUseCase postAccountUseCase;
+    @Autowired
     private final GetAccountUseCase getAccountUseCase;
+    @Autowired
     private final GetMailUseCase getMailUseCase;
     @GetMapping("/member/account")
     public ResponseEntity<ApiResponse> account(@AuthenticationPrincipal User user){
