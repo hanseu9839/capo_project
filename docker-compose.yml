@@ -24,12 +24,17 @@ services: #이 항목 밑에 실행하려는 컨테이너들을 정의
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      - VIRTUAL_HOST=photocard.site
+      - TZ=Asia/Seoul
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   certbot:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
   mysql: # 서비스 명
     image: mysql/mysql-server:8.0.23 #사용할 이미지
     container_name: real_world # 컨테이너 이름 설정
