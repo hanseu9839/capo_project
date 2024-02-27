@@ -7,7 +7,6 @@ services: #이 항목 밑에 실행하려는 컨테이너들을 정의
      restart: always
      ports:
        - 8080:8080
-
   front:
     build:
       context: ../PhotocardTradeProject
