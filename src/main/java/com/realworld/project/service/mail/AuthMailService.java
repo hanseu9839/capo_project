@@ -13,7 +13,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,14 +29,24 @@ import static com.realworld.project.common.code.ErrorCode.EMAIL_REQUEST_ERROR;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AuthMailService implements GetMailUseCase {
+
     private final JavaMailSender javaMailSender;
     private final CommandAuthMailPort commandAuthMailPort;
     private final LoadAuthMailPort loadAuthMailPort;
     private final LoadMemberPort loadMemberPort;
+
     @Value("${spring.mail.username}")
     private String from;
+
+    @Autowired
+    public AuthMailService(JavaMailSender javaMailSender, CommandAuthMailPort commandAuthMailPort, LoadAuthMailPort loadAuthMailPort, LoadMemberPort loadMemberPort) {
+        this.javaMailSender = javaMailSender;
+        this.commandAuthMailPort = commandAuthMailPort;
+        this.loadAuthMailPort = loadAuthMailPort;
+        this.loadMemberPort = loadMemberPort;
+    }
+
     @Override
     public AuthMail emailAuth(String userEmail) throws MessagingException, UnsupportedEncodingException {
         String authKey = createKey();
