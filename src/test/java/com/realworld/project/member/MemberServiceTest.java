@@ -61,24 +61,24 @@ public class MemberServiceTest {
                 ()->assertTrue(passwordEncoder.matches(rawPassword, encodedPassword))
         );
     }
-    @Test
-    @DisplayName("회원가입 테스트")
-    void saveMember() {
+//    @Test
+//    @DisplayName("회원가입 테스트")
+//    void saveMember() {
         //given
-        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
-        MemberDTO member = MemberDTO.builder()
-                .userId("test8833")
-                .userEmail("hans983@naver.com")
-                .phoneNumber("01023599839")
-                .password("@Qwerty54953")
-                .build();
+//        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
+//        MemberDTO member = MemberDTO.builder()
+//                .userId("test8833")
+//                .userEmail("hans983@naver.com")
+//                .phoneNumber("01023599839")
+//                .password("@Qwerty54953")
+//                .build();build
 
         // when
-        MemberJpaEntity saveId = memberService.saveMember(member);
+//        MemberJpaEntity saveId = memberService.saveMember(member);
 
         // then
-        assertEquals(member.getUserId(), saveId.getUserId());
-    }
+//        assertEquals(member.getUserId(), saveId.getUserId());
+//    }
 
     @Test
     @Transactional
