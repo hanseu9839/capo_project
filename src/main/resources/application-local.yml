@@ -9,24 +9,24 @@ spring:
       hibernate:
         show_sql: true
         use_sql_comments: true
-#  mail:
-#    host: smtp.naver.com #smtp 서버 주소
-#    port: 465 # 메일 인증서버 포트
-#    username: hans9839@naver.com
-#    password: YTSUYG7MQBBY
-#    properties:
-#      mail:
-#        smtp:
-#          starttls:
-#            enabel: true
-#            required: true
-#          auth:
-#            connectiontimeout: 5000
-#            timeout: 5000
-#            writetimeout: 5000
-#          ssl:
+  mail:
+    host: smtp.naver.com #smtp 서버 주소
+    port: 465 # 메일 인증서버 포트
+    username: hans9839@naver.com
+    password: YTSUYG7MQBBY
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enabel: true
+            required: true
+          auth:
+            connectiontimeout: 5000
+            timeout: 5000
+            writetimeout: 5000
+          ssl:
               #trust: smtp.naver.com
-#            enable: true
+            enable: true
 logging:
   level:
     org:
