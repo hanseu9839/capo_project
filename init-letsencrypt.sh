@@ -1,11 +1,9 @@
-#!/bin/bash
-
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
   exit 1
 fi
 
-domains=(photocard.site)
+domains=(photocard.site www.photocard.site)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="hanseu9839@gmail.com" # Adding a valid address is strongly recommended
@@ -67,7 +65,7 @@ esac
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose run --rm --entrypoint "\
-  certbot certonly --webroot -w /var/www/certbot \
+  certbot certonly -a webroot -v --debug-challenges -w /var/www/certbot \
     $staging_arg \
     $email_arg \
     $domain_args \
