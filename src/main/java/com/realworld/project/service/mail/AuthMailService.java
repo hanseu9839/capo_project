@@ -32,7 +32,6 @@ import static com.realworld.project.common.code.ErrorCode.EMAIL_REQUEST_ERROR;
 @Service
 @RequiredArgsConstructor
 public class AuthMailService implements GetMailUseCase {
-    @Autowired
     private final JavaMailSender javaMailSender;
     private final CommandAuthMailPort commandAuthMailPort;
     private final LoadAuthMailPort loadAuthMailPort;
