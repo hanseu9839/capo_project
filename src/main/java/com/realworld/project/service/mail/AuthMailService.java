@@ -15,6 +15,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -31,6 +32,7 @@ import static com.realworld.project.common.code.ErrorCode.EMAIL_REQUEST_ERROR;
 @Service
 @RequiredArgsConstructor
 public class AuthMailService implements GetMailUseCase {
+    @Autowired
     private final JavaMailSender javaMailSender;
     private final CommandAuthMailPort commandAuthMailPort;
     private final LoadAuthMailPort loadAuthMailPort;
