@@ -1,24 +1,6 @@
 version: "3.9" # 파일 규격 버전
 
 services: #이 항목 밑에 실행하려는 컨테이너들을 정의
-  gitlab:
-    container_name: gitlab
-    image: "gitlab/gitlab-ce:latest"
-    restart: always
-    hostname: "photocard.site"
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https:photocard.site'
-        gitlab_rails['gitlab_shell_ssh_port'] = 3030
-      TZ: 'Asia/Seoul'
-    ports:
-      - '11180:80'
-      - '11443:443'
-      - '8022:22'
-    volumes:
-      - ./gitlab/config:/etc/gitlab
-      - ./gitlab/logs:/var/log/gitlab
-      - ./gitlab/data:/var/opt/gitlab
   back:
      container_name: back
      build:
