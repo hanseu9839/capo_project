@@ -5,4 +5,4 @@ photo-card-job: # JOB 이름
   script:
     - echo "Hello world" # 실행할 스크립트
   tags:
-    - photocardBack # photocardBack 태그가 달린 runner에서 실행
+    - project # photocardBack 태그가 달린 runner에서 실행
