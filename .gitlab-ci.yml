@@ -21,7 +21,7 @@ test:
   script: ./gradlew test
 
 package:
-  image: hanseu9839/photocard-server:latest
+  image: photocardback-back:latest
   stage: package
   variables:
     IMAGE_NAME: hanseu9839/photocard-server
@@ -42,10 +42,10 @@ deploy:
   before_script:
     - docker login -u $DOCKER_HUB_USER --password-stdin < $DOCKER_HUB_PW
   script:
-    - docker stop hanseu9839/photocard-server || true
-    - docker rm hanseu9839/photocard-server || true
+    - docker stop photocardback-back || true
+    - docker rm photocardback-back || true
     - docker rmi hanseu9839/photocard-server || true
-    - docker run -d --restart always -p 8080:8080/tcp --name photocard-server photocard-server
+    - docker run -d --restart always -p 8080:8080/tcp --name photocard-server hanseu9839/photocard-server
   after_script:
     - docker logout
   when: on_success
