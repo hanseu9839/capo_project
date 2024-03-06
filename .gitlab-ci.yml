@@ -1,9 +1,9 @@
 stages:
   - build
-  - deploy
-  - package
   - test
-
+  - package
+  - deploy
+  
 build: # JOB이름
   image: eclipse-temurin:17
   stage: build
