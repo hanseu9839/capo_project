@@ -6,7 +6,7 @@
 
 # photocardBack
 
-ci/cd
+gitlab pipeline ci/cd Testing
 
 ## Getting started
 
