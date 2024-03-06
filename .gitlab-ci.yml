@@ -14,8 +14,6 @@ build: # JOB이름
     paths:
       - build/libs/*.jar
     expire_in: 10 min
-    only:
-      - main
 
 test:
   image: eclipse-temurin:17
