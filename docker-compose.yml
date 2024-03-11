@@ -44,7 +44,7 @@ services: #이 항목 밑에 실행하려는 컨테이너들을 정의
       - "3306:3306" # 접근 포트 설정 ( 컨테이너 외부:컨테이너 내부)
     restart: always
     environment: # -e 옵션
-      MYSQL_DATABASE:  photocard# 데이터 베이스 이름
+      MYSQL_DATABASE:  photocard # 데이터 베이스 이름
       MYSQL_ROOT_HOST: '%' # MYSQL HOST
       MYSQL_ROOT_PASSWORD: "1234" # MYSQL 패스워드 설정 옵션
       TZ: "Asia/Seoul"

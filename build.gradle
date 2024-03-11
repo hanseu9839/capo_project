@@ -22,6 +22,8 @@ repositories {
 }
 
 dependencies {
+	// Junit library
+	testImplementation 'junit:junit:4.12' // JUnit 4
 	// QueryDSL JPA 라이브러리
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
