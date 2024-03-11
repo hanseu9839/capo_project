@@ -1,6 +1,7 @@
 package com.realworld.project.member;
 
 
+import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
 import com.realworld.project.application.port.in.dto.MemberDTO;
 import com.realworld.project.application.port.out.member.CommandMemberPort;
 import com.realworld.project.application.port.out.member.LoadMemberPort;
@@ -72,8 +73,8 @@ public class MemberServiceTest {
 //
 //        // when
 //        MemberJpaEntity saveId = memberService.saveMember(member);
-
-        // then
+//
+//        // then
 //        assertEquals(member.getUserId(), saveId.getUserId());
 //    }
 
@@ -90,7 +91,6 @@ public class MemberServiceTest {
                                     .build();
         // when
         long updated = memberService.updatePassword(member);
-
         //then
         assertTrue(updated>0);
     }
