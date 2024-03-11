@@ -21,7 +21,7 @@ test:
   script: ./gradlew test
 
 package:
-  image: photocardback-back:latest
+  image: hanseu9893/photocard-server
   stage: package
   variables:
     IMAGE_NAME: hanseu9839/photocard-server
