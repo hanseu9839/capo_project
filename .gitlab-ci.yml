@@ -21,7 +21,7 @@ test:
   script: ./gradlew test
 
 package:
-  image: hanseu9839/photocard-server
+  image: docker:latest
   stage: package
   variables:
     IMAGE_NAME: hanseu9839/photocard-server
@@ -35,7 +35,7 @@ package:
   after_script:
     - docker logout
 
-deploy:
+docker-build:
   stage: deploy
   tags:
     - photocard-build-server
