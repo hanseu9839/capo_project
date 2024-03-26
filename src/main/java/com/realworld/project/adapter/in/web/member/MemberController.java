@@ -40,6 +40,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody MemberDTO memberDTO){
+        log.info("loginApi Confirm");
         Token token =postMemberUseCase.login(memberDTO);
         return new ResponseEntity<>(ApiResponse.builder()
                 .result(token)
