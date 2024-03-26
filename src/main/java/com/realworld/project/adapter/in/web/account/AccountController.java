@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/photocard/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {

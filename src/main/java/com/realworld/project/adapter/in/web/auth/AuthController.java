@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/photocard/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class AuthController {
     private final PostTokenUseCase postTokenUseCase;

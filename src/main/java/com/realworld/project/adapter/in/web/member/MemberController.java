@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/photocard/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {

@@ -29,7 +29,7 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CorsFilter corsFilter;
-    String[] excludeURI = new String[] {"/photocard/v1/login", "/photocard/v1/member","/photocard/v1/duplication-check/user-id/**", "/photocard/v1/auth/email", "/photocard/v1/auth/email/**","/error", "/photocard/v1/reissue","/photocard/v1/user/find-userId/**","/photocard/v1/user/find-password/**"};
+    String[] excludeURI = new String[] {"/v1/login", "/v1/member","/v1/duplication-check/user-id/**", "/v1/auth/email", "/v1/auth/email/**","/error", "/v1/reissue","/v1/user/find-userId/**","/v1/user/find-password/**"};
     // 비밀번호 암호화
     @Bean
     public PasswordEncoder passwordEncoder() {
