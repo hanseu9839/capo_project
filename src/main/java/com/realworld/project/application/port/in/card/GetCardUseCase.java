@@ -5,6 +5,8 @@ import com.realworld.project.domain.Card;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface GetCardUseCase {
-    Slice<Card> getSearchCardList(final Pageable pageable, String search, String category, final long idx);
+    List<Card> getSearchCardList(final Pageable pageable, String search, String category, final long idx);
 }

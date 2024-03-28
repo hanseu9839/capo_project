@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class CardRepositoryImpl implements  CardRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     private final QCardJpaEntity card = QCardJpaEntity.cardJpaEntity;
     @Override
-    public Slice<CardJpaEntity> findAllCardList(Pageable pageable, String search, String category, long seq) {
+    public List<CardJpaEntity> findAllCardList(Pageable pageable, String search, String category, long seq) {
         List<CardJpaEntity> cards = queryFactory
                 .select(
                         Projections.fields(CardJpaEntity.class,
@@ -29,13 +28,14 @@ public class CardRepositoryImpl implements  CardRepositoryCustom{
                         ))
                 .from(card)
                 .where(
+                    ltSeq(seq),
                     containTitle(search),
                     eqCategory(category)
                 )
                 .orderBy()
                 .limit(pageable.getPageSize()+1)
                 .fetch();
-        return null;
+        return cards;
     }
 
     private BooleanExpression containTitle(String search){
@@ -55,9 +55,9 @@ public class CardRepositoryImpl implements  CardRepositoryCustom{
 
     private BooleanExpression ltSeq(Long seq){
         if(seq == null){
-            return null;
+            return null; // BooleanExpression 자리에 NULL 반환 시 자동으로 제거된다.
         }
-        return null;
+        return card.cardSeq.lt(seq);
     }
 
     private OrderSpecifier<?> cardSort(Pageable pageable){
