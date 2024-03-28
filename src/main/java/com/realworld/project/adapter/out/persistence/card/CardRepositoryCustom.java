@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CardRepositoryCustom  {
-    Slice<CardJpaEntity> findAllCardList(Pageable pageable, String search, String category, long seq);
+    List<CardJpaEntity> findAllCardList(Pageable pageable, String search, String category, long seq);
 }
