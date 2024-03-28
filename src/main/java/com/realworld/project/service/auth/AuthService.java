@@ -17,6 +17,7 @@ import com.realworld.project.domain.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,12 +34,20 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AuthService implements PostTokenUseCase, UserDetailsService {
     private final LoadMemberPort loadMemberPort;
     private final LoadTokenPort loadTokenPort;
     private final CommandTokenPort commandTokenPort;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    public AuthService(LoadMemberPort loadMemberPort, LoadTokenPort loadTokenPort, CommandTokenPort commandTokenPort, JwtTokenProvider jwtTokenProvider) {
+        this.loadMemberPort = loadMemberPort;
+        this.loadTokenPort = loadTokenPort;
+        this.commandTokenPort = commandTokenPort;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("username : {} ",username);
