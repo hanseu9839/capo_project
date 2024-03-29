@@ -1,0 +1,69 @@
+package com.realworld.feature.signup;
+
+import com.realworld.feature.member.controller.response.MemberResponse;
+import com.realworld.feature.member.controller.request.RegisterMemberRequest;
+import com.realworld.feature.member.domain.Member;
+import com.realworld.feature.member.service.MemberCommandService;
+import com.realworld.feature.member.service.MemberQueryService;
+import com.realworld.global.code.SuccessCode;
+import com.realworld.global.response.ApiResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1")
+@RequiredArgsConstructor
+@Slf4j
+public class SignUpController {
+
+    private final MemberQueryService memberQueryService;
+    private final MemberCommandService memberCommandService;
+
+    /**
+     * 회원 아이디 중복체크
+     * @param userId
+     * @return
+     */
+    @GetMapping("/duplication-check/user-id/{user_id}")
+    public ResponseEntity<ApiResponse<Boolean>> userIdDuplicationCheck(@PathVariable("user_id") String userId){
+        boolean isExist = memberQueryService.existsByUserId(userId);
+
+        ApiResponse<Boolean> memberApiResponse = new ApiResponse<>(isExist,
+                SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+
+        return ResponseEntity.ok(memberApiResponse);
+    }
+
+
+    /**
+     * 회원 가입하기
+     */
+    @PostMapping("/member")
+    public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestBody @Valid RegisterMemberRequest request){
+        Member member = Member.builder()
+                .userId(request.getUserId())
+                .password(request.getPassword())
+                .phoneNumber(request.getPhoneNumber())
+                .userEmail(request.getUserEmail())
+                .build();
+
+        Member savedMember = memberCommandService.saveMember(member);
+
+        MemberResponse response = MemberResponse.builder()
+                .userId(savedMember.getUserId())
+                .phoneNumber(savedMember.getPhoneNumber())
+                .nickname(savedMember.getNickname())
+                .userEmail(savedMember.getUserEmail())
+                .build();
+
+        ApiResponse<MemberResponse> memberApiResponse = new ApiResponse<>(response,
+                SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberApiResponse);
+    }
+
+}
