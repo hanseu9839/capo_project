@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/cards")
+@RequestMapping("/v1/cards")
 public class CardController {
     private final GetCardUseCase getCardUseCase;
 
