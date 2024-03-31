@@ -24,12 +24,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberService implements MemberCommandService, MemberQueryService{
+public class MemberCommandServiceImpl implements MemberCommandService{
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final TokenCommandService commandTokenPort;
@@ -64,10 +62,11 @@ public class MemberService implements MemberCommandService, MemberQueryService{
 
     @Override
     public Token login(Member member) {
+        // TODO: 수정해야 함
         String userId = member.getUserId();
         String password = member.getPassword();
 
-        Member findMember = getMemberByUserId(userId).orElseThrow(()
+        Member findMember = loadMemberPort.findByUserId(userId).orElseThrow(()
                 -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
 
         //비밀번호가 불일치할 경우
@@ -96,6 +95,7 @@ public class MemberService implements MemberCommandService, MemberQueryService{
 
         return token;
     }
+
     @Transactional
     @Override
     public void remove(String userId, String password) {
@@ -147,26 +147,6 @@ public class MemberService implements MemberCommandService, MemberQueryService{
                 .build();
 
         return commandMemberPort.updatePassword(targetMember);
-    }
-
-    @Override
-    public Member findByUserEmail(String userEmail){
-        return loadMemberPort.findByUserEmail(userEmail);
-    }
-
-    @Override
-    public Optional<Member> getMemberByUserId(String userId) {
-        return loadMemberPort.findByUserId(userId);
-    }
-
-    @Override
-    public boolean existsByUserEmail(String userEmail) {
-        return loadMemberPort.existsByUserEmail(userEmail);
-    }
-
-    @Override
-    public boolean existsByUserId(String userId) {
-        return loadMemberPort.existsByUserId(userId);
     }
 
     @Override
