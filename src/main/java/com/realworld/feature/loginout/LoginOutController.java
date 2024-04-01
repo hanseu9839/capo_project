@@ -1,8 +1,7 @@
 package com.realworld.feature.loginout;
 
 import com.realworld.feature.member.domain.Member;
-import com.realworld.feature.member.service.MemberCommandService;
-import com.realworld.feature.token.TokenQueryService;
+import com.realworld.feature.token.service.TokenCommandService;
 import com.realworld.feature.token.Token;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
@@ -18,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class LoginOutController {
-    private final MemberCommandService memberCommandService;
-    private final TokenQueryService tokenQueryService;
+    private final LoginService loginService;
+    private final TokenCommandService tokenCommandService;
 
     /**
      * 로그인
@@ -31,7 +30,7 @@ public class LoginOutController {
                 .password(request.getPassword())
                 .build();
 
-        Token token = memberCommandService.login(member);
+        Token token = loginService.loginAndGetToken(member);
 
         ApiResponse<Token> tokenApiResponse = new ApiResponse<>(token,
                 SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
@@ -44,7 +43,7 @@ public class LoginOutController {
      */
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<?>> logout(@AuthenticationPrincipal User user){
-        tokenQueryService.deleteToken(user.getUsername());
+        tokenCommandService.deleteToken(user.getUsername());
 
         ApiResponse<Token> tokenApiResponse = new ApiResponse<>(null,
                 200, "로그아웃 하였습니다.");
