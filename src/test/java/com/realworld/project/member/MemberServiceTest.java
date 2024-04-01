@@ -1,16 +1,16 @@
-//package com.realworld.project.member;
+//package com.realworld.member;
 //
 //
-//import com.realworld.project.adapter.in.web.account.AccountController;
-//import com.realworld.project.adapter.out.persistence.member.MemberJpaEntity;
-//import com.realworld.project.application.port.in.dto.MemberDTO;
-//import com.realworld.project.application.port.out.member.CommandMemberPort;
-//import com.realworld.project.application.port.out.member.LoadMemberPort;
-//import com.realworld.project.application.port.out.token.CommandTokenPort;
-//import com.realworld.project.common.config.QueryDslConfig;
-//import com.realworld.project.common.config.SecurityConfig;
-//import com.realworld.project.common.config.jwt.JwtTokenProvider;
-//import com.realworld.project.service.member.MemberService;
+//import com.realworld.adapter.in.web.account.AccountController;
+//import com.realworld.adapter.out.persistence.member.MemberJpaEntity;
+//import com.realworld.application.port.in.dto.MemberDTO;
+//import com.realworld.application.port.out.member.CommandMemberPort;
+//import com.realworld.application.port.out.member.LoadMemberPort;
+//import com.realworld.application.port.out.token.CommandTokenPort;
+//import com.realworld.common.config.QueryDslConfig;
+//import com.realworld.common.config.SecurityConfig;
+//import com.realworld.common.config.jwt.JwtTokenProvider;
+//import com.realworld.service.member.MemberService;
 //import jakarta.transaction.Transactional;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;

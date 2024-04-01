@@ -1,4 +1,4 @@
-//package com.realworld.project.jwt;
+//package com.realworld.jwt;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Value;

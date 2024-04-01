@@ -1,9 +1,9 @@
-//package com.realworld.project.mail;
+//package com.realworld.mail;
 //
-//import com.realworld.project.application.port.in.mail.GetMailUseCase;
-//import com.realworld.project.application.port.out.mail.CommandAuthMailPort;
-//import com.realworld.project.domain.AuthMail;
-//import com.realworld.project.service.mail.AuthMailService;
+//import com.realworld.application.port.in.mail.GetMailUseCase;
+//import com.realworld.application.port.out.mail.CommandAuthMailPort;
+//import com.realworld.domain.AuthMail;
+//import com.realworld.service.mail.AuthMailService;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
