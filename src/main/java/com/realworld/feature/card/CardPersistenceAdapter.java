@@ -1,9 +1,10 @@
 package com.realworld.feature.card;
 
+import com.realworld.feature.card.domain.Card;
+import com.realworld.feature.card.entity.CardJpaEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

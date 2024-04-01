@@ -1,5 +1,6 @@
 package com.realworld.feature.card;
 
+import com.realworld.feature.card.domain.Card;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

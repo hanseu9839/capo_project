@@ -1,7 +1,9 @@
-package com.realworld.feature.card;
+package com.realworld.feature.card.controller;
 
 
 
+import com.realworld.feature.card.GetCardUseCase;
+import com.realworld.feature.card.domain.Card;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
 

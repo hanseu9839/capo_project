@@ -1,5 +1,7 @@
 package com.realworld.feature.card;
 
+import com.realworld.feature.card.domain.Card;
+import com.realworld.feature.card.entity.CardJpaEntity;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package com.realworld.feature.card;
+package com.realworld.feature.card.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

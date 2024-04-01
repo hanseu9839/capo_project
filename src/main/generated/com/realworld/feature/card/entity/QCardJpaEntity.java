@@ -1,4 +1,4 @@
-package com.realworld.feature.card;
+package com.realworld.feature.card.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QCardJpaEntity extends EntityPathBase<CardJpaEntity> {
 
-    private static final long serialVersionUID = -342180945L;
+    private static final long serialVersionUID = 197230338L;
 
     public static final QCardJpaEntity cardJpaEntity = new QCardJpaEntity("cardJpaEntity");
 
