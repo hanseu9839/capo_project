@@ -1,7 +1,7 @@
 package com.realworld.feature.signup;
 
-import com.realworld.feature.member.controller.response.MemberResponse;
 import com.realworld.feature.member.controller.request.RegisterMemberRequest;
+import com.realworld.feature.member.controller.response.MemberResponse;
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.member.service.MemberCommandService;
 import com.realworld.feature.member.service.MemberQueryService;
@@ -25,11 +25,9 @@ public class SignUpController {
 
     /**
      * 회원 아이디 중복체크
-     * @param userId
-     * @return
      */
     @GetMapping("/duplication-check/user-id/{user_id}")
-    public ResponseEntity<ApiResponse<Boolean>> userIdDuplicationCheck(@PathVariable("user_id") String userId){
+    public ResponseEntity<ApiResponse<Boolean>> userIdDuplicationCheck(@PathVariable("user_id") String userId) {
         boolean isExist = memberQueryService.existsByUserId(userId);
 
         ApiResponse<Boolean> memberApiResponse = new ApiResponse<>(isExist,
@@ -38,12 +36,11 @@ public class SignUpController {
         return ResponseEntity.ok(memberApiResponse);
     }
 
-
     /**
      * 회원 가입하기
      */
     @PostMapping("/member")
-    public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestBody @Valid RegisterMemberRequest request){
+    public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestBody @Valid RegisterMemberRequest request) {
         Member member = Member.builder()
                 .userId(request.getUserId())
                 .password(request.getPassword())

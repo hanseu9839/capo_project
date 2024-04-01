@@ -6,21 +6,14 @@ import com.realworld.feature.member.repository.LoadMemberPort;
 import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomLoginExceptionHandler;
 import com.realworld.global.config.exception.CustomMemberExceptionHandler;
-import com.realworld.global.config.jwt.JwtTokenProvider;
 import com.realworld.global.utils.CommonUtil;
 import com.realworld.feature.auth.Authority;
 import com.realworld.feature.member.domain.Member;
-import com.realworld.feature.token.TokenCommandService;
-import com.realworld.feature.token.Token;
-import com.realworld.feature.token.TokenDTO;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +23,7 @@ import org.springframework.stereotype.Service;
 public class MemberCommandServiceImpl implements MemberCommandService{
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
-    private final TokenCommandService commandTokenPort;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Member saveMember(Member member) {
@@ -58,42 +48,6 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         MemberJpaEntity memberJpaEntity = commandMemberPort.saveMember(registMember);
 
         return memberJpaEntity.toDomain();
-    }
-
-    @Override
-    public Token login(Member member) {
-        // TODO: 수정해야 함
-        String userId = member.getUserId();
-        String password = member.getPassword();
-
-        Member findMember = loadMemberPort.findByUserId(userId).orElseThrow(()
-                -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
-
-        //비밀번호가 불일치할 경우
-        if(!passwordEncoder.matches(password, findMember.getPassword())){
-            throw new CustomLoginExceptionHandler(ErrorCode.LOGIN_REQUEST_ERROR);
-        }
-
-        // 받아온 유저네임과 패스워드를 이용해 UsernamePasswordAuthenticationToken
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
-
-        // authenticationToken 객체를 통해 Authentication 생성
-        // authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행된다.
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        TokenDTO tokenDTO = jwtTokenProvider.createToken(authentication);
-        tokenDTO.setUserId(userId);
-
-        Token token = Token.builder()
-                            .accessToken(tokenDTO.getAccessToken())
-                            .refreshToken(tokenDTO.getRefreshToken())
-                            .grantType(tokenDTO.getGrantType())
-                            .userId(userId)
-                            .nickname(member.getNickname())
-                            .build();
-
-        commandTokenPort.saveToken(token);
-
-        return token;
     }
 
     @Transactional

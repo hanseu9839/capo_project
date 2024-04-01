@@ -1,5 +1,6 @@
-package com.realworld.feature.auth;
+package com.realworld.feature.auth.mail.entity;
 
+import com.realworld.feature.auth.mail.domain.AuthMail;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +13,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Table(name="auth_mail")
+@Table(name = "auth_mail")
 @Entity
 @NoArgsConstructor
-@Getter @Setter
-@DynamicUpdate @DynamicInsert
+@Getter
+@Setter
+@DynamicUpdate
+@DynamicInsert
 @EntityListeners(AuditingEntityListener.class)
 public class AuthMailJpaEntity {
     @Id
@@ -25,11 +28,11 @@ public class AuthMailJpaEntity {
     private String authNumber;
 
     @LastModifiedDate
-    @Column(name="reg_dt", nullable = false)
+    @Column(name = "reg_dt", nullable = false)
     private LocalDateTime regDt;
 
     @Builder
-    public AuthMailJpaEntity(String userEmail, String authNumber, LocalDateTime regDt){
+    public AuthMailJpaEntity(String userEmail, String authNumber, LocalDateTime regDt) {
         this.userEmail = userEmail;
         this.authNumber = authNumber;
         this.regDt = regDt;
