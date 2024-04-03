@@ -31,7 +31,6 @@ public class CommonUtil {
         NickName nickName = new NickName();
         String []determiners=nickName.getDeterminers();
         int length = determiners.length;
-        log.info("determiners length : {} ", length);
         String determiner = determiners[(int)(Math.random()*length)];
         String []nicknames = nickName.getName();
         String name = nicknames[(int)(Math.random()*nicknames.length)];
