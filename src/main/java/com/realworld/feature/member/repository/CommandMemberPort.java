@@ -9,5 +9,5 @@ public interface CommandMemberPort {
     long updatePassword(Member member);
     long updateEmail(Member member);
     void saveBackup(Member member);
-    long nicknameUpdate(Member member);
+    long updateNickname(Member member);
 }

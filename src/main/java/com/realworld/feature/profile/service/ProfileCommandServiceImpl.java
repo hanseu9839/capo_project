@@ -22,14 +22,14 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
     private final CommandMemberPort commandMemberPort;
     @Transactional
     @Override
-    public Member nicknameUpdate(UpdateNickNameRequest request, String userId) {
+    public Member updateNickname(UpdateNickNameRequest request, String userId) {
         Member member = Member.builder()
                             .nickname(request.getNickname())
                             .userId(userId)
                             .build();
 
         long update = -1;
-        if(!StringUtils.isEmpty(request.getNickname())) update = commandMemberPort.nicknameUpdate(member);
+        if(!StringUtils.isEmpty(request.getNickname())) update = commandMemberPort.updateNickname(member);
 
         if(update<0) throw new CustomMemberExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
 

@@ -19,16 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class ProfileController {
     private final ProfileCommandService profileCommandService;
     @PatchMapping("/member/nickname")
-    public ResponseEntity<ApiResponse<?>> nicknameUpdate(@AuthenticationPrincipal User user, @RequestBody UpdateNickNameRequest request){
-        log.info("userId {} ", user.getUsername());
-        Member member = profileCommandService.nicknameUpdate(request, user.getUsername());
-        ApiResponse<?> updateApiResponse = new ApiResponse<>(member.getNickname(),
+    public ResponseEntity<ApiResponse<String>> nicknameUpdate(@AuthenticationPrincipal User user, @RequestBody UpdateNickNameRequest request){
+        Member member = profileCommandService.updateNickname(request, user.getUsername());
+        ApiResponse<String> updateApiResponse = new ApiResponse<>(member.getNickname(),
                 SuccessCode.UPDATE_SUCCESS.getStatus(),
                 SuccessCode.UPDATE_SUCCESS.getMessage());
         return ResponseEntity.ok(updateApiResponse);

@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/cards")
+@RequestMapping("/api/v1/cards")
 public class ProductController {
     private final ProductQueryServiceImpl productQueryService;
     /**
@@ -36,10 +36,10 @@ public class ProductController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> getSearchCardList(@RequestParam(value="seq", required = false)long seq, @RequestParam(required = false) String search,@RequestParam(required = false) String category, @PageableDefault(size = 10, sort="seq", direction =  Sort.Direction.DESC)Pageable pageable){
+    public ResponseEntity<ApiResponse<Object>> getSearchCardList(@RequestParam(value="seq", required = false)long seq, @RequestParam(required = false) String search,@RequestParam(required = false) String category, @PageableDefault(size = 10, sort="seq", direction =  Sort.Direction.DESC)Pageable pageable){
         List<Product> products = productQueryService.getSearchProductList(pageable, search, category, seq);
 
-        ApiResponse<?> apiResponse  = new ApiResponse<>(products, SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        ApiResponse<Object> apiResponse  = new ApiResponse<>(products, SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
         return ResponseEntity.ok(apiResponse);
     }
 

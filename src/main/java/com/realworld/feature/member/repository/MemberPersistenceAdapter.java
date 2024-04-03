@@ -100,7 +100,7 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
     }
 
     @Override
-    public long nicknameUpdate(Member member) {
+    public long updateNickname(Member member) {
         return repository.updateNickname(member.toEntity());
     }
 
