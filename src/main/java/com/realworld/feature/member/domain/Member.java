@@ -35,7 +35,7 @@ public class Member {
 
     private String nickname;
 
-    public MemberJpaEntity toEntity(){
+    public MemberJpaEntity toEntity() {
         return MemberJpaEntity.builder()
                 .userSeq(getUserSeq())
                 .userId(getUserId())

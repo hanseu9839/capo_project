@@ -20,8 +20,11 @@ public class TokenJpaEntity implements Serializable {
     @Id
     @Column(name="user_id")
     private String userId;
+
     private String grantType;
+
     String accessToken;
+
     String refreshToken;
 
     @Builder
@@ -38,7 +41,7 @@ public class TokenJpaEntity implements Serializable {
         return this;
     }
     
-    public Token toDomain(TokenJpaEntity tokenJpaEntity) {
+    public Token toDomain() {
         return Token.builder()
                 .grantType(getGrantType())
                 .accessToken(getAccessToken())
