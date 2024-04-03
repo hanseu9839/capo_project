@@ -31,8 +31,8 @@ public class JwtTokenProvider {
     // 30분
     private final long ACCESS_TOKEN_VALIDATION_SECOND = 30 * 60 * 1000;
 
-    // 2주
-    private final long REFRESH_TOKEN_VALIDATION_SECOND = 28 * 24 * 60 * 60 * 1000;
+    // 2주 (늘릴 시 에러 발생하여 토큰 인식못함) 이유 찾아봐야함.
+    private final long REFRESH_TOKEN_VALIDATION_SECOND = 14 * 24 * 60 * 60 * 1000;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
