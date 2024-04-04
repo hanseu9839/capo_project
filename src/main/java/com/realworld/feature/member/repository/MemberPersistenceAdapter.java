@@ -8,6 +8,7 @@ import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.member.entity.BackUpMemberJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 
+import com.realworld.global.config.exception.CustomMemberExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -40,7 +41,7 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
             throw e;
         }
 
-        return Optional.ofNullable(member.get().toDomain());
+        return member.map(MemberJpaEntity::toDomain);
     }
 
     @Override
