@@ -76,11 +76,11 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
     @Override
     public long updatePassword(Member member) {
-        // TODO: 비밀번호 찾기로 비밀번호 변경, 로그인해서 비밀번호 변경 분리하는 게 좋을 듯..?
-
+        // TODO: 비밀번호 찾기로 비밀번호 변경, 로그인해서 비밀번호 변경 분리하는 게 좋을 듯...?
         String currentPassword = member.getCurrentPassword();
         String newPassword = member.getNewPassword();
 
+        // TODO : 해당 부분이 UserToken이 있는 상태에서 변경하려고 하는 경우 Request값에 Email을 안받기 떄문에 있는 Email이여도 에러처리됨.
         if(StringUtils.isNotEmpty(member.getUserEmail())) {
             member = loadMemberPort.findByUserEmail(member.getUserEmail());
             // TODO: member 없으면 exception 반환
