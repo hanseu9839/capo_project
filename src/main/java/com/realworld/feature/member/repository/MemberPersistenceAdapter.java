@@ -33,13 +33,7 @@ public class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPo
 
     @Override
     public Optional<Member> findByUserId(String userId) {
-        Optional<MemberJpaEntity> member = null;
-        try{
-            member = Optional.ofNullable(repository.findByUserId(userId));
-        } catch (Exception e){
-            e.printStackTrace();
-            throw e;
-        }
+        Optional<MemberJpaEntity> member = Optional.ofNullable(repository.findByUserId(userId));
 
         return member.map(MemberJpaEntity::toDomain);
     }
