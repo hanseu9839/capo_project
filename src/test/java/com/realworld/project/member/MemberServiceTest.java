@@ -3,7 +3,6 @@
 //
 //import com.realworld.adapter.in.web.account.AccountController;
 //import com.realworld.adapter.out.persistence.member.MemberJpaEntity;
-//import com.realworld.application.port.in.dto.MemberDTO;
 //import com.realworld.application.port.out.member.CommandMemberPort;
 //import com.realworld.application.port.out.member.LoadMemberPort;
 //import com.realworld.application.port.out.token.CommandTokenPort;
@@ -68,7 +67,6 @@
 ////    void saveMember() {
 ////        //given
 ////        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
-////        MemberDTO member = MemberDTO.builder()
 ////                .userId("test8833")
 ////                .userEmail("hans983@naver.com")
 ////                .phoneNumber("01023599839")
@@ -88,11 +86,7 @@
 //    void changePassword(){
 //        // given
 //        MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, commandTokenPort,passwordEncoder, authenticationManagerBuilder, jwtTokenProvider);
-//        MemberDTO member = MemberDTO.builder()
-//                                    .userEmail("hans983@naver.com")
-//                                    .userId("seoung1234")
-//                                    .newPassword("@Qwer1234")
-//                                    .build();
+//
 //        // when
 //        long updated = memberService.updatePassword(member);
 //        //then
