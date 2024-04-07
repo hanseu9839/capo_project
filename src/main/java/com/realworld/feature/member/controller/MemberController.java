@@ -73,8 +73,12 @@ public class MemberController {
      */
     @PatchMapping("/password")
     public ResponseEntity<ApiResponse<?>> passwordUpdate(@AuthenticationPrincipal User user, @RequestBody UpdatePasswordRequest request) {
+
+        Member targetMember=memberQueryService.getMemberByUserId(user.getUsername()).orElseThrow(); //userEmail 안넘겨주기 떄문에 가져와주어야함.
+
         Member member = Member.builder()
                 .userId(user.getUsername())
+                .userEmail(targetMember.getUserEmail())
                 .currentPassword(request.getCurrentPassword())
                 .newPassword(request.getNewPassword())
                 .build();
