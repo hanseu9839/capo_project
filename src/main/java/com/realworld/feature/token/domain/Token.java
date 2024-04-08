@@ -1,4 +1,4 @@
-package com.realworld.feature.token;
+package com.realworld.feature.token.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
