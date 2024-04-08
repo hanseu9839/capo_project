@@ -1,5 +1,8 @@
-package com.realworld.feature.token;
+package com.realworld.feature.token.controller;
 
+import com.realworld.feature.token.domain.Token;
+import com.realworld.feature.token.controller.request.ReissueRequest;
+import com.realworld.feature.token.controller.response.ReissueTokenResponse;
 import com.realworld.feature.token.service.TokenCommandService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
@@ -20,19 +23,24 @@ public class TokenController {
     private final TokenCommandService tokenCommandService;
 
     @PostMapping("/reissue")
-    public ResponseEntity<ApiResponse<Token>> reissue(HttpServletRequest request){
+    public ResponseEntity<ApiResponse<ReissueTokenResponse>> reissue(HttpServletRequest request){
         String accessToken = request.getHeader("AccessToken");
         String refreshToken = request.getHeader("RefreshToken");
 
-        TokenDTO tokenDto = TokenDTO.builder()
-                                    .accessToken(accessToken)
-                                    .refreshToken(refreshToken)
-                                    .build();
+        ReissueRequest reissueRequest = ReissueRequest.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
 
+        Token token = tokenCommandService.reissue(reissueRequest);
 
-        Token token = tokenCommandService.reissue(tokenDto);
+        ReissueTokenResponse response = ReissueTokenResponse.builder()
+                .userId(token.getUserId())
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .build();
 
-        ApiResponse<Token> tokenApiResponse = new ApiResponse<>(token,
+        ApiResponse<ReissueTokenResponse> tokenApiResponse = new ApiResponse<>(response,
                 SuccessCode.UPDATE_SUCCESS.getStatus(), SuccessCode.UPDATE_SUCCESS.getMessage());
 
         return ResponseEntity.ok(tokenApiResponse);

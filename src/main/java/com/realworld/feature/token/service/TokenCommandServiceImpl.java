@@ -1,17 +1,13 @@
 package com.realworld.feature.token.service;
 
-import com.realworld.feature.token.Token;
-import com.realworld.feature.token.TokenDTO;
+import com.realworld.feature.token.domain.Token;
+import com.realworld.feature.token.controller.request.ReissueRequest;
 import com.realworld.global.code.ErrorCode;
-import com.realworld.global.code.SuccessCode;
 import com.realworld.global.config.exception.CustomJwtExceptionHandler;
 import com.realworld.global.config.jwt.JwtTokenProvider;
-import com.realworld.global.response.ApiResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
@@ -37,14 +33,14 @@ public class TokenCommandServiceImpl implements TokenCommandService {
 
     @Transactional
     @Override
-    public Token reissue(TokenDTO token) {
-        if(!jwtTokenProvider.validateToken(token.getRefreshToken())){
+    public Token reissue(ReissueRequest request) {
+        if(!jwtTokenProvider.validateToken(request.getRefreshToken())){
             throw new CustomJwtExceptionHandler(ErrorCode.JWT_TOKEN_REQUEST_ERROR);
         }
 
-        Authentication authentication = jwtTokenProvider.getAuthentication(token.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(request.getAccessToken());
 
-        TokenDTO newToken = jwtTokenProvider.createToken(authentication);
+        Token newToken = jwtTokenProvider.createToken(authentication);
 
         Optional<TokenJpaEntity> getToken = tokenRepository.findByUserId(authentication.getName());
         getToken.ifPresent(value ->{

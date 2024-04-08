@@ -4,12 +4,10 @@ import com.realworld.feature.profile.controller.request.UpdateNickNameRequest;
 import com.realworld.feature.profile.service.ProfileCommandService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
-import com.realworld.feature.member.MemberDTO;
 import com.realworld.feature.member.domain.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;

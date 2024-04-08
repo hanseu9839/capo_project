@@ -1,6 +1,6 @@
 package com.realworld.global.config.jwt;
 
-import com.realworld.feature.token.TokenDTO;
+import com.realworld.feature.token.domain.Token;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -45,7 +45,7 @@ public class JwtTokenProvider {
      * @param authentication
      * @return TokenInfo : 토큰정보
      */
-    public TokenDTO createToken(Authentication authentication) {
+    public Token createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());
@@ -70,7 +70,7 @@ public class JwtTokenProvider {
                 .compact();
 
         // TokenInfo 생성
-        return TokenDTO.builder()
+        return Token.builder()
                 .grantType(BEARER)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)

@@ -1,11 +1,9 @@
 package com.realworld.feature.profile.service;
 
 import com.realworld.feature.profile.controller.request.UpdateNickNameRequest;
-import com.realworld.feature.profile.service.ProfileCommandService;
 import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomMemberExceptionHandler;
 import com.realworld.feature.member.repository.CommandMemberPort;
-import com.realworld.feature.member.MemberDTO;
 import com.realworld.feature.member.domain.Member;
 
 import jakarta.transaction.Transactional;

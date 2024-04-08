@@ -1,8 +1,9 @@
 package com.realworld.feature.loginout;
 
 import com.realworld.feature.member.domain.Member;
+import com.realworld.feature.token.controller.response.TokenResponse;
 import com.realworld.feature.token.service.TokenCommandService;
-import com.realworld.feature.token.Token;
+import com.realworld.feature.token.domain.Token;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class LoginOutController {
      * 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<Token>> login(@RequestBody LoginRequest request){
+    public ResponseEntity<ApiResponse<TokenResponse>> login(@RequestBody LoginRequest request){
         Member member = Member.builder()
                 .userId(request.getUserId())
                 .password(request.getPassword())
@@ -32,7 +33,15 @@ public class LoginOutController {
 
         Token token = loginService.loginAndGetToken(member);
 
-        ApiResponse<Token> tokenApiResponse = new ApiResponse<>(token,
+        TokenResponse response = TokenResponse.builder()
+                .userId(token.getUserId())
+                .grantType(token.getGrantType())
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .nickname(token.getNickname())
+                .build();
+
+        ApiResponse<TokenResponse> tokenApiResponse = new ApiResponse<>(response,
                 SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
 
         return ResponseEntity.ok(tokenApiResponse);
