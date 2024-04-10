@@ -1,9 +1,11 @@
 package com.realworld.feature.member.service;
 
+import com.realworld.feature.member.entity.BackUpMemberJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
-import com.realworld.feature.member.repository.CommandMemberPort;
-import com.realworld.feature.member.repository.LoadMemberPort;
+import com.realworld.feature.member.repository.BackUpMemberRepository;
+import com.realworld.feature.member.repository.MemberRepository;
 import com.realworld.global.code.ErrorCode;
+import com.realworld.global.code.ResultErrorMsgCode;
 import com.realworld.global.config.exception.CustomLoginExceptionHandler;
 import com.realworld.global.config.exception.CustomMemberExceptionHandler;
 import com.realworld.global.utils.CommonUtil;
@@ -21,10 +23,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class MemberCommandServiceImpl implements MemberCommandService{
-    private final CommandMemberPort commandMemberPort;
-    private final LoadMemberPort loadMemberPort;
     private final PasswordEncoder passwordEncoder;
-
+    private final MemberRepository repository;
+    private final BackUpMemberRepository backRepository;
     @Override
     public Member saveMember(Member member) {
         if(!CommonUtil.passwordValidationCheck(member.getPassword())){
@@ -45,16 +46,18 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                             .authority(Authority.ROLE_USER)
                             .build();
 
-        MemberJpaEntity memberJpaEntity = commandMemberPort.saveMember(registMember);
+        // repository 예외
+        if(repository.existsByUserId(registMember.getUserId()) || repository.existsByUserEmail(registMember.getUserEmail())){
+            throw new CustomLoginExceptionHandler(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg(),ErrorCode.LOGIN_DUPLICATION_ERROR);
+        }
 
-        return memberJpaEntity.toDomain();
+        return repository.save(member.toEntity()).toDomain();
     }
 
     @Transactional
     @Override
     public void remove(String userId, String password) {
-        Member targetMember = loadMemberPort.findByUserId(userId).orElseThrow(()
-                -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
+        Member targetMember = repository.findByUserId(userId).toDomain();
 
         Member member = Member.builder()
                                 .userId(targetMember.getUserId())
@@ -67,29 +70,38 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                                 .build();
 
         if(passwordEncoder.matches(password, member.getPassword())){
-            commandMemberPort.userRemove(targetMember);
-            commandMemberPort.saveBackup(member);
+            repository.delete(member.toEntity()); // Member 삭제
+
+            BackUpMemberJpaEntity entity = new BackUpMemberJpaEntity();
+            entity.memberConvertBackupEntity(member);
+
+            backRepository.save(entity);
         } else {
             throw new CustomMemberExceptionHandler(ErrorCode.NOT_EQUAL_PASSWORD);
         }
-    }
 
+    }
+    @Transactional
     @Override
     public long updatePassword(Member member) {
         String currentPassword = member.getCurrentPassword();
         String newPassword = member.getNewPassword();
 
         if(StringUtils.isNotEmpty(member.getUserEmail())) {
-            member = loadMemberPort.findByUserEmail(member.getUserEmail());
+            MemberJpaEntity memberEntity = MemberJpaEntity.builder()
+                    .userEmail(member.getUserEmail())
+                    .build();
+            member = repository.findByUserEmail(memberEntity).toDomain();
+            if(CommonUtil.isEmpty(member)) throw new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_EMAIL);
             // TODO: member 없으면 exception 반환
         }
         if(StringUtils.isNotEmpty(member.getUserId())) {
-            member = loadMemberPort.findByUserId(member.getUserId()).orElseThrow(() ->
-                    new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
+            member = repository.findByUserId(member.getUserId()).toDomain();
+            if(CommonUtil.isEmpty(member)) throw new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
         }
 
         if(StringUtils.isNotEmpty(currentPassword)
-                && !passwordEncoder.matches(currentPassword, newPassword)){
+                && !passwordEncoder.matches(currentPassword, member.getPassword())){
             throw new CustomMemberExceptionHandler(ErrorCode.NOT_EQUAL_PASSWORD);
         }
 
@@ -98,11 +110,11 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                 .password(passwordEncoder.encode(newPassword))
                 .build();
 
-        return commandMemberPort.updatePassword(targetMember);
+        return repository.updatePassword(targetMember.toEntity());
     }
 
     @Override
     public long updateEmail(Member member) {
-        return commandMemberPort.updateEmail(member);
+        return repository.updateEmail(member.toEntity());
     }
 }

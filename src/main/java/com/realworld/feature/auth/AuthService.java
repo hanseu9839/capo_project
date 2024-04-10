@@ -1,7 +1,8 @@
 package com.realworld.feature.auth;
 
 import com.realworld.feature.member.domain.Member;
-import com.realworld.feature.member.repository.LoadMemberPort;
+import com.realworld.feature.member.repository.MemberRepository;
+import com.realworld.global.utils.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,16 +20,12 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
-    private final LoadMemberPort loadMemberPort;
-
+    private final MemberRepository repository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("username : {} ", username);
-
-        return loadMemberPort.findByUserId(username)
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-
+        UserDetails user = this.createUserDetails(repository.findByUserId(username).toDomain());
+        if(CommonUtil.isEmpty(user)) throw new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다.");
+        return user;
     }
 
     // DB 에 User 값이 존재하면 UserDetails 객체로 만들어서 리턴

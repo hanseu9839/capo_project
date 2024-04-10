@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QProductJpaEntity product = QProductJpaEntity.productJpaEntity;
     @Override
-    public List<ProductJpaEntity> getSearchCardList(Pageable pageable, String search, String category, Long seq) {
+    public List<Product> getSearchCardList(Pageable pageable, String search, String category, Long seq) {
 
         List<ProductJpaEntity> products = queryFactory
                 .select(
@@ -38,7 +39,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .orderBy(productSort(pageable))
                 .limit(pageable.getPageSize()+1)
                 .fetch();
-        return products;
+        return products.stream().map(ProductJpaEntity::toDomain).toList();
     }
 
     private BooleanExpression containTitle(String search){

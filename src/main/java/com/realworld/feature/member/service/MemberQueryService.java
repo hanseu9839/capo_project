@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface MemberQueryService {
 
-    Optional<Member> getMemberByUserId(String userId);
+    Member getMemberByUserId(String userId);
 
     boolean existsByUserEmail(String userEmail);
 

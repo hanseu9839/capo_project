@@ -22,11 +22,10 @@ public class ProductQueryServiceImpl implements ProductQueryService{
     public List<Product> getSearchProductList(Pageable pageable, String search, String category, long seq) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
-        List<ProductJpaEntity> cards = productRepository.getSearchCardList(pageRequest, search, category, seq);
-        List<Product> productDomainList = new ArrayList<>();
-        cards.forEach(card -> productDomainList.add(card.toDomain()) );
+        List<Product> cards = productRepository.getSearchCardList(pageRequest, search, category, seq);
 
-        return productDomainList;
+
+        return cards;
     }
 
 }

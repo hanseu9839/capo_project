@@ -1,4 +1,4 @@
-package com.realworld.product;
+package com.realworld.project.product;
 
 import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.feature.product.domain.Product;
@@ -29,16 +29,16 @@ public class productTest {
         // given
         PageRequest pageRequest = PageRequest.of(0,10);
         // when
-        List<ProductJpaEntity> list= productRepository.getSearchCardList(pageRequest, "", "", null);
+        List<Product> list= productRepository.getSearchCardList(pageRequest, "", "", null);
 
-//        for(ProductJpaEntity productJpaEntity : list){
-//            System.out.println(productJpaEntity.getProductSeq());
-//            System.out.println(productJpaEntity.getViews());
+//        for(Product product: list){
+//            System.out.println(product.getProductSeq());
+//            System.out.println(product.getViews());
 //        }
 
         PageRequest pageRequest2 = PageRequest.of(1,10);
 
-        List<ProductJpaEntity> list2 = productRepository.getSearchCardList(pageRequest2, "","",14L);
+        List<Product> list2 = productRepository.getSearchCardList(pageRequest2, "","",14L);
 
 //        for(ProductJpaEntity productJpaEntity : list2){
 //            System.out.println(productJpaEntity.getProductSeq());

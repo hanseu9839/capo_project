@@ -17,11 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class LoginTest {
 
-    @Autowired
-    private LoginServiceImpl loginService;
 
-    @Autowired
-    private MemberQueryServiceImpl memberQueryService;
 
     @Test
     @DisplayName("아이디 없는 경우")

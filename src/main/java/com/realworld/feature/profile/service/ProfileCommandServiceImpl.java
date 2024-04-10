@@ -1,9 +1,9 @@
 package com.realworld.feature.profile.service;
 
+import com.realworld.feature.member.repository.MemberRepository;
 import com.realworld.feature.profile.controller.request.UpdateNickNameRequest;
 import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomMemberExceptionHandler;
-import com.realworld.feature.member.repository.CommandMemberPort;
 import com.realworld.feature.member.domain.Member;
 
 import jakarta.transaction.Transactional;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProfileCommandServiceImpl implements ProfileCommandService {
-    private final CommandMemberPort commandMemberPort;
+    private final MemberRepository repository;
     @Transactional
     @Override
     public Member updateNickname(UpdateNickNameRequest request, String userId) {
@@ -27,7 +27,7 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
                             .build();
 
         long update = -1;
-        if(!StringUtils.isEmpty(request.getNickname())) update = commandMemberPort.updateNickname(member);
+        if(!StringUtils.isEmpty(request.getNickname())) update = repository.updateNickname(member.toEntity());;
 
         if(update<0) throw new CustomMemberExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
 

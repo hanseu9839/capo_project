@@ -34,7 +34,7 @@ public class MemberController {
      */
     @GetMapping("")
     public ResponseEntity<ApiResponse<MemberResponse>> getMember(@AuthenticationPrincipal User user) {
-        Member member = memberQueryService.getMemberByUserId(user.getUsername()).orElseThrow();
+        Member member = memberQueryService.getMemberByUserId(user.getUsername());
 
         MemberResponse memberResponse = MemberResponse.builder()
                 .userId(member.getUserId())
@@ -74,7 +74,7 @@ public class MemberController {
     @PatchMapping("/password")
     public ResponseEntity<ApiResponse<?>> passwordUpdate(@AuthenticationPrincipal User user, @RequestBody UpdatePasswordRequest request) {
 
-        Member targetMember=memberQueryService.getMemberByUserId(user.getUsername()).orElseThrow(); //userEmail 안넘겨주기 떄문에 가져와주어야함.
+        Member targetMember=memberQueryService.getMemberByUserId(user.getUsername()); //userEmail 안넘겨주기 떄문에 가져와주어야함.
 
         Member member = Member.builder()
                 .userId(user.getUsername())
