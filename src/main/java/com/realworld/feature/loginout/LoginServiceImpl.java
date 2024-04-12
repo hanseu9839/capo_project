@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
 
     private final MemberQueryService memberQueryService;
     private final PasswordEncoder passwordEncoder;
@@ -31,11 +31,10 @@ public class LoginServiceImpl implements LoginService{
         String userId = member.getUserId();
         String password = member.getPassword();
 
-        Member findMember = memberQueryService.getMemberByUserId(userId).orElseThrow(()
-                -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
+        Member findMember = memberQueryService.getMemberByUserId(userId).orElseThrow(() -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
 
         //비밀번호가 불일치할 경우
-        if(!passwordEncoder.matches(password, findMember.getPassword())){
+        if (!passwordEncoder.matches(password, findMember.getPassword())) {
             throw new CustomLoginExceptionHandler(ErrorCode.LOGIN_REQUEST_ERROR);
         }
 
@@ -46,7 +45,7 @@ public class LoginServiceImpl implements LoginService{
         // authenticationToken 객체를 통해 Authentication 생성
         // authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행된다.
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        Token token= jwtTokenProvider.createToken(authentication);
+        Token token = jwtTokenProvider.createToken(authentication);
         token.setUserId(userId);
 
         Token savedToken = tokenCommandService.saveToken(token);

@@ -12,5 +12,5 @@ public interface MemberQueryService {
 
     boolean existsByUserId(String userId);
 
-    Member findByUserEmail(String userEmail);
+    Optional<Member> findByUserEmail(String userEmail);
 }

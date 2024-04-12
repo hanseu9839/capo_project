@@ -2,8 +2,10 @@ package com.realworld.feature.member.service;
 
 import com.realworld.feature.member.domain.Member;
 
+import java.util.Optional;
+
 public interface MemberCommandService {
-    Member saveMember(Member memberDto);
+    Optional<Member> saveMember(Member memberDto);
 
     void remove(String userId, String password);
 

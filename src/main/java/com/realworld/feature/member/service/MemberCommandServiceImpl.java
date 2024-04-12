@@ -1,5 +1,7 @@
 package com.realworld.feature.member.service;
 
+import com.realworld.feature.auth.Authority;
+import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import com.realworld.feature.member.repository.CommandMemberPort;
 import com.realworld.feature.member.repository.LoadMemberPort;
@@ -7,9 +9,6 @@ import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomLoginExceptionHandler;
 import com.realworld.global.config.exception.CustomMemberExceptionHandler;
 import com.realworld.global.utils.CommonUtil;
-import com.realworld.feature.auth.Authority;
-import com.realworld.feature.member.domain.Member;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,37 +16,40 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberCommandServiceImpl implements MemberCommandService{
+public class MemberCommandServiceImpl implements MemberCommandService {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Member saveMember(Member member) {
-        if(!CommonUtil.passwordValidationCheck(member.getPassword())){
+    public Optional<Member> saveMember(Member member) {
+        if (!CommonUtil.passwordValidationCheck(member.getPassword())) {
             throw new CustomMemberExceptionHandler(ErrorCode.PASSWORD_REQUEST_ERROR);
         }
-        if(!CommonUtil.userIdValidationCheck(member.getUserId())){
+        if (!CommonUtil.userIdValidationCheck(member.getUserId())) {
             throw new CustomMemberExceptionHandler(ErrorCode.VALIDATION_USERID_ERROR);
         }
 
         Member registMember = Member.builder()
-                            .userSeq(member.getUserSeq())
-                            .userId(member.getUserId())
-                            .password(passwordEncoder.encode(member.getPassword()))
-                            .phoneNumber(member.getPhoneNumber())
-                            .userEmail(member.getUserEmail())
-                            .nickname(CommonUtil.createNickname())
-                            .delYn("N")
-                            .authority(Authority.ROLE_USER)
-                            .build();
+                .userSeq(member.getUserSeq())
+                .userId(member.getUserId())
+                .password(passwordEncoder.encode(member.getPassword()))
+                .phoneNumber(member.getPhoneNumber())
+                .userEmail(member.getUserEmail())
+                .nickname(CommonUtil.createNickname())
+                .delYn("N")
+                .authority(Authority.ROLE_USER)
+                .build();
 
         MemberJpaEntity memberJpaEntity = commandMemberPort.saveMember(registMember);
 
-        return memberJpaEntity.toDomain();
+        return Optional.ofNullable(registMember);
+//        return Optional.ofNullable(repository.save(member.toEntity()).toDomain());
     }
 
     @Transactional
@@ -57,16 +59,16 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                 -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
 
         Member member = Member.builder()
-                                .userId(targetMember.getUserId())
-                                .authority(targetMember.getAuthority())
-                                .phoneNumber(targetMember.getPhoneNumber())
-                                .userEmail(targetMember.getUserEmail())
-                                .password(targetMember.getPassword())
-                                .nickname(targetMember.getNickname())
-                                .phoneNumber(targetMember.getPhoneNumber())
-                                .build();
+                .userId(targetMember.getUserId())
+                .authority(targetMember.getAuthority())
+                .phoneNumber(targetMember.getPhoneNumber())
+                .userEmail(targetMember.getUserEmail())
+                .password(targetMember.getPassword())
+                .nickname(targetMember.getNickname())
+                .phoneNumber(targetMember.getPhoneNumber())
+                .build();
 
-        if(passwordEncoder.matches(password, member.getPassword())){
+        if (passwordEncoder.matches(password, member.getPassword())) {
             commandMemberPort.userRemove(targetMember);
             commandMemberPort.saveBackup(member);
         } else {
@@ -79,17 +81,17 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         String currentPassword = member.getCurrentPassword();
         String newPassword = member.getNewPassword();
 
-        if(StringUtils.isNotEmpty(member.getUserEmail())) {
+        if (StringUtils.isNotEmpty(member.getUserEmail())) {
             member = loadMemberPort.findByUserEmail(member.getUserEmail());
             // TODO: member 없으면 exception 반환
         }
-        if(StringUtils.isNotEmpty(member.getUserId())) {
+        if (StringUtils.isNotEmpty(member.getUserId())) {
             member = loadMemberPort.findByUserId(member.getUserId()).orElseThrow(() ->
                     new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
         }
 
-        if(StringUtils.isNotEmpty(currentPassword)
-                && !passwordEncoder.matches(currentPassword, newPassword)){
+        if (StringUtils.isNotEmpty(currentPassword)
+                && !passwordEncoder.matches(currentPassword, newPassword)) {
             throw new CustomMemberExceptionHandler(ErrorCode.NOT_EQUAL_PASSWORD);
         }
 
