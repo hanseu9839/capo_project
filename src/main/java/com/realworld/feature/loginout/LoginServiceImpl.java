@@ -7,6 +7,7 @@ import com.realworld.feature.token.service.TokenCommandService;
 import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomLoginExceptionHandler;
 import com.realworld.global.config.jwt.JwtTokenProvider;
+import com.realworld.global.utils.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +32,10 @@ public class LoginServiceImpl implements LoginService {
         String userId = member.getUserId();
         String password = member.getPassword();
 
-        Member findMember = memberQueryService.getMemberByUserId(userId).orElseThrow(() -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
+        Member findMember = memberQueryService.getMemberByUserId(userId);
+
+        if (CommonUtil.isEmpty(findMember))
+            throw new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
 
         //비밀번호가 불일치할 경우
         if (!passwordEncoder.matches(password, findMember.getPassword())) {

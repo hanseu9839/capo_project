@@ -16,20 +16,23 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     private final MemberRepository repository;
 
+
     @Override
     public Optional<Member> findByUserEmail(String userEmail) {
         MemberJpaEntity memberJpaEntity = MemberJpaEntity.builder()
                 .userEmail(userEmail)
                 .build();
-        Optional<MemberJpaEntity> member = Optional.ofNullable(repository.findByUserEmail(memberJpaEntity));
-
-        return member.map(MemberJpaEntity::toDomain);
+        return Optional.ofNullable(repository.findByUserEmail(memberJpaEntity).toDomain());
     }
 
     @Override
-    public Optional<Member> getMemberByUserId(String userId) {
-        Optional<MemberJpaEntity> member = Optional.ofNullable(repository.findByUserId(userId));
-        return member.map(MemberJpaEntity::toDomain);
+    public Member getMemberByUserId(String userId) {
+        return repository.findByUserId(userId).toDomain();
+    }
+
+    @Override
+    public Optional<Member> findMemberByUserId(String userId) {
+        return Optional.empty();
     }
 
     @Override

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long productSeq;
         private String title;
+        @Column(length = 50000)
         private String content;
         private Long price;
         private String category;

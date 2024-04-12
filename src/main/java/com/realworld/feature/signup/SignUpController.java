@@ -48,7 +48,7 @@ public class SignUpController {
                 .userEmail(request.getUserEmail())
                 .build();
 
-        Member savedMember = memberCommandService.saveMember(member).orElseThrow();
+        Member savedMember = memberCommandService.saveMember(member);
 
         MemberResponse response = MemberResponse.builder()
                 .userId(savedMember.getUserId())

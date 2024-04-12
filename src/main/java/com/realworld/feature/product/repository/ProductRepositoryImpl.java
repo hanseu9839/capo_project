@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QProductJpaEntity product = QProductJpaEntity.productJpaEntity;
     @Override
-    public List<ProductJpaEntity> getSearchCardList(Pageable pageable, String search, String category, long seq) {
+    public List<Product> getSearchCardList(Pageable pageable, String search, String category, Long seq) {
+
         List<ProductJpaEntity> products = queryFactory
                 .select(
                         Projections.fields(ProductJpaEntity.class,
@@ -34,10 +36,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     containTitle(search),
                     eqCategory(category)
                 )
-                .orderBy()
+                .orderBy(productSort(pageable))
                 .limit(pageable.getPageSize()+1)
                 .fetch();
-        return products;
+        return products.stream().map(ProductJpaEntity::toDomain).toList();
     }
 
     private BooleanExpression containTitle(String search){
@@ -67,20 +69,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             for(Sort.Order order: pageable.getSort()){
                 Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 
-                switch(order.getProperty()){
-                    case "title" :
-                        return new OrderSpecifier<>(direction, product.title);
-                    case "seq" :
-                        return new OrderSpecifier<>(direction, product.productSeq);
-                    case "regDt" :
-                        return new OrderSpecifier<>(direction, product.regDt);
-                    case "createDt" :
-                        return new OrderSpecifier<>(direction, product.createDt);
-                    case "views" :
-                        return new OrderSpecifier<>(direction, product.views);
-                }
+                return switch (order.getProperty()) {
+                    case "title" -> new OrderSpecifier<>(direction, product.title);
+                    case "regDt" -> new OrderSpecifier<>(direction, product.regDt);
+                    case "createDt" -> new OrderSpecifier<>(direction, product.createDt);
+                    case "views" -> new OrderSpecifier<>(direction, product.views);
+                    default -> new OrderSpecifier<>(direction, product.productSeq);
+                };
             }
         }
-        return null;
+        return new OrderSpecifier<>(Order.DESC, product.productSeq);
     }
 }

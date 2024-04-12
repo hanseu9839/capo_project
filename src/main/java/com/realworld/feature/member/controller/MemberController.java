@@ -11,7 +11,6 @@ import com.realworld.feature.member.service.MemberCommandService;
 import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.global.code.ErrorCode;
 import com.realworld.global.code.SuccessCode;
-import com.realworld.global.config.exception.CustomLoginExceptionHandler;
 import com.realworld.global.config.exception.CustomMailExceptionHandler;
 import com.realworld.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +34,7 @@ public class MemberController {
      */
     @GetMapping("")
     public ResponseEntity<ApiResponse<MemberResponse>> getMember(@AuthenticationPrincipal User user) {
-<<<<<<< Updated upstream
-        Member member = memberQueryService.getMemberByUserId(user.getUsername()).orElseThrow();
-=======
-        Member member = memberQueryService.getMemberByUserId(user.getUsername()).orElseThrow(() -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
->>>>>>> Stashed changes
+        Member member = memberQueryService.getMemberByUserId(user.getUsername());
 
         MemberResponse memberResponse = MemberResponse.builder()
                 .userId(member.getUserId())
@@ -79,7 +74,7 @@ public class MemberController {
     @PatchMapping("/password")
     public ResponseEntity<ApiResponse<?>> passwordUpdate(@AuthenticationPrincipal User user, @RequestBody UpdatePasswordRequest request) {
 
-        Member targetMember = memberQueryService.getMemberByUserId(user.getUsername()).orElseThrow(() -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID)); //userEmail 안넘겨주기 떄문에 가져와주어야함.
+        Member targetMember = memberQueryService.getMemberByUserId(user.getUsername());
 
         Member member = Member.builder()
                 .userId(user.getUsername())

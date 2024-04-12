@@ -1,5 +1,6 @@
 package com.realworld.feature.member.entity;
 
+import com.realworld.feature.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -54,6 +55,21 @@ public class BackUpMemberJpaEntity {
         this.authority = authority;
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public BackUpMemberJpaEntity memberConvertBackupEntity(Member member){
+
+        return BackUpMemberJpaEntity.builder() // BackUpMemberJpaEntity Builder 패턴
+                .authority(Authority.ROLE_USER)
+                .userId(member.getUserId())
+                .phoneNumber(member.getPhoneNumber())
+                .userEmail(member.getUserEmail())
+                .delYn("N")
+                .password(member.getPassword())
+                .nickname(member.getNickname())
+                .createDt(member.getCreateDt())
+                .regDt(member.getRegDt())
+                .build();
     }
 }
 

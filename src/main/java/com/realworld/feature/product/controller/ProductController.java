@@ -2,7 +2,6 @@ package com.realworld.feature.product.controller;
 
 
 
-import com.realworld.feature.member.service.MemberQueryServiceImpl;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.service.ProductQueryServiceImpl;
 import com.realworld.global.code.SuccessCode;
