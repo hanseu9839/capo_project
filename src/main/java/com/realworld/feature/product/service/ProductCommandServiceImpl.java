@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProductCommandServiceImpl {
-    ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public Product productGeneration(ProductGenerationRequest request) {
         Product product = Product.builder()
