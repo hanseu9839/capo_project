@@ -32,7 +32,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public Optional<Member> findMemberByUserId(String userId) {
-        return Optional.empty();
+        Optional<MemberJpaEntity> member = Optional.ofNullable(repository.findByUserId(userId));
+
+        return member.map(MemberJpaEntity::toDomain);
     }
 
     @Override

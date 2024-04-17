@@ -32,8 +32,8 @@ public class LoginServiceImpl implements LoginService {
         String userId = member.getUserId();
         String password = member.getPassword();
 
-        Member findMember = memberQueryService.getMemberByUserId(userId);
-
+        Member findMember = memberQueryService.findMemberByUserId(userId).orElseThrow(() -> new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
+        
         if (CommonUtil.isEmpty(findMember))
             throw new CustomLoginExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
 
