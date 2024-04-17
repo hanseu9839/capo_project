@@ -18,6 +18,7 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QProductJpaEntity product = QProductJpaEntity.productJpaEntity;
+
     @Override
     public List<Product> getSearchCardList(Pageable pageable, String search, String category, Long seq) {
 
@@ -32,41 +33,41 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         ))
                 .from(product)
                 .where(
-                    ltSeq(seq),
-                    containTitle(search),
-                    eqCategory(category)
+                        ltSeq(seq),
+                        containTitle(search),
+                        eqCategory(category)
                 )
                 .orderBy(productSort(pageable))
-                .limit(pageable.getPageSize()+1)
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
         return products.stream().map(ProductJpaEntity::toDomain).toList();
     }
 
-    private BooleanExpression containTitle(String search){
-        if(search == null || search.isEmpty()) {
+    private BooleanExpression containTitle(String search) {
+        if (search == null || search.isEmpty()) {
             return null;
         }
         return product.title.containsIgnoreCase(search);
     }
 
-    private BooleanExpression eqCategory(String category){
-        if(category == null || category.isEmpty()){
+    private BooleanExpression eqCategory(String category) {
+        if (category == null || category.isEmpty()) {
             return null;
         }
 
         return product.category.eq(category);
     }
 
-    private BooleanExpression ltSeq(Long seq){
-        if(seq == null){
+    private BooleanExpression ltSeq(Long seq) {
+        if (seq == null) {
             return null; // BooleanExpression 자리에 NULL 반환 시 자동으로 제거된다.
         }
         return product.productSeq.lt(seq);
     }
 
-    private OrderSpecifier<?> productSort(Pageable pageable){
-        if(!pageable.getSort().isEmpty()){
-            for(Sort.Order order: pageable.getSort()){
+    private OrderSpecifier<?> productSort(Pageable pageable) {
+        if (!pageable.getSort().isEmpty()) {
+            for (Sort.Order order : pageable.getSort()) {
                 Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 
                 return switch (order.getProperty()) {
