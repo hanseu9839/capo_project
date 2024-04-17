@@ -1,6 +1,10 @@
 package com.realworld.global.config;
 
-import com.realworld.global.config.jwt.*;
+
+import com.realworld.global.config.jwt.JwtAccessDeniedHandler;
+import com.realworld.global.config.jwt.JwtAuthenticationEntryPoint;
+import com.realworld.global.config.jwt.JwtSecurityConfig;
+import com.realworld.global.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +28,9 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CorsFilter corsFilter;
-    String[] excludeDevURI = new String[] {"/api/v1/login", "/api/v1/member","/api/v1/duplication-check/user-id/**", "/api/v1/auth/email", "/api/v1/auth/email/**","/error", "/api/v1/reissue","/api/v1/user/find-userId/**","/api/v1/user/find-password/**"};
-    String[] excludeLocalURI = new String[] {"/v1/login", "/v1/member","/v1/duplication-check/user-id/**", "/v1/auth/email", "/v1/auth/email/**","/error", "/v1/reissue","/v1/user/find-userId/**","/v1/user/find-password/**"};
+
+    String[] excludeDevURI = new String[]{"/api/v1/login", "/api/v1/member", "/api/v1/duplication-check/user-id/**", "/api/v1/auth/email", "/api/v1/auth/email/**", "/error", "/api/v1/reissue", "/api/v1/user/find-userId/**", "/api/v1/user/find-password/**"};
+    String[] excludeLocalURI = new String[]{"/v1/login", "/v1/member", "/v1/duplication-check/user-id/**", "/v1/auth/email", "/v1/auth/email/**", "/error", "/v1/reissue", "/v1/user/find-userId/**", "/v1/user/find-password/**"};
 
     // 비밀번호 암호화
     @Bean
@@ -49,7 +54,7 @@ public class SecurityConfig {
                 //.headers(headers->
                 //        headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()))
                 //.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(authenticationManager-> authenticationManager
+                .exceptionHandling(authenticationManager -> authenticationManager
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                         .accessDeniedHandler(new JwtAccessDeniedHandler()))
                 .sessionManagement((httpSecuritySessionManagementConfigurer ->
@@ -64,7 +69,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
