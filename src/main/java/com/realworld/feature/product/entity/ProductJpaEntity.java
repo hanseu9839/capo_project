@@ -52,6 +52,7 @@ public class ProductJpaEntity {
         return Product.builder()
                 .productSeq(this.productSeq)
                 .title(this.title)
+                .content(this.content)
                 .price(this.price)
                 .category(this.category)
                 .views(this.views)
