@@ -44,9 +44,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Object>> productGeneration(@RequestBody @Valid ProductGenerationRequest proGenRequest) {
+    public ResponseEntity<ApiResponse<Product>> productGeneration(@RequestBody @Valid ProductGenerationRequest proGenRequest) {
         Product product = productCommandService.productGeneration(proGenRequest);
-        log.info("product :: {}", product);
-        return ResponseEntity.ok(null);
+
+        ApiResponse<Product> apiResponse = new ApiResponse<>(product, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        return ResponseEntity.ok(apiResponse);
     }
 }
