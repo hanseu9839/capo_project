@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface ProductQueryService {
-    List<Product> getSearchProductList(final Pageable pageable, String search, String category, final long seq);
+    List<Product> getSearchProductList(final Pageable pageable, String search, String category, final Long seq);
 }

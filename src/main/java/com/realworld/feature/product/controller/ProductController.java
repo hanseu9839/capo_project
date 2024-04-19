@@ -1,7 +1,9 @@
 package com.realworld.feature.product.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.realworld.feature.product.controller.request.ProductGenerationRequest;
+import com.realworld.feature.product.controller.response.InfiniteProductScrollingResponse;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.service.ProductCommandServiceImpl;
 import com.realworld.feature.product.service.ProductQueryServiceImpl;
@@ -36,10 +38,15 @@ public class ProductController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<Object>> getSearchCardList(@RequestParam(value = "seq", required = false) long seq, @RequestParam(required = false) String search, @RequestParam(required = false) String category, @PageableDefault(size = 10, sort = "seq", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<ApiResponse<InfiniteProductScrollingResponse>> getSearchCardList(@RequestParam(value = "seq", required = false) Long seq, @RequestParam(required = false) String search, @RequestParam(required = false) String category, @PageableDefault(size = 10, sort = "seq", direction = Sort.Direction.DESC) Pageable pageable) throws JsonProcessingException {
         List<Product> products = productQueryService.getSearchProductList(pageable, search, category, seq);
 
-        ApiResponse<Object> apiResponse = new ApiResponse<>(products, SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        InfiniteProductScrollingResponse scrollingResponse = new InfiniteProductScrollingResponse(products);
+        scrollingResponse.infiniteIsNext(pageable); // 다음여부 확인 세팅
+        scrollingResponse.infiniteLastSeq();
+
+        ApiResponse<InfiniteProductScrollingResponse> apiResponse = new ApiResponse<>(scrollingResponse, SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        // ResponseEntity를 사용하여 ApiResponse 객체를 JSON으로 변환하여 반환
         return ResponseEntity.ok(apiResponse);
     }
 
