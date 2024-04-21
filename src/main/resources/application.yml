@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: local # default
+    group:
+      local: "local, datasource, jpa, mail, logging, jasypt"
+      dev: "dev, datasource, jpa, mail, logging, jasypt"
