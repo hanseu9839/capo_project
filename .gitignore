@@ -40,3 +40,6 @@ out/
 
 ## Dockerfile
 /Dockerfile
+config
+*.yml
+*.pem
