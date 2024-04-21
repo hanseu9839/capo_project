@@ -58,6 +58,8 @@ dependencies {
     //file utils
     implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.18.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    //uuid
+    implementation group: 'com.fasterxml.uuid', name: 'java-uuid-generator', version: '4.3.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation("org.springframework.security:spring-security-test")
