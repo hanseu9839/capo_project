@@ -32,3 +32,5 @@ logging:
     org:
       hibernate:
         type: trace
+file:
+  path: C:\\dev\\file\\image

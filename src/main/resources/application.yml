@@ -4,7 +4,10 @@ server:
 spring:
   profiles:
     default: dev # 기본 환경 설정을 dev로 설정한다.
-
+  servlet:
+    multipart:
+      max-request-size: 30MB
+      max-file-size: 30MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://129.154.62.23:3306/real_world?serverTimezone=UTC&characterEncoding=UTF-8 # 추후 암호화 예정
@@ -52,3 +55,6 @@ jsypt:
     bean: jasyptStringEncryptor
 jwt:
   secret: n42VY/OqNLyuiwq5wr+f+Ko5ozRqwlRHCOyufbkhvgo=
+
+file:
+  path:

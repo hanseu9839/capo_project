@@ -25,10 +25,12 @@ spring:
             timeout: 5000
             writetimeout: 5000
           ssl:
-              #trust: smtp.naver.com
+            #trust: smtp.naver.com
             enable: true
 logging:
   level:
     org:
       hibernate:
         type: trace
+image:
+  path: C:\\dev\\file\\image
