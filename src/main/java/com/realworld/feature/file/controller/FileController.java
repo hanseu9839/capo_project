@@ -4,6 +4,7 @@ import com.realworld.feature.file.domain.File;
 import com.realworld.feature.file.service.FileService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
+import com.realworld.infra.S3Service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -29,11 +30,14 @@ import java.net.URLConnection;
 public class FileController {
 
     private final FileService fileService;
+    private final S3Service s3Service;
 
     @PostMapping("")
     public ResponseEntity<ApiResponse<?>> uploadFiles(@AuthenticationPrincipal User user, @RequestParam(name = "file") MultipartFile[] multipartFiles) throws IOException {
-
         for (MultipartFile multipartFile : multipartFiles) {
+            // AWS S3 bucket save
+            String imgUrl = s3Service.saveFile(multipartFile);
+            
             String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
             if (contentType == null) {
                 contentType = multipartFile.getContentType();
