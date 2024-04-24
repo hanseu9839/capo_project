@@ -39,6 +39,8 @@ public class FileJpaEntity {
 
     private String extension;
 
+    private boolean hasThumbnail;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
