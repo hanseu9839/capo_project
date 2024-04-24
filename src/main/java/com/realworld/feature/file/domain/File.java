@@ -2,7 +2,7 @@ package com.realworld.feature.file.domain;
 
 import com.realworld.feature.file.controller.FileResponse;
 import com.realworld.feature.file.entity.FileJpaEntity;
-import com.realworld.feature.file.service.ThumbnailImageGenerator;
+import com.realworld.feature.image.ThumbnailImageGenerator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

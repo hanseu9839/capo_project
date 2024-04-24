@@ -4,6 +4,7 @@ import com.realworld.feature.file.domain.File;
 import com.realworld.feature.file.entity.FileJpaEntity;
 import com.realworld.feature.file.exception.FileExceptionHandler;
 import com.realworld.feature.file.repository.FileRepository;
+import com.realworld.feature.image.ThumbnailImageGenerator;
 import com.realworld.global.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
