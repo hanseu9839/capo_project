@@ -1,6 +1,7 @@
 package com.realworld.feature.file.service;
 
 import com.realworld.feature.file.domain.File;
+import com.realworld.feature.file.entity.FileJpaEntity;
 import com.realworld.feature.file.exception.FileExceptionHandler;
 import com.realworld.feature.file.repository.FileRepository;
 import com.realworld.global.code.ErrorCode;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -63,5 +66,31 @@ public class LocalStorageService implements StorageService {
         fileRepository.save(file.toEntity(userId));
 
         return file;
+    }
+
+    @Override
+    public void delete(String userId, String fileId) {
+        Optional<FileJpaEntity> fileJpaEntity = fileRepository.findById(UUID.fromString(fileId));
+
+        if (fileJpaEntity.isPresent()) {
+            File file = File.builder()
+                    .id(fileJpaEntity.get().getId())
+                    .name(fileJpaEntity.get().getName())
+                    .extension(fileJpaEntity.get().getExtension())
+                    .size(fileJpaEntity.get().getSize())
+                    .path(fileJpaEntity.get().getPath())
+                    .hasThumbnail(fileJpaEntity.get().isHasThumbnail())
+                    .build();
+
+            // TODO: 실패하면 throw 하기
+            // awsS3Service.delete(file.getFilePath());
+
+            if (file.isHasThumbnail()) {
+                // TODO: 썸네일 삭제 실패해도 throw 해야하나..?
+                //awsS3Service.delete(file.getThumbnailPath());
+            }
+
+            fileRepository.delete(fileJpaEntity.get());
+        }
     }
 }

@@ -64,4 +64,13 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(fileUploadResponse);
     }
 
+    @DeleteMapping("/{fileId}")
+    public ResponseEntity<ApiResponse<?>> deleteFile(@AuthenticationPrincipal User user, @PathVariable String fileId) {
+        localStorageService.delete(user.getUsername(), fileId);
+
+        ApiResponse<?> fileDeleteResponse = new ApiResponse<>(null,
+                SuccessCode.DELETE_SUCCESS.getStatus(), SuccessCode.DELETE_SUCCESS.getMessage());
+
+        return ResponseEntity.ok(fileDeleteResponse);
+    }
 }

@@ -28,6 +28,7 @@ public class File {
     private String path;
 
     private boolean hasThumbnail;
+    private String thumbnailPath;
 
     public void updateHasThumbnail(boolean value) {
         this.hasThumbnail = value;
@@ -37,34 +38,36 @@ public class File {
         this.path = path;
     }
 
+    public String getThumbnailPath() {
+        return isHasThumbnail() ? (StringUtils.substringBefore(this.path, this.id.toString())
+                + ThumbnailImageGenerator.THUMBNAIL_PREFIX + this.id
+                + FilenameUtils.EXTENSION_SEPARATOR_STR + ThumbnailImageGenerator.THUMBNAIL_IMAGE_EXTENSION) : "";
+    }
+
     public void updateId(UUID id) {
         this.id = id;
     }
 
     public FileJpaEntity toEntity(String userId) {
         return FileJpaEntity.builder()
-                .id(this.id)
+                .id(getId())
                 .userId(userId)
-                .name(this.name)
-                .path(this.path)
-                .extension(this.extension)
-                .size(this.size)
-                .hasThumbnail(this.hasThumbnail)
+                .name(getName())
+                .path(getPath())
+                .extension(getExtension())
+                .size(getSize())
+                .hasThumbnail(isHasThumbnail())
                 .build();
     }
 
     public FileResponse toResponse() {
-        String thumbnailPath = this.hasThumbnail ? (StringUtils.substringBefore(this.path, this.id.toString())
-                + ThumbnailImageGenerator.THUMBNAIL_PREFIX + this.id
-                + FilenameUtils.EXTENSION_SEPARATOR_STR + ThumbnailImageGenerator.THUMBNAIL_IMAGE_EXTENSION) : "";
-
         return FileResponse.builder()
-                .originalFileName(this.name + FilenameUtils.EXTENSION_SEPARATOR_STR + this.extension)
-                .contentType(this.contentType)
-                .size(this.size)
-                .path(this.path)
-                .hasThumbnail(this.hasThumbnail)
-                .thumbnailPath(thumbnailPath)
+                .originalFileName(getName() + FilenameUtils.EXTENSION_SEPARATOR_STR + getExtension())
+                .contentType(getContentType())
+                .size(getSize())
+                .path(getPath())
+                .hasThumbnail(isHasThumbnail())
+                .thumbnailPath(getThumbnailPath())
                 .build();
     }
 }

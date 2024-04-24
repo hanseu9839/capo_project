@@ -6,4 +6,6 @@ import java.io.InputStream;
 
 public interface StorageService {
     File save(InputStream inputStream, String userId, File file);
+
+    void delete(String userId, String fileId);
 }
