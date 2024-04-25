@@ -1,10 +1,10 @@
 package com.realworld.feature.file.controller;
 
 import com.realworld.feature.file.domain.File;
-import com.realworld.feature.file.service.FileService;
+import com.realworld.feature.file.service.FileNameGenerator;
+import com.realworld.feature.file.service.StorageService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
-import com.realworld.infra.S3Service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -12,16 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,21 +28,22 @@ import java.net.URLConnection;
 @RequiredArgsConstructor
 public class FileController {
 
-    private final FileService fileService;
-    private final S3Service s3Service;
+    private final StorageService storageService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<?>> uploadFiles(@AuthenticationPrincipal User user, @RequestParam(name = "file") MultipartFile[] multipartFiles) throws IOException {
+    public ResponseEntity<ApiResponse<List<FileResponse>>> uploadFiles(@AuthenticationPrincipal User user, @RequestParam(name = "file") MultipartFile[] multipartFiles) throws IOException {
+        List<FileResponse> fileResponseList = new ArrayList<>();
+
         for (MultipartFile multipartFile : multipartFiles) {
-            // AWS S3 bucket save
-            String imgUrl = s3Service.saveFile(multipartFile);
-            
+
             String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
             if (contentType == null) {
                 contentType = multipartFile.getContentType();
             }
 
-            String fileName = fileService.makeFileName(multipartFile);
+            FileNameGenerator fileNameGenerator = new FileNameGenerator();
+            String fileName = fileNameGenerator.getMultipartFileName(multipartFile);
+
             String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 
             File file = File.builder()
@@ -54,14 +54,24 @@ public class FileController {
                     .build();
 
             try (InputStream inputStream = multipartFile.getInputStream()) {
-                fileService.createFile(inputStream, user.getUsername(), file);
+                File savedFile = storageService.save(inputStream, user.getUsername(), file);
+                fileResponseList.add(savedFile.toResponse());
             }
         }
 
-        ApiResponse<?> fileUploadResponse = new ApiResponse<>(null,
+        ApiResponse<List<FileResponse>> fileUploadResponse = new ApiResponse<>(fileResponseList,
                 SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.INSERT_SUCCESS.getMessage());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(fileUploadResponse);
     }
 
+    @DeleteMapping("/{fileId}")
+    public ResponseEntity<ApiResponse<?>> deleteFile(@AuthenticationPrincipal User user, @PathVariable String fileId) {
+        storageService.delete(user.getUsername(), fileId);
+
+        ApiResponse<?> fileDeleteResponse = new ApiResponse<>(null,
+                SuccessCode.DELETE_SUCCESS.getStatus(), SuccessCode.DELETE_SUCCESS.getMessage());
+
+        return ResponseEntity.ok(fileDeleteResponse);
+    }
 }
