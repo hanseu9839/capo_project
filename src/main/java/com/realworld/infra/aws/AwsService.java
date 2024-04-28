@@ -1,16 +1,17 @@
 package com.realworld.infra.aws;
 
-
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.realworld.feature.file.domain.File;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AwsService {
@@ -19,16 +20,16 @@ public class AwsService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     
-    public String uploadS3Bucket(InputStream inputStream, File file) {
-        String originFilename = file.getName();
-
+    public String uploadS3Bucket(InputStream inputStream, String key, long fileSize, String contentType) {
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
-        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(fileSize);
+        metadata.setContentType(contentType);
 
-        amazonS3.putObject(bucket, originFilename, inputStream, metadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, key, inputStream, metadata);
 
-        return amazonS3.getUrl(bucket, originFilename).toString();
+        amazonS3.putObject(putObjectRequest);
+
+        return amazonS3.getUrl(bucket, key).toString();
     }
 
     public void deleteS3Bucket(String key) {
