@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class FileResponse {
+    private String id;
 
     private String originalFileName;
 

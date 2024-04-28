@@ -32,7 +32,7 @@ public class LocalStorageService implements StorageService {
     private String filePath;
 
     @Override
-    public File save(InputStream inputStream, String userId, File file) {
+    public File upload(InputStream inputStream, String userId, File file) {
         file.updateId(fileNameGenerator.createFileId());
 
         String savedFileName = file.getId() + FilenameUtils.EXTENSION_SEPARATOR_STR + file.getExtension();

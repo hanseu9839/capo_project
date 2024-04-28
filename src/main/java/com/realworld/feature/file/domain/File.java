@@ -44,8 +44,7 @@ public class File {
 
     public String getThumbnailPath() {
         return isHasThumbnail() ? (StringUtils.substringBefore(this.path, this.id.toString())
-                + ThumbnailImageGenerator.THUMBNAIL_PREFIX + this.id
-                + FilenameUtils.EXTENSION_SEPARATOR_STR + ThumbnailImageGenerator.THUMBNAIL_IMAGE_EXTENSION) : "";
+                + ThumbnailImageGenerator.THUMBNAIL_PREFIX + this.id) : "";
     }
 
     public void updateId(UUID id) {
@@ -66,6 +65,7 @@ public class File {
 
     public FileResponse toResponse() {
         return FileResponse.builder()
+                .id(String.valueOf(getId()))
                 .originalFileName(getName() + FilenameUtils.EXTENSION_SEPARATOR_STR + getExtension())
                 .contentType(getContentType())
                 .size(getSize())

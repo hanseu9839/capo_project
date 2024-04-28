@@ -54,7 +54,7 @@ public class FileController {
                     .build();
 
             try (InputStream inputStream = multipartFile.getInputStream()) {
-                File savedFile = cloudStorageService.save(inputStream, user.getUsername(), file);
+                File savedFile = cloudStorageService.upload(inputStream, user.getUsername(), file);
                 fileResponseList.add(savedFile.toResponse());
             }
         }
