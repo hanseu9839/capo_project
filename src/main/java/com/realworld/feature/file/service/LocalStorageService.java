@@ -73,25 +73,7 @@ public class LocalStorageService implements StorageService {
     public void delete(String userId, String fileId) {
         Optional<FileJpaEntity> fileJpaEntity = fileRepository.findById(UUID.fromString(fileId));
 
-        if (fileJpaEntity.isPresent()) {
-            File file = File.builder()
-                    .id(fileJpaEntity.get().getId())
-                    .name(fileJpaEntity.get().getName())
-                    .extension(fileJpaEntity.get().getExtension())
-                    .size(fileJpaEntity.get().getSize())
-                    .path(fileJpaEntity.get().getPath())
-                    .hasThumbnail(fileJpaEntity.get().isHasThumbnail())
-                    .build();
-
-            // TODO: 실패하면 throw 하기
-            // awsS3Service.delete(file.getFilePath());
-
-            if (file.isHasThumbnail()) {
-                // TODO: 썸네일 삭제 실패해도 throw 해야하나..?
-                //awsS3Service.delete(file.getThumbnailPath());
-            }
-
-            fileRepository.delete(fileJpaEntity.get());
-        }
+        // TODO: 파일 삭제는 직접ㅎㅎ
+        fileJpaEntity.ifPresent(fileRepository::delete);
     }
 }
