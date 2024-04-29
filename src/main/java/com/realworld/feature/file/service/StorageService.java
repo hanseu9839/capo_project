@@ -5,7 +5,7 @@ import com.realworld.feature.file.domain.File;
 import java.io.InputStream;
 
 public interface StorageService {
-    File save(InputStream inputStream, String userId, File file);
+    File upload(InputStream inputStream, String userId, File file);
 
     void delete(String userId, String fileId);
 }

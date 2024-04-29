@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileController {
 
-    private final StorageService storageService;
+    private final StorageService cloudStorageService;
 
     @PostMapping("")
     public ResponseEntity<ApiResponse<List<FileResponse>>> uploadFiles(@AuthenticationPrincipal User user, @RequestParam(name = "file") MultipartFile[] multipartFiles) throws IOException {
@@ -54,7 +54,7 @@ public class FileController {
                     .build();
 
             try (InputStream inputStream = multipartFile.getInputStream()) {
-                File savedFile = storageService.save(inputStream, user.getUsername(), file);
+                File savedFile = cloudStorageService.upload(inputStream, user.getUsername(), file);
                 fileResponseList.add(savedFile.toResponse());
             }
         }
@@ -67,7 +67,7 @@ public class FileController {
 
     @DeleteMapping("/{fileId}")
     public ResponseEntity<ApiResponse<?>> deleteFile(@AuthenticationPrincipal User user, @PathVariable String fileId) {
-        storageService.delete(user.getUsername(), fileId);
+        cloudStorageService.delete(user.getUsername(), fileId);
 
         ApiResponse<?> fileDeleteResponse = new ApiResponse<>(null,
                 SuccessCode.DELETE_SUCCESS.getStatus(), SuccessCode.DELETE_SUCCESS.getMessage());
