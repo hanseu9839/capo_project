@@ -1,6 +1,6 @@
 package com.realworld.feature.file.entity;
 
-import com.realworld.feature.member.entity.MemberJpaEntity;
+import com.realworld.feature.product.entity.ProductJpaEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,40 +10,39 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
+@ToString
 @Entity
-@Table(name = "file")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "product_file")
 @EntityListeners(AuditingEntityListener.class)
-public class FileJpaEntity {
-
+public class ProductFileJpaEntity {
     @Id
-    @Column
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long seq;
 
     @Column(name = "user_id")
     private String userId;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    private MemberJpaEntity member;
+    @ManyToOne
+    @JoinColumn(name = "product_seq", referencedColumnName = "product_seq")
+    private ProductJpaEntity product;
 
-    private String path;
+    @Column(name = "file_id")
+    private UUID id;
 
-    private String name;
-
-    private long size;
-
-    private String extension;
-
-    private boolean hasThumbnail;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
 
     @LastModifiedDate
+    @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 }

@@ -1,5 +1,6 @@
 package com.realworld.feature.member.entity;
 
+import com.realworld.feature.auth.Authority;
 import com.realworld.feature.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,11 +9,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.realworld.feature.auth.Authority;
-
 import java.time.LocalDateTime;
 
-@Table(name="user")
+@ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -21,20 +20,21 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@SequenceGenerator(
-        name = "USER_PK_SEQUENCE",
-        sequenceName = "USER_SEQ",
-        initialValue = 1,
-        allocationSize = 50)
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id"}))
+//@SequenceGenerator(
+//        name = "USER_PK_SEQUENCE",
+//        sequenceName = "USER_SEQ",
+//        initialValue = 1,
+//        allocationSize = 50)
 public class MemberJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_PK_SEQUENCE")
-    @Column(name="user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "user_seq")
     private Long userSeq;
 
     @Id
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private String userId;
 
     private String password;
@@ -46,6 +46,7 @@ public class MemberJpaEntity {
     private String delYn;
 
     private String nickname;
+
     @LastModifiedDate
     private LocalDateTime regDt;
 
@@ -56,7 +57,7 @@ public class MemberJpaEntity {
     private Authority authority;
 
     @Builder
-    public MemberJpaEntity(Long userSeq, String userId, String password,String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority, String nickname){
+    public MemberJpaEntity(Long userSeq, String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority, String nickname) {
         this.userSeq = userSeq;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
@@ -70,7 +71,7 @@ public class MemberJpaEntity {
     }
 
     @Builder
-    public MemberJpaEntity(Long userSeq, String userId, String password,String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority ){
+    public MemberJpaEntity(Long userSeq, String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority) {
         this.userSeq = userSeq;
         this.userId = userId;
         this.phoneNumber = phoneNumber;
@@ -83,7 +84,7 @@ public class MemberJpaEntity {
     }
 
     @Builder
-    public MemberJpaEntity(String userId, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt){
+    public MemberJpaEntity(String userId, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt) {
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
@@ -92,7 +93,7 @@ public class MemberJpaEntity {
         this.createDt = createDt;
     }
 
-    public Member toDomain(){
+    public Member toDomain() {
         return Member.builder()
                 .userSeq(getUserSeq())
                 .password(getPassword())

@@ -16,6 +16,5 @@ public enum GroupCategory {
         this.name = name;
         this.code = code;
     }
-
-
+    
 }

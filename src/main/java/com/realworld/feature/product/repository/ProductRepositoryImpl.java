@@ -29,7 +29,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                                 product.title,
                                 product.price,
                                 product.views,
-                                product.regDt
+                                product.modifiedAt
                         ))
                 .from(product)
                 .where(
@@ -72,8 +72,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
                 return switch (order.getProperty()) {
                     case "title" -> new OrderSpecifier<>(direction, product.title);
-                    case "regDt" -> new OrderSpecifier<>(direction, product.regDt);
-                    case "createDt" -> new OrderSpecifier<>(direction, product.createDt);
+                    case "regDt" -> new OrderSpecifier<>(direction, product.modifiedAt);
+                    case "createDt" -> new OrderSpecifier<>(direction, product.createAt);
                     case "views" -> new OrderSpecifier<>(direction, product.views);
                     default -> new OrderSpecifier<>(direction, product.productSeq);
                 };
