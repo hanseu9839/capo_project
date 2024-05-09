@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TODO: ProductJpaEntity Image, Like 좋아요 기능 컬럼 미구현 (추후 개발)
@@ -74,7 +75,6 @@ public class ProductJpaEntity {
 
     @Builder
     public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, String category, int views, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
-//        this.id = id;
         this.productSeq = productSeq;
         this.userId = userId;
         this.title = title;
@@ -90,12 +90,11 @@ public class ProductJpaEntity {
 
     public Product toDomain() {
         return Product.builder()
-//                .id(this.id)
                 .productSeq(this.productSeq)
-                .images(this.images)
+                .images(this.images.stream().map(ProductFileJpaEntity::toDomain).collect(Collectors.toList()))
                 .title(this.title)
                 .userId(this.userId)
-                .member(this.member)
+                .member(this.member.toDomain())
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)

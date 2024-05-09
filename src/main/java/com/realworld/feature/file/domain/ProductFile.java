@@ -23,34 +23,15 @@ public class ProductFile {
 
     private UUID id;
 
-    private String name;
-
-    private String contentType;
-
-    private String extension;
-
-    private long size;
-
-    private String imageUrl;
-
     private LocalDateTime createAt;
 
     private LocalDateTime modifiedAt;
-
-    public void updateId(UUID id) {
-        this.id = id;
-    }
-
-    public void updateImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public ProductFileJpaEntity toEntity() {
         return ProductFileJpaEntity.builder()
                 .userId(this.userId)
                 .product(this.product.toEntity())
                 .id(this.id)
-                .imageUrl(this.imageUrl)
                 .createAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();

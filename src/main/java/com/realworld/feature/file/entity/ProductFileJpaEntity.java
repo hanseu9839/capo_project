@@ -1,5 +1,6 @@
 package com.realworld.feature.file.entity;
 
+import com.realworld.feature.file.domain.ProductFile;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,9 +36,6 @@ public class ProductFileJpaEntity {
     @Column(name = "file_id")
     private UUID id;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @CreatedDate
     @Column(name = "create_at")
     private LocalDateTime createAt;
@@ -45,4 +43,14 @@ public class ProductFileJpaEntity {
     @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
+
+    public ProductFile toDomain() {
+        return ProductFile.builder()
+                .userId(this.userId)
+                .id(this.id)
+                .product(this.product.toDomain())
+                .createAt(this.createAt)
+                .modifiedAt(this.modifiedAt)
+                .build();
+    }
 }

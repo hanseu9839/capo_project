@@ -1,12 +1,10 @@
-package com.realworld.feature.product.domain;
-
+package com.realworld.feature.product.controller.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.realworld.feature.file.domain.ProductFile;
 import com.realworld.feature.member.domain.Member;
-import com.realworld.feature.product.entity.ProductJpaEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,21 +12,15 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
-
-/**
- * TODO: Like,Image 추가해야합니다.
- */
+@ToString
 @Builder
 @Getter
 @Setter
-@ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude
-public class Product {
+public class ProductGenerationResponse {
 
-    //    private UUID id;
     private Long productSeq;
 
     private String title;
@@ -50,18 +42,5 @@ public class Product {
     private List<ProductFile> images;
 
     private Member member;
-
-    public ProductJpaEntity toEntity() {
-        return ProductJpaEntity.builder()
-                .userId(this.userId)
-                .images(this.images.stream().map(ProductFile::toEntity).collect(Collectors.toList()))
-                .productSeq(this.productSeq)
-                .title(this.title)
-                .member(this.member.toEntity())
-                .content(this.content)
-                .category(this.category)
-                .price(this.price)
-                .build();
-    }
 
 }

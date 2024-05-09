@@ -2,14 +2,17 @@ package com.realworld.feature.product.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.realworld.feature.file.controller.FileResponse;
+import com.realworld.feature.file.domain.File;
 import com.realworld.feature.file.domain.ProductFile;
-import com.realworld.feature.file.entity.ProductFileJpaEntity;
 import com.realworld.feature.file.service.FileNameGenerator;
-import com.realworld.feature.file.service.ProductCloudStorageService;
+import com.realworld.feature.file.service.StorageService;
 import com.realworld.feature.product.controller.request.ProductGenerationRequest;
 import com.realworld.feature.product.controller.response.InfiniteProductScrollingResponse;
+import com.realworld.feature.product.controller.response.ProductGenerationResponse;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.service.ProductCommandService;
+import com.realworld.feature.product.service.ProductFileCommandService;
 import com.realworld.feature.product.service.ProductQueryService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
@@ -40,7 +43,8 @@ import java.util.List;
 public class ProductController {
     private final ProductQueryService productQueryService;
     private final ProductCommandService productCommandService;
-    private final ProductCloudStorageService productCloudStorageService;
+    private final ProductFileCommandService productFileCommandService;
+    private final StorageService cloudStorageService;
 
 
     /**
@@ -66,16 +70,15 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Product>> productGeneration(@AuthenticationPrincipal User user, @RequestPart @Valid ProductGenerationRequest proGenRequest, @RequestPart(name = "images") List<MultipartFile> multipartFiles) throws IOException {
+    public ResponseEntity<ApiResponse<ProductGenerationResponse>> productGeneration(@AuthenticationPrincipal User user, @RequestPart @Valid ProductGenerationRequest proGenRequest, @RequestPart(name = "images") List<MultipartFile> multipartFiles) throws IOException {
 
         Product product = productCommandService.productGeneration(user, proGenRequest);
 
-        List<ProductFileJpaEntity> images = new ArrayList<>();
-
+        List<FileResponse> fileResponseList = new ArrayList<>();
+        File file = null;
         for (MultipartFile multipartFile : multipartFiles) {
 
             String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
-
             if (contentType == null) {
                 contentType = multipartFile.getContentType();
             }
@@ -85,23 +88,47 @@ public class ProductController {
 
             String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 
-            ProductFile file = ProductFile.builder()
+            file = File.builder()
                     .name(fileName)
-                    .userId(user.getUsername())
-                    .product(product)
-                    .size(multipartFiles.size())
+                    .size(multipartFile.getSize())
                     .extension(fileExtension)
                     .contentType(contentType)
                     .build();
 
+
+//            ProductFile file = ProductFile.builder()
+//                    .name(fileName)
+//                    .userId(user.getUsername())
+//                    .product(product)
+//                    .size(multipartFiles.size())
+//                    .extension(fileExtension)
+//                    .contentType(contentType)
+//                    .build();
+
             try (InputStream inputStream = multipartFile.getInputStream()) {
-                images.add(productCloudStorageService.upload(inputStream, file));
+                File savedFile = cloudStorageService.upload(inputStream, user.getUsername(), file);
+                fileResponseList.add(savedFile.toResponse());
             }
         }
 
-        product.setImages(images);
+        List<ProductFile> images = new ArrayList<>();
+        fileResponseList.forEach(fileResponse -> images.add(productFileCommandService.save(fileResponse, product)));
 
-        ApiResponse<Product> apiResponse = new ApiResponse<>(product, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        ProductGenerationResponse response = ProductGenerationResponse.builder()
+                .productSeq(product.getProductSeq())
+                .title(product.getTitle())
+                .userId(product.getUserId())
+                .content(product.getContent())
+                .category(product.getCategory())
+                .price(product.getPrice())
+                .views(product.getViews())
+                .createDt(product.getCreateDt())
+                .regDt(product.getRegDt())
+                .images(images)
+                .member(product.getMember())
+                .build();
+
+        ApiResponse<ProductGenerationResponse> apiResponse = new ApiResponse<>(response, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
         return ResponseEntity.ok(apiResponse);
     }
 }

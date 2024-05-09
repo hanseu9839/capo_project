@@ -29,6 +29,7 @@ public class MemberController {
     private final MemberQueryService memberQueryService;
     private final AuthMailService authMailService;
 
+
     /**
      * 회원 정보 가져오기
      */
