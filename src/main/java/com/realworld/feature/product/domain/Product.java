@@ -4,7 +4,6 @@ package com.realworld.feature.product.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.realworld.feature.file.domain.ProductFile;
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import lombok.Builder;

@@ -3,8 +3,8 @@ package com.realworld.feature.product.controller.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.realworld.feature.file.domain.ProductFile;
 import com.realworld.feature.member.domain.Member;
+import com.realworld.feature.product.domain.ProductFile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonInclude
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductGenerationResponse {
 
     private Long productSeq;

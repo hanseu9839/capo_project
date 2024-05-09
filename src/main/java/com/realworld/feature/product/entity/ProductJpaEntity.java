@@ -1,6 +1,5 @@
 package com.realworld.feature.product.entity;
 
-import com.realworld.feature.file.entity.ProductFileJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import com.realworld.feature.product.domain.Product;
 import jakarta.persistence.*;
