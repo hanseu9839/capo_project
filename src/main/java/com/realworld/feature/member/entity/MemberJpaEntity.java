@@ -107,4 +107,12 @@ public class MemberJpaEntity {
                 .authority(getAuthority())
                 .build();
     }
+
+    public Member productToDomain() {
+        return Member.builder()
+                .userId(this.userId)
+                .userEmail(this.userEmail)
+                .nickname(this.nickname)
+                .build();
+    }
 }

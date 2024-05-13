@@ -2,11 +2,12 @@ package com.realworld.feature.product.repository;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.realworld.feature.member.entity.QMemberJpaEntity;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.entity.ProductJpaEntity;
+import com.realworld.feature.product.entity.QProductFileJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,20 +19,17 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QProductJpaEntity product = QProductJpaEntity.productJpaEntity;
+    private final QMemberJpaEntity member = QMemberJpaEntity.memberJpaEntity;
+
+    private final QProductFileJpaEntity productFile = QProductFileJpaEntity.productFileJpaEntity;
 
     @Override
     public List<Product> getSearchCardList(Pageable pageable, String search, String category, Long seq) {
 
         List<ProductJpaEntity> products = queryFactory
-                .select(
-                        Projections.fields(ProductJpaEntity.class,
-                                product.productSeq,
-                                product.title,
-                                product.price,
-                                product.views,
-                                product.modifiedAt
-                        ))
+                .select(product)
                 .from(product)
+                .innerJoin(product.member, member)
                 .where(
                         ltSeq(seq),
                         containTitle(search),
@@ -40,7 +38,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .orderBy(productSort(pageable))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
-        return products.stream().map(ProductJpaEntity::toDomain).toList();
+        return products.stream().map(ProductJpaEntity::searchToDomain).toList();
     }
 
     private BooleanExpression containTitle(String search) {

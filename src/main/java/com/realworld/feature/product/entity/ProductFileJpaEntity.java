@@ -42,7 +42,7 @@ public class ProductFileJpaEntity {
     @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
-
+    
     public ProductFile toDomain() {
         return ProductFile.builder()
                 .userId(this.userId)
@@ -52,4 +52,12 @@ public class ProductFileJpaEntity {
                 .modifiedAt(this.modifiedAt)
                 .build();
     }
+
+    public ProductFile searchToDomain() {
+        return ProductFile.builder()
+                .userId(this.userId)
+                .id(this.id)
+                .build();
+    }
+
 }

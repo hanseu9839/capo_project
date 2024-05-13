@@ -20,7 +20,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonInclude
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InfiniteProductScrollingResponse {
     private final List<Product> products;
     private boolean isNext;

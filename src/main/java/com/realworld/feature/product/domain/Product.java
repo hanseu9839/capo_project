@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Setter
 @ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonInclude
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
 
     //    private UUID id;
@@ -53,7 +53,7 @@ public class Product {
     public ProductJpaEntity toEntity() {
         return ProductJpaEntity.builder()
                 .userId(this.userId)
-                .images(this.images.stream().map(ProductFile::toEntity).collect(Collectors.toList()))
+                .images(this.images.stream().map(ProductFile::searchToEntity).collect(Collectors.toList()))
                 .productSeq(this.productSeq)
                 .title(this.title)
                 .member(this.member.toEntity())
@@ -62,5 +62,6 @@ public class Product {
                 .price(this.price)
                 .build();
     }
+
 
 }

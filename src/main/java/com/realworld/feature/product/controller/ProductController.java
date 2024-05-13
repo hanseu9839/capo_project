@@ -3,8 +3,6 @@ package com.realworld.feature.product.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.realworld.feature.file.controller.FileResponse;
-import com.realworld.feature.file.domain.File;
-import com.realworld.feature.file.service.FileNameGenerator;
 import com.realworld.feature.file.service.StorageService;
 import com.realworld.feature.product.controller.request.ProductGenerationRequest;
 import com.realworld.feature.product.controller.response.InfiniteProductScrollingResponse;
@@ -16,10 +14,10 @@ import com.realworld.feature.product.service.ProductFileCommandService;
 import com.realworld.feature.product.service.ProductQueryService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
+import com.realworld.global.utils.CommonUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,10 +27,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,46 +65,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ProductGenerationResponse>> productGeneration(@AuthenticationPrincipal User user, @RequestPart @Valid ProductGenerationRequest proGenRequest, @RequestPart(name = "images") List<MultipartFile> multipartFiles) throws IOException {
+    public ResponseEntity<ApiResponse<ProductGenerationResponse>> productGeneration(@AuthenticationPrincipal User user, @RequestPart @Valid ProductGenerationRequest proGenRequest, @RequestPart(name = "images") MultipartFile[] multipartFiles) throws IOException {
 
         Product product = productCommandService.productGeneration(user, proGenRequest);
 
-        List<FileResponse> fileResponseList = new ArrayList<>();
-        File file = null;
-        for (MultipartFile multipartFile : multipartFiles) {
-
-            String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
-            if (contentType == null) {
-                contentType = multipartFile.getContentType();
-            }
-
-            FileNameGenerator fileNameGenerator = new FileNameGenerator();
-            String fileName = fileNameGenerator.getMultipartFileName(multipartFile);
-
-            String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-
-            file = File.builder()
-                    .name(fileName)
-                    .size(multipartFile.getSize())
-                    .extension(fileExtension)
-                    .contentType(contentType)
-                    .build();
-
-
-//            ProductFile file = ProductFile.builder()
-//                    .name(fileName)
-//                    .userId(user.getUsername())
-//                    .product(product)
-//                    .size(multipartFiles.size())
-//                    .extension(fileExtension)
-//                    .contentType(contentType)
-//                    .build();
-
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                File savedFile = cloudStorageService.upload(inputStream, user.getUsername(), file);
-                fileResponseList.add(savedFile.toResponse());
-            }
-        }
+        List<FileResponse> fileResponseList = CommonUtil.upload(user, List.of(multipartFiles), cloudStorageService);
 
         List<ProductFile> images = new ArrayList<>();
         fileResponseList.forEach(fileResponse -> images.add(productFileCommandService.save(fileResponse, product)));

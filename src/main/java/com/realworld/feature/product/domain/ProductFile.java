@@ -1,6 +1,7 @@
 package com.realworld.feature.product.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.feature.product.entity.ProductFileJpaEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductFile {
 
     private Product product;
@@ -35,4 +37,14 @@ public class ProductFile {
                 .modifiedAt(this.modifiedAt)
                 .build();
     }
+
+    public ProductFileJpaEntity searchToEntity() {
+        return ProductFileJpaEntity.builder()
+                .userId(this.userId)
+                .id(this.id)
+                .createAt(this.createAt)
+                .modifiedAt(this.modifiedAt)
+                .build();
+    }
+
 }

@@ -4,6 +4,7 @@ import com.realworld.feature.member.entity.MemberJpaEntity;
 import com.realworld.feature.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * TODO: ProductJpaEntity Image, Like 좋아요 기능 컬럼 미구현 (추후 개발)
  */
+@Slf4j
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -94,6 +96,22 @@ public class ProductJpaEntity {
                 .title(this.title)
                 .userId(this.userId)
                 .member(this.member.toDomain())
+                .content(this.content)
+                .price(this.price)
+                .category(this.category)
+                .views(this.views)
+                .createDt(this.createAt)
+                .regDt(this.modifiedAt)
+                .build();
+    }
+
+    public Product searchToDomain() {
+        return Product.builder()
+                .productSeq(this.productSeq)
+                .images(this.images.stream().map(ProductFileJpaEntity::searchToDomain).collect(Collectors.toList()))
+                .title(this.title)
+                .userId(this.userId)
+                .member(this.member.productToDomain())
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)

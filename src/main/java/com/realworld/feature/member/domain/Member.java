@@ -1,5 +1,6 @@
 package com.realworld.feature.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.feature.auth.Authority;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Member {
     private Long userSeq;
 
@@ -49,6 +51,14 @@ public class Member {
                 .regDt(getRegDt())
                 .delYn(getDelYn())
                 .authority(getAuthority())
+                .build();
+    }
+
+    public MemberJpaEntity productToEntity() {
+        return MemberJpaEntity.builder()
+                .userId(this.userId)
+                .userEmail(this.userEmail)
+                .nickname(this.nickname)
                 .build();
     }
 }
