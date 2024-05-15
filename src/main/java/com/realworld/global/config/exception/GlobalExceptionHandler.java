@@ -29,11 +29,11 @@ public class GlobalExceptionHandler {
      * API 호출 시, '객체' 혹은 '파라미터' 데이터 값이 유효하지 않은 경우
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("handleMethodArgumentNotValidException", ex);
         BindingResult bindingResult = ex.getBindingResult();
         StringBuilder stringBuilder = new StringBuilder();
-        for(FieldError fieldError : bindingResult.getFieldErrors()){
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
             stringBuilder.append(fieldError.getField()).append(":");
             stringBuilder.append(fieldError.getDefaultMessage());
             stringBuilder.append(", ");
@@ -44,11 +44,12 @@ public class GlobalExceptionHandler {
 
     /**
      * API 호출 시 'Header' 내에 데이터 값이 유효하지 않은 경우
+     *
      * @param ex
      * @return
      */
     @ExceptionHandler(MissingRequestHeaderException.class)
-    protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException ex){
+    protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
         log.error("MissingRequestHeaderException", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -56,11 +57,12 @@ public class GlobalExceptionHandler {
 
     /**
      * 클라이언트에서 Body로 '객체' 데이터가 넘어오지 않았을 경우
+     *
      * @param ex
      * @return
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+    protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         log.error("HttpMessageNotReadableException", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -68,11 +70,12 @@ public class GlobalExceptionHandler {
 
     /**
      * 잘못된 서버 요청일 경우 발생한 경우
+     *
      * @param ex
      * @return
      */
     @ExceptionHandler(HttpClientErrorException.BadRequest.class)
-    protected  ResponseEntity<ErrorResponse> handleBadRequestException(HttpClientErrorException ex){
+    protected ResponseEntity<ErrorResponse> handleBadRequestException(HttpClientErrorException ex) {
         log.error("HttpClientErrorException.BadRequest", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.BAD_REQUEST_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -80,11 +83,12 @@ public class GlobalExceptionHandler {
 
     /**
      * Null값이 발생한 경우
+     *
      * @param e
      * @return
      */
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e){
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
         log.error("handleNullPointException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.NULL_POINT_ERROR, e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -97,7 +101,7 @@ public class GlobalExceptionHandler {
      * @return ResponseEntity<ErrorResponse>
      */
     @ExceptionHandler(IOException.class)
-    protected ResponseEntity<ErrorResponse> handleIOException(IOException ex){
+    protected ResponseEntity<ErrorResponse> handleIOException(IOException ex) {
         log.error("handleIOException", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.IO_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -110,8 +114,8 @@ public class GlobalExceptionHandler {
      * @return ResponseEntity<ErrorResponse>
      */
     @ExceptionHandler(JsonProcessingException.class)
-    protected ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException ex){
-        log.error("handleJsonProcessingException",ex);
+    protected ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException ex) {
+        log.error("handleJsonProcessingException", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -123,7 +127,7 @@ public class GlobalExceptionHandler {
      * @return ResponseEntity<ErrorResponse>
      */
     @ExceptionHandler(JsonParseException.class)
-    protected ResponseEntity<ErrorResponse> handleJsonParseException(JsonParseException ex){
+    protected ResponseEntity<ErrorResponse> handleJsonParseException(JsonParseException ex) {
         log.error("handleJsonParseException");
         final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -135,28 +139,28 @@ public class GlobalExceptionHandler {
      * @param ex Exception
      * @return ResponseEntity<ErrorResponse>
      */
-    protected ResponseEntity<ErrorResponse> handleAllException(Exception ex){
+    protected ResponseEntity<ErrorResponse> handleAllException(Exception ex) {
         log.error("Exception", ex);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERVAL_SERVER_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERVAL_SERVER_ERROR, ex.getMessage() == null ? "empty" : ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      * 로그인시 에러
+     *
      * @param ex
      * @return
      */
     @ExceptionHandler(CustomLoginExceptionHandler.class)
-    protected ResponseEntity<ErrorResponse> handleLoginCustomException(CustomLoginExceptionHandler ex){
-        log.error("LoginCustomException",ex);
-        if(ex.getMessage().equals(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg())){
-            final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_DUPLICATION_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+    protected ResponseEntity<ErrorResponse> handleLoginCustomException(CustomLoginExceptionHandler ex) {
+        log.error("LoginCustomException", ex);
+        if (ex.getMessage().equals(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg())) {
+            final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_DUPLICATION_ERROR, ex.getMessage() == null ? "empty" : ex.getMessage());
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-        }else{
-            final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_REQUEST_ERROR, ex.getMessage()==null?"empty" : ex.getMessage());
+        } else {
+            final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_REQUEST_ERROR, ex.getMessage() == null ? "empty" : ex.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
 
 
     }
@@ -165,7 +169,7 @@ public class GlobalExceptionHandler {
      * 토큰 값 오류
      */
     @ExceptionHandler(CustomJwtExceptionHandler.class)
-    protected ResponseEntity<ErrorResponse> handleJwtCustomException(CustomJwtExceptionHandler ex){
+    protected ResponseEntity<ErrorResponse> handleJwtCustomException(CustomJwtExceptionHandler ex) {
         log.error("Exception", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.JWT_TOKEN_REQUEST_ERROR, ex.getMessage());
 
@@ -173,23 +177,36 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomMailExceptionHandler.class)
-    protected  ResponseEntity<ErrorResponse> handleMailCustomException(CustomMailExceptionHandler ex){
+    protected ResponseEntity<ErrorResponse> handleMailCustomException(CustomMailExceptionHandler ex) {
         log.error("Exception", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.EMAIL_REQUEST_ERROR, ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CustomMemberExceptionHandler.class)
-    protected  ResponseEntity<ErrorResponse> handleMemberCustomException(CustomMemberExceptionHandler ex){
+    @ExceptionHandler(CustomProductExceptionHandler.class)
+    protected ResponseEntity<ErrorResponse> handleProductCustomException(CustomProductExceptionHandler ex) {
         log.error("Exception", ex);
         ErrorResponse response = null;
-        if(ex.getMessage().equals(ErrorCode.NOT_EXISTS_EMAIL.getMessage()))
+
+        if (ex.getMessage().equals(ErrorCode.NOT_EXISTS_PRODUCT.getMessage()))
+            response = ErrorResponse.of(ErrorCode.NOT_EXISTS_PRODUCT, ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomMemberExceptionHandler.class)
+    protected ResponseEntity<ErrorResponse> handleMemberCustomException(CustomMemberExceptionHandler ex) {
+        log.error("Exception", ex);
+        ErrorResponse response = null;
+        if (ex.getMessage().equals(ErrorCode.NOT_EXISTS_EMAIL.getMessage()))
             response = ErrorResponse.of(ErrorCode.NOT_EXISTS_EMAIL, ex.getMessage());
-        else if(ex.getMessage().equals(ErrorCode.PASSWORD_REQUEST_ERROR.getMessage()))
+        else if (ex.getMessage().equals(ErrorCode.PASSWORD_REQUEST_ERROR.getMessage()))
             response = ErrorResponse.of(ErrorCode.PASSWORD_REQUEST_ERROR, ex.getMessage());
-        else if(ex.getMessage().equals(ErrorCode.NOT_EQUAL_PASSWORD.getMessage()))
+        else if (ex.getMessage().equals(ErrorCode.NOT_EQUAL_PASSWORD.getMessage()))
             response = ErrorResponse.of(ErrorCode.NOT_EQUAL_PASSWORD, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+
 }

@@ -9,6 +9,7 @@ import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.feature.product.entity.QProductFileJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
+import com.realworld.global.category.GroupCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +25,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final QProductFileJpaEntity productFile = QProductFileJpaEntity.productFileJpaEntity;
 
     @Override
-    public List<Product> getSearchCardList(Pageable pageable, String search, String category, Long seq) {
+    public List<Product> getSearchCardList(Pageable pageable, String search, GroupCategory category, Long seq) {
 
         List<ProductJpaEntity> products = queryFactory
                 .select(product)
@@ -41,6 +42,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return products.stream().map(ProductJpaEntity::searchToDomain).toList();
     }
 
+
     private BooleanExpression containTitle(String search) {
         if (search == null || search.isEmpty()) {
             return null;
@@ -48,12 +50,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return product.title.containsIgnoreCase(search);
     }
 
-    private BooleanExpression eqCategory(String category) {
-        if (category == null || category.isEmpty()) {
+    private BooleanExpression eqCategory(GroupCategory category) {
+        if (category == null || category.toString().isEmpty()) {
             return null;
         }
 
-        return product.category.eq(category);
+        return product.category.eq(GroupCategory.valueOf(category.toString()));
     }
 
     private BooleanExpression ltSeq(Long seq) {

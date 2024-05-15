@@ -2,6 +2,7 @@ package com.realworld.feature.product.entity;
 
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import com.realworld.feature.product.domain.Product;
+import com.realworld.global.category.GroupCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -57,8 +58,9 @@ public class ProductJpaEntity {
     private String content;
 
     private Long price;
-
-    private String category;
+    
+    @Enumerated(EnumType.STRING)
+    private GroupCategory category;
 
     private String hashtag;
 
@@ -75,7 +77,7 @@ public class ProductJpaEntity {
 
 
     @Builder
-    public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, String category, int views, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
+    public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
         this.productSeq = productSeq;
         this.userId = userId;
         this.title = title;

@@ -3,7 +3,9 @@ package com.realworld.feature.product.service;
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.feature.product.controller.request.ProductGenerationRequest;
+import com.realworld.feature.product.controller.request.ProductUpdateRequest;
 import com.realworld.feature.product.domain.Product;
+import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.feature.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 @Slf4j
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 public class ProductCommandServiceImpl implements ProductCommandService {
     private final ProductRepository productRepository;
     private final MemberQueryService memberQueryService;
+
 
     @Override
     @Transactional
@@ -40,4 +44,11 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         return productRepository.save(product.toEntity()).toDomain();
     }
 
+    @Override
+    @Transactional
+    public Product productUpdates(User user, ProductUpdateRequest request) {
+        Optional<ProductJpaEntity> productEntity = productRepository.findById(String.valueOf(request.getProductSeq()));
+        log.info("productEntity :: {}", productEntity.get());
+        return null;
+    }
 }

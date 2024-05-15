@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.realworld.feature.product.domain.Product;
+import com.realworld.global.code.ErrorCode;
+import com.realworld.global.config.exception.CustomProductExceptionHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -42,6 +44,6 @@ public class InfiniteProductScrollingResponse {
                 return o2.getProductSeq().compareTo(o1.getProductSeq());
             }
         });
-        this.nextCursor = product.get().getProductSeq();
+        this.nextCursor = product.orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT)).getProductSeq();
     }
 }

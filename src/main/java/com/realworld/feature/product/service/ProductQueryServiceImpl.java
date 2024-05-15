@@ -2,6 +2,7 @@ package com.realworld.feature.product.service;
 
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.repository.ProductRepository;
+import com.realworld.global.category.GroupCategory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +18,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Product> getSearchProductList(Pageable pageable, String search, String category, Long seq) {
+    public List<Product> getSearchProductList(Pageable pageable, String search, GroupCategory category, Long seq) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
         List<Product> cards = productRepository.getSearchCardList(pageRequest, search, category, seq);

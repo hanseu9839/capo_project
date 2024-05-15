@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.product.entity.ProductJpaEntity;
+import com.realworld.global.category.GroupCategory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class Product {
 
     private String content;
 
-    private String category;
+    private GroupCategory category;
 
     private Long price;
 
