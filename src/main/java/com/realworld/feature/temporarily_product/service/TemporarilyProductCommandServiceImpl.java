@@ -5,6 +5,8 @@ import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.feature.temporarily_product.controller.request.TemporarilyProductGenerationRequest;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
 import com.realworld.feature.temporarily_product.repository.TemporarilyProductRepository;
+import com.realworld.global.code.ErrorCode;
+import com.realworld.global.config.exception.CustomProductExceptionHandler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -37,5 +39,14 @@ public class TemporarilyProductCommandServiceImpl implements TemporarilyProductC
 
 
         return repository.save(product.toEntity()).generationToDomain();
+    }
+
+    @Override
+    public void delete(User user, TemporarilyProduct product) {
+        if (!user.getUsername().equals(product.getUserId())) {
+            throw new CustomProductExceptionHandler(ErrorCode.NOT_MATCHES_USER_PRODUCT);
+        }
+
+        repository.delete(product.toEntity());
     }
 }

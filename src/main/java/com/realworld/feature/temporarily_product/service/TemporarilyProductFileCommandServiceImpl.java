@@ -1,5 +1,6 @@
 package com.realworld.feature.temporarily_product.service;
 
+import com.realworld.feature.file.service.StorageService;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProductFile;
 import com.realworld.feature.temporarily_product.repository.TemporarilyProductFileRepository;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class TemporarilyProductFileCommandServiceImpl implements TemporarilyProductFileCommandService {
 
     private final TemporarilyProductFileRepository repository;
-
+    private final StorageService
     @Override
     public TemporarilyProductFile save(String imageId, TemporarilyProduct product) {
         TemporarilyProductFile file = TemporarilyProductFile.builder()
@@ -22,5 +23,10 @@ public class TemporarilyProductFileCommandServiceImpl implements TemporarilyProd
                 .product(product)
                 .build();
         return repository.save(file.toEntity()).generationToDomain();
+    }
+
+    @Override
+    public void delete(String userId, String imageId) {
+
     }
 }

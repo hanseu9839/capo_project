@@ -6,4 +6,6 @@ import org.springframework.security.core.userdetails.User;
 
 public interface TemporarilyProductCommandService {
     TemporarilyProduct productTemporarilyGeneration(User user, TemporarilyProductGenerationRequest request);
+
+    void delete(User user, TemporarilyProduct product);
 }

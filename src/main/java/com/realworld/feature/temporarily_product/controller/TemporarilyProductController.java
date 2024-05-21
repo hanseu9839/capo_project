@@ -6,6 +6,7 @@ import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProductFile;
 import com.realworld.feature.temporarily_product.service.TemporarilyProductCommandService;
 import com.realworld.feature.temporarily_product.service.TemporarilyProductFileCommandService;
+import com.realworld.feature.temporarily_product.service.TemporarilyProductQueryService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ import java.util.List;
 public class TemporarilyProductController {
     private final TemporarilyProductCommandService temporarilyProductCommandService;
     private final TemporarilyProductFileCommandService temporarilyProductFileCommandService;
+    private final TemporarilyProductQueryService temporarilyProductQueryService;
 
     public ResponseEntity<ApiResponse<TemporarilyProductGenerationResponse>> temporarilyProductGeneration(@AuthenticationPrincipal User user, @RequestBody @Valid TemporarilyProductGenerationRequest request) throws IOException {
 
@@ -56,6 +58,13 @@ public class TemporarilyProductController {
 
     @DeleteMapping("/{temporarily_product_seq}")
     public ResponseEntity<ApiResponse<?>> temporarilyProductDeletes(@AuthenticationPrincipal User user, @PathVariable(value = "temporarily_product_seq") Long seq) {
+        TemporarilyProduct product = temporarilyProductQueryService.getDetails(seq);
+        temporarilyProductCommandService.delete(user, product);
+        product.getImages().stream().map(TemporarilyProductFile::getId).forEach(imageId -> temporarilyProductFileCommandService.delete(user.getUsername(), String.valueOf(imageId)));
 
+        ApiResponse<?> response = new ApiResponse<>(null,
+                SuccessCode.DELETE_SUCCESS.getStatus(), SuccessCode.DELETE_SUCCESS.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 }
