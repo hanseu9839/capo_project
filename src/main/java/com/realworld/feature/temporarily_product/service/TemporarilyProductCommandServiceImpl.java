@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@Service
+@Service("temporarilyProductCommandService")
 @RequiredArgsConstructor
 public class TemporarilyProductCommandServiceImpl implements TemporarilyProductCommandService {
     private final MemberQueryService memberQueryService;

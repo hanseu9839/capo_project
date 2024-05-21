@@ -50,5 +50,5 @@ public class TemporarilyProduct {
                 .thumbnailId(this.thumbnailId)
                 .build();
     }
-    
+
 }

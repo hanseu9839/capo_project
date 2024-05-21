@@ -41,8 +41,7 @@ public class TemporarilyProductJpaEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private MemberJpaEntity member;
 
-
-    @OneToMany(mappedBy = "temporarilyProduct", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product")
     private List<TemporarilyProductFileJpaEntity> images = new ArrayList<>();
 
     private String title;
