@@ -1,5 +1,8 @@
 package com.realworld.feature.file.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.realworld.feature.file.controller.FileResponse;
 import com.realworld.feature.file.entity.FileJpaEntity;
 import com.realworld.feature.image.ThumbnailImageGenerator;
@@ -14,6 +17,8 @@ import java.util.UUID;
 @Getter
 @Builder
 @ToString
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class File {
 
     private UUID id;

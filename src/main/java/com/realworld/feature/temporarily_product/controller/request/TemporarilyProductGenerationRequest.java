@@ -1,4 +1,4 @@
-package com.realworld.feature.product.controller.request;
+package com.realworld.feature.temporarily_product.controller.request;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,24 +11,23 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProductUpdateRequest {
-    @NotNull(message = "요청 값 오류입니다.")
-    private Long productSeq;
-
+public class TemporarilyProductGenerationRequest {
     @NotNull(message = "제목이 입력되지 않았습니다.")
     private String title;
 
     @NotNull(message = "내용이 입력되지 않았습니다.")
     private String content;
 
-    @NotNull(message = "카테고리가 입력되지 않았습니다.")
+    @NotNull(message = "카테고리를 입력해주세요.")
     private GroupCategory category;
 
-    @NotNull(message = "가격이 입력되지 않았습니다.")
+    @NotNull(message = "가격을 입력해주세요.")
     private Long price;
 
     @JsonProperty("thumbnail_id")
+    @NotNull(message = "썸네일 이미지를 선택해주세요.")
     private String thumbnailId;
 
     private List<String> images;
+
 }

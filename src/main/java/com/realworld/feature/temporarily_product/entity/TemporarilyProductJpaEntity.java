@@ -1,13 +1,11 @@
-package com.realworld.feature.product.entity;
+package com.realworld.feature.temporarily_product.entity;
 
 import com.realworld.feature.member.entity.MemberJpaEntity;
-import com.realworld.feature.product.domain.Product;
+import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
 import com.realworld.global.category.GroupCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,19 +16,18 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * TODO: ProductJpaEntity Image, Like 좋아요 기능 컬럼 미구현 (추후 개발)
- */
+
 @Slf4j
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-@DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "product")
-public class ProductJpaEntity {
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Table(name = "temporarily_product")
+public class TemporarilyProductJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -44,14 +41,11 @@ public class ProductJpaEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private MemberJpaEntity member;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<ProductFileJpaEntity> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "temporarilyProduct", fetch = FetchType.EAGER)
+    private List<TemporarilyProductFileJpaEntity> images = new ArrayList<>();
 
     private String title;
-
-    @ColumnDefault("0")
-    @Column(name = "like_count")
-    private int likeCount;
 
     @Column(length = 50000)
     private String content;
@@ -62,9 +56,6 @@ public class ProductJpaEntity {
     private GroupCategory category;
 
     private String hashtag;
-
-    @ColumnDefault("0")
-    private int views;
 
     @Column(name = "thumbnail_id")
     private UUID thumbnailId;
@@ -78,84 +69,64 @@ public class ProductJpaEntity {
     private LocalDateTime modifiedAt;
 
 
-    @Builder
-    public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, UUID thumbnailId, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
-        this.productSeq = productSeq;
-        this.userId = userId;
-        this.title = title;
-        this.member = member;
-        this.content = content;
-        this.price = price;
-        this.category = category;
-        this.views = views;
-        this.thumbnailId = thumbnailId;
-        this.images = images;
-        this.createAt = createAt;
-        this.modifiedAt = modifiedAt;
-    }
-
-    public Product toDomain() {
-        return Product.builder()
+    public TemporarilyProduct toDomain() {
+        return TemporarilyProduct.builder()
                 .productSeq(this.productSeq)
-                .images(this.images.stream().map(ProductFileJpaEntity::toDomain).collect(Collectors.toList()))
+                .images(this.images.stream().map(TemporarilyProductFileJpaEntity::toDomain).collect(Collectors.toList()))
                 .title(this.title)
                 .userId(this.userId)
                 .member(this.member.toDomain())
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .views(this.views)
                 .thumbnailId(this.thumbnailId)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
     }
 
-    public Product generationToDomain() {
-        return Product.builder()
+    public TemporarilyProduct generationToDomain() {
+        return TemporarilyProduct.builder()
                 .productSeq(this.productSeq)
-                .images(this.images.stream().map(ProductFileJpaEntity::generationToDomain).collect(Collectors.toList()))
+                .images(this.images.stream().map(TemporarilyProductFileJpaEntity::generationToDomain).collect(Collectors.toList()))
                 .title(this.title)
                 .userId(this.userId)
                 .member(this.member.productToDomain())
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .views(this.views)
                 .thumbnailId(this.thumbnailId)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
     }
 
-    public Product updateToDomain() {
-        return Product.builder()
+    public TemporarilyProduct updateToDomain() {
+        return TemporarilyProduct.builder()
                 .productSeq(this.productSeq)
-                .images(this.images.stream().map(ProductFileJpaEntity::updateToDomain).collect(Collectors.toList()))
+                .images(this.images.stream().map(TemporarilyProductFileJpaEntity::updateToDomain).collect(Collectors.toList()))
                 .title(this.title)
                 .userId(this.userId)
                 .member(this.member.productToDomain())
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .views(this.views)
                 .thumbnailId(this.thumbnailId)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
     }
 
-    public Product searchToDomain() {
-        return Product.builder()
+    public TemporarilyProduct searchToDomain() {
+        return TemporarilyProduct.builder()
                 .productSeq(this.productSeq)
-                .images(this.images.stream().map(ProductFileJpaEntity::searchToDomain).collect(Collectors.toList()))
+                .images(this.images.stream().map(TemporarilyProductFileJpaEntity::searchToDomain).collect(Collectors.toList()))
                 .title(this.title)
                 .userId(this.userId)
                 .member(this.member.productToDomain())
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .views(this.views)
                 .thumbnailId(this.thumbnailId)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
@@ -163,4 +134,3 @@ public class ProductJpaEntity {
     }
 
 }
-

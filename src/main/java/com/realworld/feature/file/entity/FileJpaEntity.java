@@ -1,5 +1,6 @@
 package com.realworld.feature.file.entity;
 
+import com.realworld.feature.file.domain.File;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,5 +48,15 @@ public class FileJpaEntity {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    
+    public File toDomain() {
+        return File.builder()
+                .path(this.path)
+                .id(this.id)
+                .size(this.size)
+                .extension(this.extension)
+                .hasThumbnail(this.hasThumbnail)
+                .name(this.name)
+                .build();
+    }
+
 }

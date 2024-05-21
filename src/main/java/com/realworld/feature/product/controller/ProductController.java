@@ -2,27 +2,23 @@ package com.realworld.feature.product.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.realworld.feature.file.controller.FileResponse;
 import com.realworld.feature.file.domain.File;
-import com.realworld.feature.file.service.FileNameGenerator;
-import com.realworld.feature.file.service.StorageService;
+import com.realworld.feature.file.service.FileQueryService;
 import com.realworld.feature.product.controller.request.ProductGenerationRequest;
 import com.realworld.feature.product.controller.request.ProductUpdateRequest;
 import com.realworld.feature.product.controller.response.InfiniteProductScrollingResponse;
-import com.realworld.feature.product.controller.response.ProductGenerationResponse;
 import com.realworld.feature.product.controller.response.ProductUpdateResponse;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.domain.ProductFile;
-import com.realworld.feature.product.service.ProductCommandService;
 import com.realworld.feature.product.service.ProductFileCommandService;
-import com.realworld.feature.product.service.ProductQueryService;
+import com.realworld.feature.product.service.product.ProductCommandService;
+import com.realworld.feature.product.service.product.ProductQueryService;
 import com.realworld.global.category.GroupCategory;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -30,14 +26,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -47,8 +39,7 @@ public class ProductController {
     private final ProductQueryService productQueryService;
     private final ProductCommandService productCommandService;
     private final ProductFileCommandService productFileCommandService;
-    private final StorageService cloudStorageService;
-
+    private final FileQueryService fileQueryService;
 
     /**
      * TODO :: TestCode 작성 및 Product , ProductJpaEntity 추가하기..!
@@ -72,67 +63,69 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // TODO: 임시저장 로직으로 변경 예정
+
     @PostMapping
-    public ResponseEntity<ApiResponse<ProductGenerationResponse>> productGeneration(@AuthenticationPrincipal User user, @RequestPart @Valid ProductGenerationRequest proGenRequest, @RequestPart(name = "images") MultipartFile[] multipartFiles) throws IOException {
+    public ResponseEntity<ApiResponse<?>> productGeneration(@AuthenticationPrincipal User user, @RequestBody @Valid List<ProductGenerationRequest> requests) {
 
-        Product product = productCommandService.productGeneration(user, proGenRequest);
+        requests.forEach(request -> productCommandService.save(user, request));
 
-        List<FileResponse> fileResponseList = new ArrayList<>();
-        for (MultipartFile multipartFile : multipartFiles) {
-
-            String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
-            if (contentType == null) {
-                contentType = multipartFile.getContentType();
-            }
-
-            FileNameGenerator fileNameGenerator = new FileNameGenerator();
-            String fileName = fileNameGenerator.getMultipartFileName(multipartFile);
-
-            String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-
-            File file = File.builder()
-                    .name(fileName)
-                    .size(multipartFile.getSize())
-                    .extension(fileExtension)
-                    .contentType(contentType)
-                    .build();
-
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                File savedFile = cloudStorageService.upload(inputStream, user.getUsername(), file);
-                fileResponseList.add(savedFile.toResponse());
-            }
-        }
-
-        List<ProductFile> images = new ArrayList<>();
-
-        fileResponseList.forEach(fileResponse -> images.add(productFileCommandService.save(fileResponse, product)));
-
-        ProductGenerationResponse response = ProductGenerationResponse.builder()
-                .productSeq(product.getProductSeq())
-                .title(product.getTitle())
-                .userId(product.getUserId())
-                .content(product.getContent())
-                .category(product.getCategory())
-                .price(product.getPrice())
-                .views(product.getViews())
-                .createDt(product.getCreateDt())
-                .regDt(product.getRegDt())
-                .images(images)
-                .member(product.getMember())
-                .build();
-
-        ApiResponse<ProductGenerationResponse> apiResponse = new ApiResponse<>(response, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
-        return ResponseEntity.ok(apiResponse);
+        ApiResponse<?> response = new ApiResponse<>(null, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        return ResponseEntity.ok(response);
     }
+
+    // TODO: 임시저장 로직으로 변경 예정
+    @PostMapping("/temporarily")
 
 
     @PatchMapping
-    public ResponseEntity<ApiResponse<ProductUpdateResponse>> productUpdates(@AuthenticationPrincipal User user, @RequestPart @Valid ProductUpdateRequest request, @RequestPart(name = "images") MultipartFile[] multipartFiles) {
+    public ResponseEntity<ApiResponse<ProductUpdateResponse>> productUpdates(@AuthenticationPrincipal User user, @RequestBody @Valid ProductUpdateRequest request) {
 
         Product product = productCommandService.productUpdates(user, request);
 
-        return null;
+        // 새로 추가된 imageIds
+        List<String> newImageIds = request.getImages().stream().filter(imageId ->
+                !product.getImages().stream().map(ProductFile::getId).map(UUID::toString).toList().contains(imageId)
+        ).toList();
+
+        newImageIds.forEach(imageId -> productFileCommandService.save(imageId, product));
+
+        // 제거할 imageIds
+        List<String> deleteImageIds = product.getImages().stream().map(ProductFile::getId).map(UUID::toString).filter(imageId -> !request.getImages().contains(imageId)).toList();
+        deleteImageIds.forEach(imageId -> productFileCommandService.delete(user.getUsername(), imageId));
+
+        List<File> images = new ArrayList<>();
+        Product details = productQueryService.getDetailsProduct(product.getProductSeq());
+        details.getImages().forEach(image -> images.add(fileQueryService.getFile(image.getId())));
+
+        ProductUpdateResponse response = ProductUpdateResponse.builder()
+                .seq(details.getProductSeq())
+                .member(details.getMember())
+                .category(details.getCategory())
+                .price(details.getPrice())
+                .title(details.getTitle())
+                .content(details.getContent())
+                .views(details.getViews())
+                .createAt(details.getCreatedAt())
+                .modifiedAt(details.getModifiedAt())
+                .images(images)
+                .build();
+
+        ApiResponse<ProductUpdateResponse> apiResponse = new ApiResponse<>(response, SuccessCode.UPDATE_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+
+
+        return ResponseEntity.ok(apiResponse);
     }
 
+    @DeleteMapping("/{product_seq}")
+    public ResponseEntity<ApiResponse<?>> productDeletes(@AuthenticationPrincipal User user, @PathVariable(value = "product_seq") Long productSeq) {
+        Product product = productQueryService.getDetailsProduct(productSeq);
+
+        productCommandService.productDelete(user, product);
+        product.getImages().forEach(image -> productFileCommandService.delete(user.getUsername(), String.valueOf(image.getId())));
+
+        ApiResponse<?> productDeleteResponse = new ApiResponse<>(null,
+                SuccessCode.DELETE_SUCCESS.getStatus(), SuccessCode.DELETE_SUCCESS.getMessage());
+
+        return ResponseEntity.ok(productDeleteResponse);
+    }
 }

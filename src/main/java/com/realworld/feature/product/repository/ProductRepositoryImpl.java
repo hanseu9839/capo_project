@@ -10,6 +10,8 @@ import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.feature.product.entity.QProductFileJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
 import com.realworld.global.category.GroupCategory;
+import com.realworld.global.code.ErrorCode;
+import com.realworld.global.config.exception.CustomProductExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +27,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final QProductFileJpaEntity productFile = QProductFileJpaEntity.productFileJpaEntity;
 
     @Override
-    public List<Product> getSearchCardList(Pageable pageable, String search, GroupCategory category, Long seq) {
+    public List<Product> getSearchProductList(Pageable pageable, String search, GroupCategory category, Long seq) {
 
         List<ProductJpaEntity> products = queryFactory
                 .select(product)
@@ -40,6 +42,23 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return products.stream().map(ProductJpaEntity::searchToDomain).toList();
+    }
+
+    @Override
+    public Product getDetailsProduct(Long seq) {
+        ProductJpaEntity details = queryFactory
+                .select(product)
+                .from(product)
+                .innerJoin(product.member, member)
+                .where(
+                        product.productSeq.eq(seq)
+                ).fetchOne();
+
+        if (details == null) {
+            throw new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT);
+        }
+
+        return details.searchToDomain();
     }
 
 

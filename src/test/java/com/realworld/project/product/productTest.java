@@ -21,7 +21,7 @@ public class productTest {
         // given
         PageRequest pageRequest = PageRequest.of(0, 10);
         // when
-        List<Product> list = productRepository.getSearchCardList(pageRequest, "", GroupCategory.valueOf(""), null);
+        List<Product> list = productRepository.getSearchProductList(pageRequest, "", GroupCategory.valueOf("BOY_GROUP"), null);
 
 //        for(Product product: list){
 //            System.out.println(product.getProductSeq());
@@ -30,7 +30,7 @@ public class productTest {
 
         PageRequest pageRequest2 = PageRequest.of(1, 10);
 
-        List<Product> list2 = productRepository.getSearchCardList(pageRequest2, "", GroupCategory.valueOf(""), 14L);
+//        List<Product> list2 = productRepository.getSearchProductList(pageRequest2, "", GroupCategory.valueOf(""), 14L);
 
 //        for(ProductJpaEntity productJpaEntity : list2){
 //            System.out.println(productJpaEntity.getProductSeq());

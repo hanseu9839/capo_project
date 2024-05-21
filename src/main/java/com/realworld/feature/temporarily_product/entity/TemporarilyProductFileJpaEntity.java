@@ -1,8 +1,11 @@
-package com.realworld.feature.product.entity;
+package com.realworld.feature.temporarily_product.entity;
 
-import com.realworld.feature.product.domain.ProductFile;
+import com.realworld.feature.temporarily_product.domain.TemporarilyProductFile;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,16 +13,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Getter
-@Setter
-@Table(name = "product_file")
-@EntityListeners(AuditingEntityListener.class)
-public class ProductFileJpaEntity {
+@Table(name = "temporarily_product_file")
+public class TemporarilyProductFileJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long seq;
@@ -29,7 +29,7 @@ public class ProductFileJpaEntity {
 
     @ManyToOne
     @JoinColumn(name = "product_seq", referencedColumnName = "product_seq")
-    private ProductJpaEntity product;
+    private TemporarilyProductJpaEntity product;
 
     @Column(name = "file_id")
     private UUID id;
@@ -42,8 +42,8 @@ public class ProductFileJpaEntity {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    public ProductFile toDomain() {
-        return ProductFile.builder()
+    public TemporarilyProductFile toDomain() {
+        return TemporarilyProductFile.builder()
                 .userId(this.userId)
                 .id(this.id)
                 .product(this.product.toDomain())
@@ -52,15 +52,15 @@ public class ProductFileJpaEntity {
                 .build();
     }
 
-    public ProductFile generationToDomain() {
-        return ProductFile.builder()
+    public TemporarilyProductFile generationToDomain() {
+        return TemporarilyProductFile.builder()
                 .userId(this.userId)
                 .id(this.id)
                 .build();
     }
 
-    public ProductFile updateToDomain() {
-        return ProductFile.builder()
+    public TemporarilyProductFile updateToDomain() {
+        return TemporarilyProductFile.builder()
                 .userId(this.userId)
                 .id(this.id)
                 .createAt(this.createAt)
@@ -68,11 +68,10 @@ public class ProductFileJpaEntity {
                 .build();
     }
 
-    public ProductFile searchToDomain() {
-        return ProductFile.builder()
+    public TemporarilyProductFile searchToDomain() {
+        return TemporarilyProductFile.builder()
                 .userId(this.userId)
                 .id(this.id)
                 .build();
     }
-
 }

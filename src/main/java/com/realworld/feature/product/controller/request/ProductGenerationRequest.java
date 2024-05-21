@@ -1,25 +1,34 @@
 package com.realworld.feature.product.controller.request;
 
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.realworld.feature.member.domain.Member;
+import com.realworld.feature.product.domain.ProductFile;
 import com.realworld.global.category.GroupCategory;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.List;
 
 @Getter
-@Setter
 public class ProductGenerationRequest {
-    @NotNull(message = "제목이 입력되지 않았습니다.")
-    private String title;
+    @NotNull(message = "요청 값 오류입니다.")
+    private GroupCategory category;
 
     @NotNull(message = "내용이 입력되지 않았습니다.")
     private String content;
 
-    @NotNull(message = "카테고리를 입력해주세요.")
-    private GroupCategory category;
+    private String hashtag;
 
-    @NotNull(message = "가격을 입력해주세요.")
+    @NotNull(message = "가격이 입력되지 않았습니다.")
     private Long price;
 
+    @NotNull(message = "제목이 입력되지 않았습니다.")
+    private String title;
     
+    private Member member;
+
+    private List<ProductFile> images;
+
+    @JsonProperty("thumbnail_id")
+    private String thumbnailId;
 }
