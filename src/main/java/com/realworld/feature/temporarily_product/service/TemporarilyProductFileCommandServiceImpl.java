@@ -14,7 +14,8 @@ import java.util.UUID;
 public class TemporarilyProductFileCommandServiceImpl implements TemporarilyProductFileCommandService {
 
     private final TemporarilyProductFileRepository repository;
-    private final StorageService
+    private final StorageService cloudStorageService;
+
     @Override
     public TemporarilyProductFile save(String imageId, TemporarilyProduct product) {
         TemporarilyProductFile file = TemporarilyProductFile.builder()
@@ -28,5 +29,7 @@ public class TemporarilyProductFileCommandServiceImpl implements TemporarilyProd
     @Override
     public void delete(String userId, String imageId) {
 
+        cloudStorageService.delete(userId, imageId);
+        repository.deleteById(UUID.fromString(imageId));
     }
 }
