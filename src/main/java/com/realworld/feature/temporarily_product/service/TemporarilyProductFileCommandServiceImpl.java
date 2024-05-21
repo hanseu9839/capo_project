@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+@Service("temporarilyFileCommandService")
 @RequiredArgsConstructor
 public class TemporarilyProductFileCommandServiceImpl implements TemporarilyProductFileCommandService {
 

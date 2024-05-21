@@ -4,8 +4,8 @@ import com.realworld.feature.temporarily_product.controller.request.TemporarilyP
 import com.realworld.feature.temporarily_product.controller.response.TemporarilyProductGenerationResponse;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProductFile;
-import com.realworld.feature.temporarily_product.service.TemporarilyFileCommandService;
 import com.realworld.feature.temporarily_product.service.TemporarilyProductCommandService;
+import com.realworld.feature.temporarily_product.service.TemporarilyProductFileCommandService;
 import com.realworld.feature.temporarily_product.service.TemporarilyProductQueryService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api/v1/cards/temporarily")
 public class TemporarilyProductController {
     private final TemporarilyProductCommandService temporarilyProductCommandService;
-    private final TemporarilyFileCommandService temporarilyProductFileCommandService;
+    private final TemporarilyProductFileCommandService temporarilyProductFileCommandService;
     private final TemporarilyProductQueryService temporarilyProductQueryService;
 
     public ResponseEntity<ApiResponse<TemporarilyProductGenerationResponse>> temporarilyProductGeneration(@AuthenticationPrincipal User user, @RequestBody @Valid TemporarilyProductGenerationRequest request) throws IOException {
