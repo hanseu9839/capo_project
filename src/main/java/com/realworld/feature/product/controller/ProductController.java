@@ -73,10 +73,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: 임시저장 로직으로 변경 예정
-    @PostMapping("/temporarily")
-
-
+    
     @PatchMapping
     public ResponseEntity<ApiResponse<ProductUpdateResponse>> productUpdates(@AuthenticationPrincipal User user, @RequestBody @Valid ProductUpdateRequest request) {
 
