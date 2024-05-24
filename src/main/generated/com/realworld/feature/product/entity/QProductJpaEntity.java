@@ -22,7 +22,7 @@ public class QProductJpaEntity extends EntityPathBase<ProductJpaEntity> {
 
     public static final QProductJpaEntity productJpaEntity = new QProductJpaEntity("productJpaEntity");
 
-    public final StringPath category = createString("category");
+    public final EnumPath<com.realworld.global.category.GroupCategory> category = createEnum("category", com.realworld.global.category.GroupCategory.class);
 
     public final StringPath content = createString("content");
 
@@ -41,6 +41,8 @@ public class QProductJpaEntity extends EntityPathBase<ProductJpaEntity> {
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final NumberPath<Long> productSeq = createNumber("productSeq", Long.class);
+
+    public final ComparablePath<java.util.UUID> thumbnailId = createComparable("thumbnailId", java.util.UUID.class);
 
     public final StringPath title = createString("title");
 

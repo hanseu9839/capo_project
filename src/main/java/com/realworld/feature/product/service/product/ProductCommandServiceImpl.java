@@ -45,8 +45,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Transactional
     public Product productUpdates(User user, ProductUpdateRequest request) {
         ProductJpaEntity findProduct = repository.findById(request.getProductSeq()).orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT));
-
-
+        
         findProduct.setCategory(request.getCategory());
         findProduct.setContent(request.getContent());
         findProduct.setPrice(request.getPrice());

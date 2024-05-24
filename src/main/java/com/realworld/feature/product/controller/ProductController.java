@@ -73,7 +73,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    
+
     @PatchMapping
     public ResponseEntity<ApiResponse<ProductUpdateResponse>> productUpdates(@AuthenticationPrincipal User user, @RequestBody @Valid ProductUpdateRequest request) {
 
@@ -107,7 +107,7 @@ public class ProductController {
                 .images(images)
                 .build();
 
-        ApiResponse<ProductUpdateResponse> apiResponse = new ApiResponse<>(response, SuccessCode.UPDATE_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        ApiResponse<ProductUpdateResponse> apiResponse = new ApiResponse<>(response, SuccessCode.UPDATE_SUCCESS.getStatus(), SuccessCode.UPDATE_SUCCESS.getMessage());
 
 
         return ResponseEntity.ok(apiResponse);

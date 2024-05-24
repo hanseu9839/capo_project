@@ -3,7 +3,9 @@ package com.realworld.feature.temporarily_product.service;
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.feature.temporarily_product.controller.request.TemporarilyProductGenerationRequest;
+import com.realworld.feature.temporarily_product.controller.request.TemporarilyProductUpdateRequest;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
+import com.realworld.feature.temporarily_product.entity.TemporarilyProductJpaEntity;
 import com.realworld.feature.temporarily_product.repository.TemporarilyProductRepository;
 import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomProductExceptionHandler;
@@ -37,8 +39,19 @@ public class TemporarilyProductCommandServiceImpl implements TemporarilyProductC
                 .thumbnailId(UUID.fromString(request.getThumbnailId()))
                 .build();
 
-
         return repository.save(product.toEntity()).generationToDomain();
+    }
+
+    @Override
+    @Transactional
+    public TemporarilyProduct update(String userId, TemporarilyProductUpdateRequest request) {
+        TemporarilyProductJpaEntity entity = repository.findById(request.getProductSeq()).orElseThrow();
+        entity.setCategory(request.getCategory());
+        entity.setPrice(request.getPrice());
+        entity.setTitle(request.getTitle());
+        entity.setContent(request.getContent());
+        entity.setThumbnailId(UUID.fromString(request.getThumbnailId()));
+        return null;
     }
 
     @Override

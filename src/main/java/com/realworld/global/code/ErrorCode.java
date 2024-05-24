@@ -42,6 +42,10 @@ public enum ErrorCode {
 
     // 포토카드 사용자 불일치 오류
     NOT_MATCHES_USER_PRODUCT(400, "글을 작성한 유저가 아닙니다."),
+
+    // 임시 저장 포토카드 조회 오류
+    NOT_EXISTS_TEMPORARILY_PRODUCT(400, "임시 저장 포토카드가 존재하지 않습니다."),
+    
     // 잘못된 서버 요청
     BAD_REQUEST_ERROR(400, "Bad Request Exception"),
     // @RequestBody 데이터 미 존재

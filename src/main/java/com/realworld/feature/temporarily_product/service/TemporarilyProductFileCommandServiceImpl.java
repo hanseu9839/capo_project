@@ -28,7 +28,6 @@ public class TemporarilyProductFileCommandServiceImpl implements TemporarilyProd
 
     @Override
     public void delete(String userId, String imageId) {
-
         cloudStorageService.delete(userId, imageId);
         repository.deleteById(UUID.fromString(imageId));
     }

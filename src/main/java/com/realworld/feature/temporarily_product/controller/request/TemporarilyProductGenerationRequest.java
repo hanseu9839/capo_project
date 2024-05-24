@@ -28,6 +28,7 @@ public class TemporarilyProductGenerationRequest {
     @NotNull(message = "썸네일 이미지를 선택해주세요.")
     private String thumbnailId;
 
+    @NotNull(message = "사진은 필수 값입니다.")
     private List<String> images;
 
 }
