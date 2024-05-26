@@ -5,13 +5,20 @@ import com.realworld.feature.temporarily_product.repository.TemporarilyProductRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TemporarilyProductQueryServiceImpl implements TemporarilyProductQueryService {
     private final TemporarilyProductRepository repository;
 
     @Override
-    public TemporarilyProduct getDetails(Long seq) {
-        return repository.getTemporarilyProductDetails(seq);
+    public TemporarilyProduct temporarilyProductDetails(Long seq) {
+        return repository.temporarilyProductDetails(seq);
+    }
+
+    @Override
+    public List<TemporarilyProduct> temporarilyProductList(String userId) {
+        return repository.temporarilyProductList(userId);
     }
 }

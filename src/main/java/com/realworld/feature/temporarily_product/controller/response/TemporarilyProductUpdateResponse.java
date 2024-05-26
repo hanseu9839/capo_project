@@ -23,11 +23,20 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TemporarilyProductUpdateResponse {
     private Long seq;
+
     private Member member;
+
     private GroupCategory category;
+
     private String title;
+
     private String content;
+
+    private String thumbnailUrl;
+
     private LocalDateTime createAt;
+
     private LocalDateTime modifiedAt;
+
     private List<File> images;
 }

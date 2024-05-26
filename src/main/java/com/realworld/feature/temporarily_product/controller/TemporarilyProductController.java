@@ -6,6 +6,7 @@ import com.realworld.feature.temporarily_product.controller.request.TemporarilyP
 import com.realworld.feature.temporarily_product.controller.request.TemporarilyProductUpdateRequest;
 import com.realworld.feature.temporarily_product.controller.response.TemporarilyProductDetailsResponse;
 import com.realworld.feature.temporarily_product.controller.response.TemporarilyProductGenerationResponse;
+import com.realworld.feature.temporarily_product.controller.response.TemporarilyProductListResponse;
 import com.realworld.feature.temporarily_product.controller.response.TemporarilyProductUpdateResponse;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProduct;
 import com.realworld.feature.temporarily_product.domain.TemporarilyProductFile;
@@ -54,7 +55,7 @@ public class TemporarilyProductController {
                 .content(product.getContent())
                 .category(product.getCategory())
                 .price(product.getPrice())
-                .thumbnailId(String.valueOf(product.getThumbnailId()))
+                .thumbnailUrl(product.getThumbnailUrl())
                 .createAt(product.getCreatedAt())
                 .modifiedAt(product.getModifiedAt())
                 .images(images)
@@ -62,6 +63,19 @@ public class TemporarilyProductController {
                 .build();
 
         ApiResponse<TemporarilyProductGenerationResponse> apiResponse = new ApiResponse<>(response, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<TemporarilyProductListResponse>> temporarilyProductList(@AuthenticationPrincipal User user) {
+        List<TemporarilyProduct> products = temporarilyProductQueryService.temporarilyProductList(user.getUsername());
+
+        TemporarilyProductListResponse response = TemporarilyProductListResponse.builder()
+                .products(products)
+                .build();
+
+        ApiResponse<TemporarilyProductListResponse> apiResponse = new ApiResponse<>(response, SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+
         return ResponseEntity.ok(apiResponse);
     }
 
@@ -81,7 +95,7 @@ public class TemporarilyProductController {
         deleteImageIds.forEach(imageId -> temporarilyProductFileCommandService.delete(user.getUsername(), imageId));
 
         List<File> images = new ArrayList<>();
-        TemporarilyProduct details = temporarilyProductQueryService.getDetails(product.getProductSeq());
+        TemporarilyProduct details = temporarilyProductQueryService.temporarilyProductDetails(product.getProductSeq());
         details.getImages().forEach(image -> images.add(fileQueryService.getFile(image.getId())));
 
         TemporarilyProductUpdateResponse response = TemporarilyProductUpdateResponse.builder()
@@ -89,6 +103,7 @@ public class TemporarilyProductController {
                 .member(details.getMember())
                 .category(details.getCategory())
                 .title(details.getTitle())
+                .thumbnailUrl(details.getThumbnailUrl())
                 .content(details.getContent())
                 .createAt(details.getCreatedAt())
                 .modifiedAt(details.getModifiedAt())
@@ -103,7 +118,7 @@ public class TemporarilyProductController {
 
     @DeleteMapping("/{temporarily_product_seq}")
     public ResponseEntity<ApiResponse<?>> temporarilyProductDeletes(@AuthenticationPrincipal User user, @PathVariable(value = "temporarily_product_seq") Long seq) {
-        TemporarilyProduct product = temporarilyProductQueryService.getDetails(seq);
+        TemporarilyProduct product = temporarilyProductQueryService.temporarilyProductDetails(seq);
         temporarilyProductCommandService.delete(user, product);
         product.getImages().stream().map(TemporarilyProductFile::getId).forEach(imageId -> temporarilyProductFileCommandService.delete(user.getUsername(), String.valueOf(imageId)));
 
@@ -115,7 +130,7 @@ public class TemporarilyProductController {
 
     @GetMapping("/{temporarily_product_seq}")
     public ResponseEntity<ApiResponse<TemporarilyProductDetailsResponse>> details(@PathVariable(value = "temporarily_product_seq") Long seq) {
-        TemporarilyProduct product = temporarilyProductQueryService.getDetails(seq);
+        TemporarilyProduct product = temporarilyProductQueryService.temporarilyProductDetails(seq);
 
         List<File> images = new ArrayList<>();
         product.getImages().forEach(imageId -> images.add(fileQueryService.getFile(imageId.getId())));

@@ -39,7 +39,7 @@ public class TemporarilyProductGenerationResponse {
 
     private LocalDateTime modifiedAt;
 
-    private String thumbnailId;
+    private String thumbnailUrl;
 
     private List<TemporarilyProductFile> images;
 

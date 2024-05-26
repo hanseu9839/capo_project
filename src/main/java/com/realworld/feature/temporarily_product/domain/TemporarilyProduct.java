@@ -8,7 +8,6 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -27,7 +26,7 @@ public class TemporarilyProduct {
 
     private Long price;
 
-    private UUID thumbnailId;
+    private String thumbnailUrl;
 
     private LocalDateTime createdAt;
 
@@ -47,7 +46,7 @@ public class TemporarilyProduct {
                 .content(this.content)
                 .category(this.category)
                 .price(this.price)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .build();
     }
 

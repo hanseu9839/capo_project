@@ -10,6 +10,8 @@ import com.realworld.global.code.ErrorCode;
 import com.realworld.global.config.exception.CustomProductExceptionHandler;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 public class TemporarilyProductRepositoryImpl implements TemporarilyProductRepositoryCustom {
@@ -19,7 +21,7 @@ public class TemporarilyProductRepositoryImpl implements TemporarilyProductRepos
     private final QMemberJpaEntity member = QMemberJpaEntity.memberJpaEntity;
 
     @Override
-    public TemporarilyProduct getTemporarilyProductDetails(Long seq) {
+    public TemporarilyProduct temporarilyProductDetails(Long seq) {
         TemporarilyProductJpaEntity details = queryFactory
                 .select(temporarilyProduct)
                 .from(temporarilyProduct)
@@ -30,5 +32,16 @@ public class TemporarilyProductRepositoryImpl implements TemporarilyProductRepos
             throw new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_TEMPORARILY_PRODUCT);
         }
         return details.searchToDomain();
+    }
+
+    @Override
+    public List<TemporarilyProduct> temporarilyProductList(String userId) {
+        List<TemporarilyProductJpaEntity> temporarilyProductList = queryFactory
+                .select(temporarilyProduct)
+                .from(temporarilyProduct)
+                .innerJoin(temporarilyProduct.member, member)
+                .where(temporarilyProduct.userId.eq(userId)).fetch();
+
+        return temporarilyProductList.stream().map(TemporarilyProductJpaEntity::searchToDomain).toList();
     }
 }

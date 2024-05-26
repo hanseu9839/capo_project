@@ -26,7 +26,7 @@ public class TemporarilyProductGenerationRequest {
 
     @JsonProperty("thumbnail_id")
     @NotNull(message = "썸네일 이미지를 선택해주세요.")
-    private String thumbnailId;
+    private String thumbnailUrl;
 
     @NotNull(message = "사진은 필수 값입니다.")
     private List<String> images;

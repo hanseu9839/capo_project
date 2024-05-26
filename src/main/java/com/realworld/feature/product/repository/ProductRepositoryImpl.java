@@ -91,8 +91,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
                 return switch (order.getProperty()) {
                     case "title" -> new OrderSpecifier<>(direction, product.title);
-                    case "regDt" -> new OrderSpecifier<>(direction, product.modifiedAt);
-                    case "createDt" -> new OrderSpecifier<>(direction, product.createAt);
+                    case "modifiedAt" -> new OrderSpecifier<>(direction, product.modifiedAt);
+                    case "createAt" -> new OrderSpecifier<>(direction, product.createAt);
                     case "views" -> new OrderSpecifier<>(direction, product.views);
                     default -> new OrderSpecifier<>(direction, product.productSeq);
                 };

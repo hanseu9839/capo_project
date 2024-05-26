@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -56,8 +55,8 @@ public class TemporarilyProductJpaEntity {
 
     private String hashtag;
 
-    @Column(name = "thumbnail_id")
-    private UUID thumbnailId;
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl;
 
     @CreatedDate
     @Column(name = "create_at")
@@ -78,7 +77,7 @@ public class TemporarilyProductJpaEntity {
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
@@ -94,7 +93,7 @@ public class TemporarilyProductJpaEntity {
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
@@ -110,7 +109,7 @@ public class TemporarilyProductJpaEntity {
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
@@ -126,7 +125,7 @@ public class TemporarilyProductJpaEntity {
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();

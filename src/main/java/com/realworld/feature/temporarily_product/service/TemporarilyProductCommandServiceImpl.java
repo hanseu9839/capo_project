@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 @Service("temporarilyProductCommandService")
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class TemporarilyProductCommandServiceImpl implements TemporarilyProductC
                 .images(new ArrayList<>())
                 .category(request.getCategory())
                 .price(request.getPrice())
-                .thumbnailId(UUID.fromString(request.getThumbnailId()))
+                .thumbnailUrl(request.getThumbnailUrl())
                 .build();
 
         return repository.save(product.toEntity()).generationToDomain();
@@ -50,8 +49,8 @@ public class TemporarilyProductCommandServiceImpl implements TemporarilyProductC
         entity.setPrice(request.getPrice());
         entity.setTitle(request.getTitle());
         entity.setContent(request.getContent());
-        entity.setThumbnailId(UUID.fromString(request.getThumbnailId()));
-        return null;
+        entity.setThumbnailUrl(request.getThumbnailId());
+        return entity.updateToDomain();
     }
 
     @Override

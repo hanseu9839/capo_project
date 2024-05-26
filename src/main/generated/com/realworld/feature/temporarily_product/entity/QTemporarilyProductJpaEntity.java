@@ -40,7 +40,7 @@ public class QTemporarilyProductJpaEntity extends EntityPathBase<TemporarilyProd
 
     public final NumberPath<Long> productSeq = createNumber("productSeq", Long.class);
 
-    public final ComparablePath<java.util.UUID> thumbnailId = createComparable("thumbnailId", java.util.UUID.class);
+    public final StringPath thumbnailUrl = createString("thumbnailUrl");
 
     public final StringPath title = createString("title");
 

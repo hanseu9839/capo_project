@@ -191,7 +191,8 @@ public class GlobalExceptionHandler {
 
         if (ex.getMessage().equals(ErrorCode.NOT_EXISTS_PRODUCT.getMessage()))
             response = ErrorResponse.of(ErrorCode.NOT_EXISTS_PRODUCT, ex.getMessage());
-
+        else if (ex.getMessage().equals(ErrorCode.NOT_EXISTS_TEMPORARILY_PRODUCT.getMessage()))
+            response = ErrorResponse.of(ErrorCode.NOT_EXISTS_TEMPORARILY_PRODUCT, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
