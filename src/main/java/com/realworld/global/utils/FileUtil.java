@@ -18,7 +18,7 @@ public class FileUtil {
         } else if (osName.contains("windows")) {
             return rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources";
         } else if (osName.contains("linux")) {
-            return File.separator + "home" + File.separator + "photocard_firebase";
+            return rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources";
         }
 
         return File.separator + "home";
