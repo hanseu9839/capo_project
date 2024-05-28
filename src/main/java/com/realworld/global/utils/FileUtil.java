@@ -14,10 +14,13 @@ public class FileUtil {
         String rootPath = System.getProperty("user.dir");
 
         if (osName.contains("mac")) {
+            log.info("mac :: ");
             return rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources";
         } else if (osName.contains("windows")) {
+            log.info("windows :: ");
             return rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources";
         } else if (osName.contains("linux")) {
+            log.info("linux :: ");
             return File.separator + "app";
         }
 
