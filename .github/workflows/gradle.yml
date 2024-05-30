@@ -67,7 +67,7 @@ jobs:
         arguments: clean bootJar
   # Docker 이미지 빌드 
     - name: docker image build
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
+      run: docker build --build-arg FIREBASE_PRIVATE_KEY=${{ secrets.FIREBASE_PRIVATE }} -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
   # docker hub 로그인 
     - name: docker login
       uses: docker/login-action@v2
