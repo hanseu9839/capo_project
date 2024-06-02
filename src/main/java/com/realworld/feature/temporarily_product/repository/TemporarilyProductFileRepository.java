@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface TemporarilyProductFileRepository extends JpaRepository<TemporarilyProductFileJpaEntity, UUID> {
-
+public interface TemporarilyProductFileRepository extends JpaRepository<TemporarilyProductFileJpaEntity, UUID>, TemporarilyProductFileRepositoryCustom {
 
 }

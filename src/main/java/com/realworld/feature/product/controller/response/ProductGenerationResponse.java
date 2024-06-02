@@ -1,10 +1,10 @@
-package com.realworld.feature.temporarily_product.controller.response;
+package com.realworld.feature.product.controller.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.realworld.feature.file.domain.File;
 import com.realworld.feature.member.domain.Member;
+import com.realworld.feature.product.domain.ProductFile;
 import com.realworld.global.category.GroupCategory;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,16 +20,18 @@ import java.util.List;
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TemporarilyProductDetailsResponse {
-    private Long temporarilyProductSeq;
-
-    private Member member;
-
-    private GroupCategory category;
+public class ProductGenerationResponse {
+    private Long productSeq;
 
     private String title;
 
+    private String userId;
+
     private String content;
+
+    private GroupCategory category;
+
+    private Long price;
 
     private String thumbnailUrl;
 
@@ -37,6 +39,7 @@ public class TemporarilyProductDetailsResponse {
 
     private LocalDateTime modifiedAt;
 
-    private List<File> images;
+    private List<ProductFile> images;
 
+    private Member member;
 }

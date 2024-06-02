@@ -1,14 +1,19 @@
 package com.realworld.feature.product.service.product;
 
 
+import com.realworld.feature.product.controller.request.ConvertProductGenerationRequest;
 import com.realworld.feature.product.controller.request.ProductGenerationRequest;
 import com.realworld.feature.product.controller.request.ProductUpdateRequest;
 import com.realworld.feature.product.domain.Product;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.List;
+
 public interface ProductCommandService {
 
-    Product save(User user, ProductGenerationRequest request);
+    List<Product> convertProductGeneration(User user, List<ConvertProductGenerationRequest> request);
+
+    Product generation(User user, ProductGenerationRequest request);
 
     Product productUpdates(User user, ProductUpdateRequest request);
 

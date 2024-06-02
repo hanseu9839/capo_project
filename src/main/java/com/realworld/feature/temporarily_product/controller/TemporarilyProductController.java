@@ -62,7 +62,7 @@ public class TemporarilyProductController {
                 .member(product.getMember())
                 .build();
 
-        ApiResponse<TemporarilyProductGenerationResponse> apiResponse = new ApiResponse<>(response, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        ApiResponse<TemporarilyProductGenerationResponse> apiResponse = new ApiResponse<>(response, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.INSERT_SUCCESS.getMessage());
         return ResponseEntity.ok(apiResponse);
     }
 
@@ -136,11 +136,12 @@ public class TemporarilyProductController {
         product.getImages().forEach(imageId -> images.add(fileQueryService.getFile(imageId.getId())));
 
         TemporarilyProductDetailsResponse response = TemporarilyProductDetailsResponse.builder()
-                .seq(product.getProductSeq())
+                .temporarilyProductSeq(product.getProductSeq())
                 .member(product.getMember())
                 .category(product.getCategory())
                 .title(product.getTitle())
                 .content(product.getContent())
+                .thumbnailUrl(product.getThumbnailUrl())
                 .createAt(product.getCreatedAt())
                 .modifiedAt(product.getModifiedAt())
                 .images(images)

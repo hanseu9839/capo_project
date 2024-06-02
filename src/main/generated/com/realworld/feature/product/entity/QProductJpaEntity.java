@@ -42,7 +42,7 @@ public class QProductJpaEntity extends EntityPathBase<ProductJpaEntity> {
 
     public final NumberPath<Long> productSeq = createNumber("productSeq", Long.class);
 
-    public final ComparablePath<java.util.UUID> thumbnailId = createComparable("thumbnailId", java.util.UUID.class);
+    public final StringPath thumbnailUrl = createString("thumbnailUrl");
 
     public final StringPath title = createString("title");
 

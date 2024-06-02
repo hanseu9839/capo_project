@@ -13,7 +13,6 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -42,7 +41,7 @@ public class Product {
 
     private int views;
 
-    private UUID thumbnailId;
+    private String thumbnailUrl;
 
     private LocalDateTime createdAt;
 
@@ -62,7 +61,7 @@ public class Product {
                 .content(this.content)
                 .category(this.category)
                 .price(this.price)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .build();
     }
 

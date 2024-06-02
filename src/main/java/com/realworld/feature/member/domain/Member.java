@@ -3,10 +3,7 @@ package com.realworld.feature.member.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.feature.auth.Authority;
 import com.realworld.feature.member.entity.MemberJpaEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +12,8 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
     private Long userSeq;
 

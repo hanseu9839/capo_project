@@ -15,7 +15,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -66,8 +65,8 @@ public class ProductJpaEntity {
     @ColumnDefault("0")
     private int views;
 
-    @Column(name = "thumbnail_id")
-    private UUID thumbnailId;
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl;
 
     @CreatedDate
     @Column(name = "create_at")
@@ -79,7 +78,7 @@ public class ProductJpaEntity {
 
 
     @Builder
-    public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, UUID thumbnailId, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
+    public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, String thumbnailUrl, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
         this.productSeq = productSeq;
         this.userId = userId;
         this.title = title;
@@ -88,7 +87,7 @@ public class ProductJpaEntity {
         this.price = price;
         this.category = category;
         this.views = views;
-        this.thumbnailId = thumbnailId;
+        this.thumbnailUrl = thumbnailUrl;
         this.images = images;
         this.createAt = createAt;
         this.modifiedAt = modifiedAt;
@@ -105,7 +104,7 @@ public class ProductJpaEntity {
                 .price(this.price)
                 .category(this.category)
                 .views(this.views)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
@@ -122,7 +121,7 @@ public class ProductJpaEntity {
                 .price(this.price)
                 .category(this.category)
                 .views(this.views)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
@@ -139,7 +138,7 @@ public class ProductJpaEntity {
                 .price(this.price)
                 .category(this.category)
                 .views(this.views)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
@@ -156,7 +155,7 @@ public class ProductJpaEntity {
                 .price(this.price)
                 .category(this.category)
                 .views(this.views)
-                .thumbnailId(this.thumbnailId)
+                .thumbnailUrl(this.thumbnailUrl)
                 .createdAt(this.createAt)
                 .modifiedAt(this.modifiedAt)
                 .build();
