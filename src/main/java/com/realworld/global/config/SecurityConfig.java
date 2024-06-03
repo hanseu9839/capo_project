@@ -8,6 +8,7 @@ import com.realworld.global.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,17 +21,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
-    private final CorsFilter corsFilter;
-
-    String[] excludeDevURI = new String[]{"/api/v1/login", "/api/v1/member", "/api/v1/duplication-check/user-id/**", "/api/v1/auth/email", "/api/v1/auth/email/**", "/error", "/api/v1/reissue", "/api/v1/user/find-userId/**", "/api/v1/user/find-password/**"};
+    String[] excludeDevURI = new String[]{"/api/v1/login", "/api/v1/member", "/api/v1/duplication-check/user-id/**", "/api/v1/auth/email", "/api/v1/auth/email/**", "/error", "/api/v1/reissue", "/api/v1/user/find-userId/**", "/api/v1/user/find-password/**", "/api/v1/"};
     String[] excludeLocalURI = new String[]{"/v1/login", "/v1/member", "/v1/duplication-check/user-id/**", "/v1/auth/email", "/v1/auth/email/**", "/error", "/v1/reissue", "/v1/user/find-userId/**", "/v1/user/find-password/**"};
+    String[] getExcludeDevURI = new String[]{"/api/v1/cards", "/api/v1/cards/**"};
+    String[] getExcludeLocalURI = new String[]{"/api/v1/cards", "/api/v1/cards/**"};
 
     // 비밀번호 암호화
     @Bean
@@ -59,10 +59,13 @@ public class SecurityConfig {
                         .accessDeniedHandler(new JwtAccessDeniedHandler()))
                 .sessionManagement((httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)))
-                .authorizeRequests(auth -> auth
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, getExcludeDevURI).permitAll()
+                        .requestMatchers(HttpMethod.GET, getExcludeLocalURI).permitAll()
                         .requestMatchers(excludeDevURI).permitAll()
                         .requestMatchers(excludeLocalURI).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
         return http.build();
