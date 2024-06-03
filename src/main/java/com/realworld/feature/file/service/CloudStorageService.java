@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -84,6 +85,10 @@ public class CloudStorageService implements StorageService {
         return file;
     }
 
+    @Override
+    public void getFile(String id, OutputStream os) {
+        fireBaseService.getFile(id, os);
+    }
 
     @Override
     public void delete(String userId, String fileId) {
