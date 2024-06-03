@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
 @Service
 public class FireBaseService {
@@ -19,6 +20,13 @@ public class FireBaseService {
         Blob blob = bucket.create(key, inputStream, contentType);
 
         return blob.getMediaLink();
+    }
+
+    public void getFile(String key, OutputStream os) {
+        Bucket bucket = StorageClient.getInstance().bucket(fireBaseStorage);
+
+        Blob blob = bucket.get(key);
+        blob.downloadTo(os);
     }
 
     public void deleteFireBaseBucket(String key) {

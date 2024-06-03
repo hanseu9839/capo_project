@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
 
@@ -47,9 +46,15 @@ public class File {
         this.size = size;
     }
 
+    public String getPath() {
+        return "https://photocard.site/api/v1/file/" + getId();
+    }
+
     public String getThumbnailPath() {
-        return isHasThumbnail() ? (StringUtils.substringBefore(this.path, this.id.toString())
-                + ThumbnailImageGenerator.THUMBNAIL_PREFIX + this.id) : "";
+        //  return isHasThumbnail() ? (StringUtils.substringBefore(this.path, this.id.toString())
+        //      + ThumbnailImageGenerator.THUMBNAIL_PREFIX + this.id) : "";
+
+        return isHasThumbnail() ? "https://photocard.site/api/v1/file/" + ThumbnailImageGenerator.THUMBNAIL_PREFIX + getId() : "";
     }
 
     public void updateId(UUID id) {

@@ -5,6 +5,7 @@ import com.realworld.feature.file.service.FileNameGenerator;
 import com.realworld.feature.file.service.StorageService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -63,6 +64,14 @@ public class FileController {
                 SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.INSERT_SUCCESS.getMessage());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(fileUploadResponse);
+    }
+
+    @GetMapping("/{fileId}")
+    public void getFile(@AuthenticationPrincipal User user,
+                        @PathVariable String fileId,
+                        HttpServletResponse response) throws IOException {
+
+        cloudStorageService.getFile(fileId, response.getOutputStream());
     }
 
     @DeleteMapping("/{fileId}")

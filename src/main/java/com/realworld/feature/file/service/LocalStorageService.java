@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -75,5 +76,10 @@ public class LocalStorageService implements StorageService {
 
         // TODO: 파일 삭제는 직접ㅎㅎ
         fileJpaEntity.ifPresent(fileRepository::delete);
+    }
+
+    @Override
+    public void getFile(String id, OutputStream os) {
+        // 파일 가져오기
     }
 }
