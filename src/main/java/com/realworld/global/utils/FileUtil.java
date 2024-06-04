@@ -20,8 +20,7 @@ public class FileUtil {
             log.info("windows :: ");
             return rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources";
         } else if (osName.contains("linux")) {
-            log.info("linux :: ");
-            return File.separator + "app";
+            return rootPath + File.separator + "src" + File.separator + "main" + File.separator + "resources";
         }
 
         return File.separator + "home";
