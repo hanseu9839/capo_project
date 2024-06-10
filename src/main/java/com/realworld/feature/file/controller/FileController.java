@@ -25,7 +25,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/file")
+@RequestMapping("/v1/file")
 @RequiredArgsConstructor
 public class FileController {
 
@@ -33,7 +33,7 @@ public class FileController {
 
     @PostMapping("")
     public ResponseEntity<ApiResponse<List<FileResponse>>> uploadFiles(@AuthenticationPrincipal User user, @RequestParam(name = "file") MultipartFile[] multipartFiles) throws IOException {
-        
+
         List<FileResponse> fileResponseList = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
 

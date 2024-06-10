@@ -1,8 +1,8 @@
 package com.realworld.feature.token.controller;
 
-import com.realworld.feature.token.domain.Token;
 import com.realworld.feature.token.controller.request.ReissueRequest;
 import com.realworld.feature.token.controller.response.ReissueTokenResponse;
+import com.realworld.feature.token.domain.Token;
 import com.realworld.feature.token.service.TokenCommandService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class TokenController {
 
     private final TokenCommandService tokenCommandService;
 
     @PostMapping("/reissue")
-    public ResponseEntity<ApiResponse<ReissueTokenResponse>> reissue(HttpServletRequest request){
+    public ResponseEntity<ApiResponse<ReissueTokenResponse>> reissue(HttpServletRequest request) {
         String accessToken = request.getHeader("AccessToken");
         String refreshToken = request.getHeader("RefreshToken");
 
