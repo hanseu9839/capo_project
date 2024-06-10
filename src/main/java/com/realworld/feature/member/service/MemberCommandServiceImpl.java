@@ -51,7 +51,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
             throw new CustomLoginExceptionHandler(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg(), ErrorCode.LOGIN_DUPLICATION_ERROR);
         }
 
-        return repository.save(member.toEntity()).toDomain();
+        return repository.save(registMember.toEntity()).toDomain();
     }
 
     @Transactional
