@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Member {
-    private Long userSeq;
-
     private String userId;
 
     private String password;
@@ -40,7 +38,6 @@ public class Member {
 
     public MemberJpaEntity toEntity() {
         return MemberJpaEntity.builder()
-                .userSeq(getUserSeq())
                 .userId(getUserId())
                 .userEmail(getUserEmail())
                 .password(getPassword())

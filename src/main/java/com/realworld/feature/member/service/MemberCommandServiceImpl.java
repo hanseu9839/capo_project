@@ -37,7 +37,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         }
 
         Member registMember = Member.builder()
-                .userSeq(member.getUserSeq())
                 .userId(member.getUserId())
                 .password(passwordEncoder.encode(member.getPassword()))
                 .phoneNumber(member.getPhoneNumber())

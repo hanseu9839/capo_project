@@ -1,6 +1,7 @@
 package com.realworld.feature.member.entity;
 
 import com.realworld.feature.auth.Authority;
+import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,28 +11,18 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-@IdClass(MemberPK.class)
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id"}))
-//@SequenceGenerator(
-//        name = "USER_PK_SEQUENCE",
-//        sequenceName = "USER_SEQ",
-//        initialValue = 1,
-//        allocationSize = 50)
 public class MemberJpaEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "user_seq")
-    private Long userSeq;
 
     @Id
     @Column(name = "user_id")
@@ -56,9 +47,11 @@ public class MemberJpaEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LikeJpaEntity> likes;
+
     @Builder
-    public MemberJpaEntity(Long userSeq, String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority, String nickname) {
-        this.userSeq = userSeq;
+    public MemberJpaEntity(String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority, String nickname) {
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
@@ -71,8 +64,7 @@ public class MemberJpaEntity {
     }
 
     @Builder
-    public MemberJpaEntity(Long userSeq, String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority) {
-        this.userSeq = userSeq;
+    public MemberJpaEntity(String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority) {
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
@@ -95,7 +87,6 @@ public class MemberJpaEntity {
 
     public Member toDomain() {
         return Member.builder()
-                .userSeq(getUserSeq())
                 .password(getPassword())
                 .userId(getUserId())
                 .userEmail(getUserEmail())
