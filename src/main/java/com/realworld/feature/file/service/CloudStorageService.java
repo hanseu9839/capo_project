@@ -53,7 +53,6 @@ public class CloudStorageService implements StorageService {
                                     "image/" + ThumbnailImageGenerator.THUMBNAIL_IMAGE_EXTENSION);
                         }
                     }
-
                     file.updateHasThumbnail(true);
                 } catch (Exception e) {
                     log.error("Error create thumbnail image", e);
@@ -86,8 +85,8 @@ public class CloudStorageService implements StorageService {
     }
 
     @Override
-    public void getFile(String id, OutputStream os) {
-        fireBaseService.getFile(id, os);
+    public String getFile(String id, OutputStream os) {
+        return fireBaseService.getFile(id, os);
     }
 
     @Override

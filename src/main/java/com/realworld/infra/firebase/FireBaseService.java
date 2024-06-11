@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FireBaseService {
@@ -22,11 +24,14 @@ public class FireBaseService {
         return blob.getMediaLink();
     }
 
-    public void getFile(String key, OutputStream os) {
+    public String getFile(String key, OutputStream os) {
         Bucket bucket = StorageClient.getInstance().bucket(fireBaseStorage);
 
         Blob blob = bucket.get(key);
-        blob.downloadTo(os);
+
+        URL url = blob.signUrl(1, TimeUnit.HOURS);
+
+        return url.toString();
     }
 
     public void deleteFireBaseBucket(String key) {

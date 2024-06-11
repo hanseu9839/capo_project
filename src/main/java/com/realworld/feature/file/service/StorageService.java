@@ -10,5 +10,5 @@ public interface StorageService {
 
     void delete(String userId, String fileId);
 
-    void getFile(String id, OutputStream os);
+    String getFile(String id, OutputStream os);
 }

@@ -1,5 +1,6 @@
 package com.realworld.feature.file.controller;
 
+import com.realworld.feature.file.controller.Response.GetFileResponse;
 import com.realworld.feature.file.domain.File;
 import com.realworld.feature.file.service.FileNameGenerator;
 import com.realworld.feature.file.service.StorageService;
@@ -67,11 +68,18 @@ public class FileController {
     }
 
     @GetMapping("/{fileId}")
-    public void getFile(@AuthenticationPrincipal User user,
-                        @PathVariable String fileId,
-                        HttpServletResponse response) throws IOException {
+    public ResponseEntity<ApiResponse<GetFileResponse>> getFile(@AuthenticationPrincipal User user,
+                                                                @PathVariable String fileId,
+                                                                HttpServletResponse response) throws IOException {
 
-        cloudStorageService.getFile(fileId, response.getOutputStream());
+        String url = cloudStorageService.getFile(fileId, response.getOutputStream());
+        GetFileResponse fileResponse = GetFileResponse.builder()
+                .imageUrl(url)
+                .build();
+
+        ApiResponse<GetFileResponse> apiResponse = new ApiResponse<>(fileResponse, SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     @DeleteMapping("/{fileId}")

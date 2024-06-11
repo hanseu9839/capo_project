@@ -79,7 +79,8 @@ public class LocalStorageService implements StorageService {
     }
 
     @Override
-    public void getFile(String id, OutputStream os) {
+    public String getFile(String id, OutputStream os) {
         // 파일 가져오기
+        return null;
     }
 }
