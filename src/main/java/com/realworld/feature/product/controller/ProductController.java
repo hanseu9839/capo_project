@@ -163,6 +163,7 @@ public class ProductController {
                 .member(product.getMember())
                 .category(product.getCategory())
                 .title(product.getTitle())
+                .price(product.getPrice())
                 .content(product.getContent())
                 .thumbnailUrl(product.getThumbnailUrl())
                 .createdAt(product.getCreatedAt())
