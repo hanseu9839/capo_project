@@ -29,8 +29,8 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     String[] excludeDevURI = new String[]{"/api/v1/login", "/api/v1/member", "/api/v1/duplication-check/user-id/**", "/api/v1/auth/email", "/api/v1/auth/email/**", "/error", "/api/v1/reissue", "/api/v1/user/find-userId/**", "/api/v1/user/find-password/**", "/api/v1/"};
     String[] excludeLocalURI = new String[]{"/v1/login", "/v1/member", "/v1/duplication-check/user-id/**", "/v1/auth/email", "/v1/auth/email/**", "/error", "/v1/reissue", "/v1/user/find-userId/**", "/v1/user/find-password/**"};
-    String[] getExcludeDevURI = new String[]{"/api/v1/cards", "/api/v1/cards/**"};
-    String[] getExcludeLocalURI = new String[]{"/api/v1/cards", "/api/v1/cards/**"};
+    String[] getExcludeDevURI = new String[]{"/api/v1/cards", "/api/v1/cards/**", "/api/v1/file/**"};
+    String[] getExcludeLocalURI = new String[]{"/api/v1/cards", "/api/v1/cards/**", "/api/v1/file/**"};
 
     // 비밀번호 암호화
     @Bean
