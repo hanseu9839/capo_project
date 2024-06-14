@@ -1,6 +1,8 @@
 package com.realworld.global.category;
 
 public enum GroupCategory {
+    // 전체
+    ALL,
     // 남성그룹
     BOY_GROUP,
     // 여자그룹

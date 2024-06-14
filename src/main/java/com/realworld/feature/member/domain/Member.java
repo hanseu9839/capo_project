@@ -2,6 +2,7 @@ package com.realworld.feature.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.feature.auth.Authority;
+import com.realworld.feature.file.domain.File;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import lombok.*;
 
@@ -36,6 +37,8 @@ public class Member {
 
     private String nickname;
 
+    private File file;
+
     public MemberJpaEntity toEntity() {
         return MemberJpaEntity.builder()
                 .userId(getUserId())
@@ -46,6 +49,7 @@ public class Member {
                 .createDt(getCreateDt())
                 .regDt(getRegDt())
                 .delYn(getDelYn())
+                .file(getFile().toEntity())
                 .authority(getAuthority())
                 .build();
     }

@@ -1,7 +1,6 @@
 package com.realworld.feature.file.entity;
 
 import com.realworld.feature.file.domain.File;
-import com.realworld.feature.member.entity.MemberJpaEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,13 +23,6 @@ public class FileJpaEntity {
     @Id
     @Column
     private UUID id;
-
-    @Column(name = "user_id")
-    private String userId;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    private MemberJpaEntity member;
 
     private String path;
 

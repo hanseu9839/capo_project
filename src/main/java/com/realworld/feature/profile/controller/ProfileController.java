@@ -30,4 +30,6 @@ public class ProfileController {
                 SuccessCode.UPDATE_SUCCESS.getMessage());
         return ResponseEntity.ok(updateApiResponse);
     }
+
+    
 }

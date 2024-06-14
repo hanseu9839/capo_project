@@ -65,7 +65,7 @@ public class LocalStorageService implements StorageService {
             throw new FileExceptionHandler("파일 업로드 중 오류가 발생했습니다.", ErrorCode.BAD_REQUEST_ERROR);
         }
 
-        fileRepository.save(file.toEntity(userId));
+        fileRepository.save(file.toEntity());
 
         return file;
     }

@@ -61,10 +61,9 @@ public class File {
         this.id = id;
     }
 
-    public FileJpaEntity toEntity(String userId) {
+    public FileJpaEntity toEntity() {
         return FileJpaEntity.builder()
                 .id(getId())
-                .userId(userId)
                 .name(getName())
                 .path(getPath())
                 .extension(getExtension())
