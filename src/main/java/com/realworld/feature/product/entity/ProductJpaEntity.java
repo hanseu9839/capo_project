@@ -1,5 +1,6 @@
 package com.realworld.feature.product.entity;
 
+import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.global.category.GroupCategory;
@@ -76,12 +77,15 @@ public class ProductJpaEntity {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LikeJpaEntity> likes;
 
     @Builder
-    public ProductJpaEntity(Long productSeq, String userId, String title, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, String thumbnailUrl, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
+    public ProductJpaEntity(Long productSeq, String userId, String title, int likeCount, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, String thumbnailUrl, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
         this.productSeq = productSeq;
         this.userId = userId;
         this.title = title;
+        this.likeCount = likeCount;
         this.member = member;
         this.content = content;
         this.price = price;
@@ -96,8 +100,9 @@ public class ProductJpaEntity {
     public Product toDomain() {
         return Product.builder()
                 .productSeq(this.productSeq)
-                .images(this.images.stream().map(ProductFileJpaEntity::toDomain).collect(Collectors.toList()))
+//                .images(this.images.stream().map(ProductFileJpaEntity::toDomain).collect(Collectors.toList()))
                 .title(this.title)
+                .likeCount(this.likeCount)
                 .userId(this.userId)
                 .member(this.member.toDomain())
                 .content(this.content)
@@ -117,6 +122,7 @@ public class ProductJpaEntity {
                 .title(this.title)
                 .userId(this.userId)
                 .member(this.member.productToDomain())
+                .likeCount(this.likeCount)
                 .content(this.content)
                 .price(this.price)
                 .category(this.category)
@@ -136,6 +142,7 @@ public class ProductJpaEntity {
                 .member(this.member.productToDomain())
                 .content(this.content)
                 .price(this.price)
+                .likeCount(this.likeCount)
                 .category(this.category)
                 .views(this.views)
                 .thumbnailUrl(this.thumbnailUrl)
@@ -153,6 +160,7 @@ public class ProductJpaEntity {
                 .member(this.member.productToDomain())
                 .content(this.content)
                 .price(this.price)
+                .likeCount(this.likeCount)
                 .category(this.category)
                 .views(this.views)
                 .thumbnailUrl(this.thumbnailUrl)
@@ -161,5 +169,20 @@ public class ProductJpaEntity {
                 .build();
     }
 
+    public Product likeToDomain() {
+        return Product.builder()
+                .productSeq(this.productSeq)
+                .title(this.title)
+                .userId(this.userId)
+                .content(this.content)
+                .price(this.price)
+                .likeCount(this.likeCount)
+                .category(this.category)
+                .views(this.views)
+                .thumbnailUrl(this.thumbnailUrl)
+                .createdAt(this.createAt)
+                .modifiedAt(this.modifiedAt)
+                .build();
+    }
 }
 

@@ -18,4 +18,10 @@ public interface ProductCommandService {
     Product productUpdates(User user, ProductUpdateRequest request);
 
     void productDelete(User user, Product product);
+
+    void raiseLikeCount(Product product);
+
+    void decreaseLikeCount(Product product);
+
+    void raiseViews(Long productSeq);
 }

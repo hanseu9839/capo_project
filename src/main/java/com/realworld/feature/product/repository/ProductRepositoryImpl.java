@@ -4,10 +4,10 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.realworld.feature.like.entity.QLikeJpaEntity;
 import com.realworld.feature.member.entity.QMemberJpaEntity;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.entity.ProductJpaEntity;
-import com.realworld.feature.product.entity.QProductFileJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
 import com.realworld.global.category.GroupCategory;
 import com.realworld.global.code.ErrorCode;
@@ -23,12 +23,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QProductJpaEntity product = QProductJpaEntity.productJpaEntity;
     private final QMemberJpaEntity member = QMemberJpaEntity.memberJpaEntity;
-
-    private final QProductFileJpaEntity productFile = QProductFileJpaEntity.productFileJpaEntity;
+    private final QLikeJpaEntity like = QLikeJpaEntity.likeJpaEntity;
 
     @Override
     public List<Product> getSearchProductList(Pageable pageable, String search, GroupCategory category, Long seq) {
-
+        // 좋아요 수는 product에 물려있기 때문에 조인 x likeCount
         List<ProductJpaEntity> products = queryFactory
                 .select(product)
                 .from(product)
@@ -94,6 +93,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     case "modifiedAt" -> new OrderSpecifier<>(direction, product.modifiedAt);
                     case "createAt" -> new OrderSpecifier<>(direction, product.createAt);
                     case "views" -> new OrderSpecifier<>(direction, product.views);
+                    case "likeCount" -> new OrderSpecifier<>(direction, product.likeCount);
                     default -> new OrderSpecifier<>(direction, product.productSeq);
                 };
             }

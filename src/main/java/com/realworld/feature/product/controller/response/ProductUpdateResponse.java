@@ -35,6 +35,8 @@ public class ProductUpdateResponse {
 
     private int views;
 
+    private int likeCount;
+
     private String thumbnailId;
 
     private LocalDateTime createAt;

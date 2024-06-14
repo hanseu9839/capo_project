@@ -37,6 +37,8 @@ public class Product {
 
     private GroupCategory category;
 
+    private int likeCount;
+
     private Long price;
 
     private int views;
@@ -55,6 +57,7 @@ public class Product {
         return ProductJpaEntity.builder()
                 .userId(this.userId)
                 .images(this.images.stream().map(ProductFile::searchToEntity).collect(Collectors.toList()))
+                .likeCount(this.likeCount)
                 .productSeq(this.productSeq)
                 .title(this.title)
                 .member(this.member.toEntity())

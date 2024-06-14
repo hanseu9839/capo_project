@@ -131,4 +131,24 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
         repository.delete(product.toEntity());
     }
+
+    @Transactional
+    @Override
+    public void raiseLikeCount(Product product) {
+        ProductJpaEntity data = repository.findById(product.getProductSeq()).orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT));
+        data.setLikeCount(data.getLikeCount() + 1);
+    }
+
+    @Override
+    public void decreaseLikeCount(Product product) {
+        ProductJpaEntity data = repository.findById(product.getProductSeq()).orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT));
+        data.setLikeCount(data.getLikeCount() - 1);
+    }
+
+    @Override
+    @Transactional
+    public void raiseViews(Long productSeq) {
+        ProductJpaEntity product = repository.findById(productSeq).orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT));
+        product.setViews(product.getViews() + 1);
+    }
 }

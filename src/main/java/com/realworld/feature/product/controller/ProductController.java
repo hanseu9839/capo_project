@@ -92,6 +92,8 @@ public class ProductController {
                 .content(product.getContent())
                 .category(product.getCategory())
                 .price(product.getPrice())
+                .views(product.getViews())
+                .likeCount(product.getLikeCount())
                 .thumbnailUrl(product.getThumbnailUrl())
                 .createAt(product.getCreatedAt())
                 .modifiedAt(product.getModifiedAt())
@@ -131,6 +133,7 @@ public class ProductController {
                 .title(details.getTitle())
                 .content(details.getContent())
                 .views(details.getViews())
+                .likeCount(details.getLikeCount())
                 .createAt(details.getCreatedAt())
                 .modifiedAt(details.getModifiedAt())
                 .images(images)
@@ -161,6 +164,7 @@ public class ProductController {
         ProductDetailsResponse response = ProductDetailsResponse.builder()
                 .productSeq(product.getProductSeq())
                 .member(product.getMember())
+                .likeCount(product.getLikeCount())
                 .category(product.getCategory())
                 .title(product.getTitle())
                 .price(product.getPrice())
@@ -170,6 +174,8 @@ public class ProductController {
                 .modifiedAt(product.getModifiedAt())
                 .images(product.getImages())
                 .build();
+
+        productCommandService.raiseViews(productSeq);
 
         ApiResponse<ProductDetailsResponse> apiResponse = new ApiResponse<>(response,
                 SuccessCode.SELECT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());

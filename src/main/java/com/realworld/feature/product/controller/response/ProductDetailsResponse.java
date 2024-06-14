@@ -35,6 +35,8 @@ public class ProductDetailsResponse {
 
     private int views;
 
+    private int likeCount;
+
     private String thumbnailUrl;
 
     private LocalDateTime createdAt;

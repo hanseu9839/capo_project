@@ -33,6 +33,10 @@ public class ProductGenerationResponse {
 
     private Long price;
 
+    private int views;
+
+    private int likeCount;
+
     private String thumbnailUrl;
 
     private LocalDateTime createAt;

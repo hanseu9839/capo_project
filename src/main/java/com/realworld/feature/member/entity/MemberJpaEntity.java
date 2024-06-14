@@ -1,6 +1,7 @@
 package com.realworld.feature.member.entity;
 
 import com.realworld.feature.auth.Authority;
+import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString
 @EqualsAndHashCode
@@ -45,8 +47,8 @@ public class MemberJpaEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-//    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<LikeJpaEntity> likes;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LikeJpaEntity> likes;
 
     @Builder
     public MemberJpaEntity(String userId, String password, String phoneNumber, String userEmail, String delYn, LocalDateTime regDt, LocalDateTime createDt, Authority authority, String nickname) {
