@@ -64,7 +64,7 @@ public class QTemporarilyProductJpaEntity extends EntityPathBase<TemporarilyProd
 
     public QTemporarilyProductJpaEntity(Class<? extends TemporarilyProductJpaEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.realworld.feature.member.entity.QMemberJpaEntity(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new com.realworld.feature.member.entity.QMemberJpaEntity(forProperty("member"), inits.get("member")) : null;
     }
 
 }

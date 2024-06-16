@@ -5,9 +5,12 @@ import com.realworld.feature.auth.Authority;
 import com.realworld.feature.file.domain.File;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+@Slf4j
 @Getter
 @Setter
 @ToString
@@ -23,6 +26,7 @@ public class Member {
     private String currentPassword;
     private String newPassword;
 
+    private String content;
     private String phoneNumber;
 
     private String userEmail;
@@ -49,7 +53,7 @@ public class Member {
                 .createDt(getCreateDt())
                 .regDt(getRegDt())
                 .delYn(getDelYn())
-                .file(getFile().toEntity())
+                .file(Objects.isNull(getFile()) ? null : getFile().toEntity())
                 .authority(getAuthority())
                 .build();
     }

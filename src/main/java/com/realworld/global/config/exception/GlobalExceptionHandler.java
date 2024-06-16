@@ -206,6 +206,8 @@ public class GlobalExceptionHandler {
             response = ErrorResponse.of(ErrorCode.PASSWORD_REQUEST_ERROR, ex.getMessage());
         else if (ex.getMessage().equals(ErrorCode.NOT_EQUAL_PASSWORD.getMessage()))
             response = ErrorResponse.of(ErrorCode.NOT_EQUAL_PASSWORD, ex.getMessage());
+        else if (ex.getMessage().equals(ErrorCode.NOT_EXISTS_USERID.getMessage()))
+            response = ErrorResponse.of(ErrorCode.NOT_EXISTS_USERID, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

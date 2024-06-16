@@ -80,7 +80,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<ProductGenerationResponse>> generation(@AuthenticationPrincipal User user, @RequestBody ProductGenerationRequest request) {
-        Product product = productCommandService.generation(user, request);
+        Product product = productCommandService.generation(user.getUsername(), request);
 
         List<ProductFile> images = new ArrayList<>();
         request.getImages().forEach(imageId -> images.add(productFileCommandService.save(imageId, product)));

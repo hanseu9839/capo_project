@@ -66,9 +66,9 @@ public class LikeController {
         } else { // 좋아요 있는 경우
             productCommandService.decreaseLikeCount(product);
             likeCommandService.deleteByMemberAndProduct(member, product);
-            apiResponse = new ApiResponse<>(null, SuccessCode.INSERT_SUCCESS.getStatus(), SuccessCode.SELECT_SUCCESS.getMessage());
+            apiResponse = new ApiResponse<>(null, SuccessCode.DELETE_SUCCESS.getStatus(), SuccessCode.DELETE_SUCCESS.getMessage());
         }
-
+        
         return ResponseEntity.ok(apiResponse);
     }
 

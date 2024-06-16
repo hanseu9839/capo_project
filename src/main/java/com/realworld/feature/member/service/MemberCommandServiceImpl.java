@@ -51,7 +51,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         if (repository.existsByUserId(registMember.getUserId()) || repository.existsByUserEmail(registMember.getUserEmail())) {
             throw new CustomLoginExceptionHandler(ResultErrorMsgCode.LOGIN_DUPLICATION_ERROR.getMsg(), ErrorCode.LOGIN_DUPLICATION_ERROR);
         }
-
         return repository.save(registMember.toEntity()).toDomain();
     }
 

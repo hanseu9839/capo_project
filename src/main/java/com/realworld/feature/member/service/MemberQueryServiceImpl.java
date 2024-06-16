@@ -3,6 +3,8 @@ package com.realworld.feature.member.service;
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import com.realworld.feature.member.repository.MemberRepository;
+import com.realworld.global.code.ErrorCode;
+import com.realworld.global.config.exception.CustomMemberExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,10 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public Member getMemberByUserId(String userId) {
-        return repository.findByUserId(userId).toDomain();
+        MemberJpaEntity member = repository.findByUserId(userId);
+        if (member == null) throw new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_USERID);
+        
+        return member.toDomain();
     }
 
     @Override

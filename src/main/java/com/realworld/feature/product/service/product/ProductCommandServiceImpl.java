@@ -93,8 +93,8 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     }
 
     @Override
-    public Product generation(User user, ProductGenerationRequest request) {
-        Member member = memberQueryService.getMemberByUserId(user.getUsername());
+    public Product generation(String userId, ProductGenerationRequest request) {
+        Member member = memberQueryService.getMemberByUserId(userId);
 
         Product product = Product.builder()
                 .title(request.getTitle())

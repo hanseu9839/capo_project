@@ -53,6 +53,7 @@ public class Product {
 
     private Member member;
 
+
     public ProductJpaEntity toEntity() {
         return ProductJpaEntity.builder()
                 .userId(this.userId)

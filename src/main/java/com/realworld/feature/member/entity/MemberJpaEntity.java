@@ -6,6 +6,7 @@ import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @ToString
 @EqualsAndHashCode
@@ -25,6 +27,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id"}))
+@Slf4j
 public class MemberJpaEntity {
 
     @Id
@@ -40,6 +43,8 @@ public class MemberJpaEntity {
     private String delYn;
 
     private String nickname;
+
+    private String content;
 
     @OneToOne
     @JoinColumn(name = "file_id")
@@ -64,8 +69,9 @@ public class MemberJpaEntity {
                 .userId(getUserId())
                 .userEmail(getUserEmail())
                 .phoneNumber(getPhoneNumber())
-                .file(getFile().toDomain())
+                .file(Objects.isNull(getFile()) ? null : getFile().toDomain())
                 .nickname(getNickname())
+                .content(getContent())
                 .createDt(getCreateDt())
                 .regDt(getRegDt())
                 .delYn(getDelYn())

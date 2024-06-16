@@ -1,7 +1,6 @@
 package com.realworld.feature.signup;
 
 import com.realworld.feature.file.domain.File;
-import com.realworld.feature.file.service.FileNameGenerator;
 import com.realworld.feature.file.service.StorageService;
 import com.realworld.feature.member.controller.request.RegisterMemberRequest;
 import com.realworld.feature.member.controller.response.MemberResponse;
@@ -10,20 +9,18 @@ import com.realworld.feature.member.service.MemberCommandService;
 import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
+import com.realworld.global.utils.FileUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLConnection;
 import java.util.UUID;
 
 @RestController
@@ -50,31 +47,13 @@ public class SignUpController {
     }
 
     /**
-     * TODO : 로직 정리 필요 너무 더러움..
      * 회원 가입하기
      */
     @Transactional
     @PostMapping("/member")
     public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestPart("request") @Valid RegisterMemberRequest request, @RequestPart("multipartFile") MultipartFile multipartFile) throws IOException {
 
-        String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
-
-        if (contentType == null) {
-            contentType = multipartFile.getContentType();
-        }
-        FileNameGenerator generator = new FileNameGenerator();
-
-        String fileName = generator.getMultipartFileName(multipartFile);
-
-        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-
-        File file = File.builder()
-                .name(fileName)
-                .size(multipartFile.getSize())
-                .extension(fileExtension)
-                .contentType(contentType)
-                .build();
-
+        File file = FileUtil.fileSetting(multipartFile);
         UUID fileId = null;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {

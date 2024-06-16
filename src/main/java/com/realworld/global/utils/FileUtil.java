@@ -1,13 +1,39 @@
 package com.realworld.global.utils;
 
+import com.realworld.feature.file.service.FileNameGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.URLConnection;
+
 
 @Slf4j
 @Component
 public class FileUtil {
+
+    public static com.realworld.feature.file.domain.File fileSetting(MultipartFile multipartFile) throws IOException {
+        String contentType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(multipartFile.getInputStream()));
+        if (contentType == null) {
+            contentType = multipartFile.getContentType();
+        }
+
+        FileNameGenerator fileNameGenerator = new FileNameGenerator();
+        String fileName = fileNameGenerator.getMultipartFileName(multipartFile);
+
+        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+
+        return com.realworld.feature.file.domain.File.builder()
+                .name(fileName)
+                .size(multipartFile.getSize())
+                .extension(fileExtension)
+                .contentType(contentType)
+                .build();
+    }
 
     public String osFilePathSeparation() {
         String osName = System.getProperty("os.name").toLowerCase();

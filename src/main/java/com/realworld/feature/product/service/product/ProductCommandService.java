@@ -13,7 +13,7 @@ public interface ProductCommandService {
 
     List<Product> convertProductGeneration(User user, List<ConvertProductGenerationRequest> request);
 
-    Product generation(User user, ProductGenerationRequest request);
+    Product generation(String userId, ProductGenerationRequest request);
 
     Product productUpdates(User user, ProductUpdateRequest request);
 
@@ -24,4 +24,6 @@ public interface ProductCommandService {
     void decreaseLikeCount(Product product);
 
     void raiseViews(Long productSeq);
+
 }
+
