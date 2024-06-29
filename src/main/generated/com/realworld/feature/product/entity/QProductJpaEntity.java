@@ -34,6 +34,8 @@ public class QProductJpaEntity extends EntityPathBase<ProductJpaEntity> {
 
     public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
+    public final ListPath<com.realworld.feature.like.entity.LikeJpaEntity, com.realworld.feature.like.entity.QLikeJpaEntity> likes = this.<com.realworld.feature.like.entity.LikeJpaEntity, com.realworld.feature.like.entity.QLikeJpaEntity>createList("likes", com.realworld.feature.like.entity.LikeJpaEntity.class, com.realworld.feature.like.entity.QLikeJpaEntity.class, PathInits.DIRECT2);
+
     public final com.realworld.feature.member.entity.QMemberJpaEntity member;
 
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = createDateTime("modifiedAt", java.time.LocalDateTime.class);
@@ -68,7 +70,7 @@ public class QProductJpaEntity extends EntityPathBase<ProductJpaEntity> {
 
     public QProductJpaEntity(Class<? extends ProductJpaEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.realworld.feature.member.entity.QMemberJpaEntity(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new com.realworld.feature.member.entity.QMemberJpaEntity(forProperty("member"), inits.get("member")) : null;
     }
 
 }

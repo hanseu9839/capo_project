@@ -43,6 +43,8 @@ public class Member {
 
     private File file;
 
+    private String oauthImage;
+
     public MemberJpaEntity toEntity() {
         return MemberJpaEntity.builder()
                 .userId(getUserId())
@@ -54,6 +56,7 @@ public class Member {
                 .regDt(getRegDt())
                 .delYn(getDelYn())
                 .file(Objects.isNull(getFile()) ? null : getFile().toEntity())
+                .oauthImage(getOauthImage())
                 .authority(getAuthority())
                 .build();
     }

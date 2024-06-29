@@ -59,6 +59,8 @@ public class MemberJpaEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Column(name = "oauth_image")
+    private String oauthImage;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeJpaEntity> likes;

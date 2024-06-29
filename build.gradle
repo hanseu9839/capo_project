@@ -22,8 +22,8 @@ repositories {
 }
 
 dependencies {
-    // Junit library
-    testImplementation 'junit:junit:4.12' // JUnit 4
+
+
     // QueryDSL JPA 라이브러리
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
@@ -61,13 +61,22 @@ dependencies {
     //uuid
     implementation group: 'com.fasterxml.uuid', name: 'java-uuid-generator', version: '4.3.0'
     implementation 'com.google.firebase:firebase-admin:9.2.0'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation("org.springframework.security:spring-security-test")
-    implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
-
     //aws
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    //oauth2
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+
+    // Junit library
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core:3.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation 'com.querydsl:querydsl-jpa'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 }
 
 tasks.named('test') {
