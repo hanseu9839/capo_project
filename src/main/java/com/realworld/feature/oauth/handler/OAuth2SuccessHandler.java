@@ -1,5 +1,6 @@
 package com.realworld.feature.oauth.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.realworld.feature.token.domain.Token;
 import com.realworld.feature.token.service.TokenCommandService;
 import com.realworld.global.config.jwt.JwtTokenProvider;
@@ -20,9 +21,10 @@ import java.io.IOException;
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    private static final String URI = "/auth/success";
+    private static final String URI = "/";
     private final JwtTokenProvider tokenProvider;
     private final TokenCommandService tokenCommandService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -32,11 +34,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         Token token = tokenProvider.createToken(authentication);
         token.setUserId(authentication.getName());
-        
+
         tokenCommandService.saveToken(token);
         String redirectUrl = UriComponentsBuilder.fromUriString(URI)
-                .queryParam("token", token)
                 .build().toUriString();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+
+        String result = objectMapper.writeValueAsString(token);
+
+        response.getWriter().write(result);
         response.sendRedirect(redirectUrl);
     }
 }
