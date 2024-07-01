@@ -60,7 +60,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v3
       with:
         submodules: true
         token: ${{ secrets.CAPO_TOKEN }}
