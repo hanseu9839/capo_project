@@ -89,7 +89,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
-        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }} # PRIVATE_KEY
         port: 22
         script: |
           sudo docker rm -f $(docker ps -qa)
