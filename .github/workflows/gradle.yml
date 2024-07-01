@@ -86,15 +86,17 @@ jobs:
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.3
       id: deploy
+      env: 
+        COMPOSE: "/home/capo_project/docker-compose.yml"
       with:
         host: ${{ secrets.EC2_HOST }} # EC2_HOST 키
         username: ubuntu
         key: ${{ secrets.EC2_PRIVATE_KEY }} # PRIVATE_KEY
         port: 22
-        envs: GITHUB_SHA
+        envs: COMPOSE
         script: |
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
-          sudo docker-compose up -d
+          sudo docker-compose -f $COMPOSE up -d
           sudo docker image prune -f
         
