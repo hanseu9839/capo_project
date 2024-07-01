@@ -91,9 +91,10 @@ jobs:
         username: ubuntu
         key: ${{ secrets.EC2_PRIVATE_KEY }} # PRIVATE_KEY
         port: 22
+        envs: GITHUB_SHA
         script: |
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
-          docker-compose up -d
-          docker image prune -f
+          sudo docker-compose up -d
+          sudo docker image prune -f
         
