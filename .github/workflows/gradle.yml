@@ -20,7 +20,6 @@ jobs:
        MYSQL_URL: ${{ secrets.MYSQL_URL }}
        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       working-directory: ./be/stackoverflow-be
     
     steps:
     - name: Checkout repository  # Step 1: 코드 저장소 체크아웃
@@ -38,15 +37,15 @@ jobs:
         server-username: ${{ github.actor }}  # GitHub 액터의 사용자 이름 사용
         server-password: ${{ secrets.GITHUB_TOKEN }}  # GitHub 토큰 사용
         overwrite-settings: true  # 기존 설정 덮어쓰기
-        working-directory: ./be/stackoverflow-be
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
       
     - name: Build with Gradle
       run: ./gradlew build
-      working-directory: ${{ env.working-directory }}
       
     - name: Build with Gradle  # Step 4: Gradle로 프로젝트 빌드
       run: ./gradlew clean build  # Gradle의 clean 및 build 명령 실행
-      working-directory: ${{ env.working-directory }}
         
     # docker hub 로그인 
     - name: docker login
@@ -69,7 +68,6 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
-      working-directory: ${{ env.working-directory }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
