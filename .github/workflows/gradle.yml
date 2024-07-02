@@ -20,7 +20,7 @@ jobs:
        MYSQL_URL: ${{ secrets.MYSQL_URL }}
        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       working-directory: ./capo/work
+       working-directory: ./be/stackoverflow-be
     
     steps:
     - name: Checkout repository  # Step 1: 코드 저장소 체크아웃
@@ -40,29 +40,21 @@ jobs:
         overwrite-settings: true  # 기존 설정 덮어쓰기
         working-directory: ./be/stackoverflow-be
       
-    - name: Cache Gradle packages  # Step 3: Gradle 패키지 캐시
-      uses: actions/cache@v3  # 최신 버전(v3)의 캐싱 액션 사용
-      with:
-        path: ~/.gradle  # Gradle 패키지의 캐시 경로
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  # Gradle 파일의 해시를 기반으로한 캐시 키
-        restore-keys: ${{ runner.os }}-gradle  # 캐시 복원 키
+    - name: Build with Gradle
+      run: ./gradlew build
       working-directory: ${{ env.working-directory }}
       
     - name: Build with Gradle  # Step 4: Gradle로 프로젝트 빌드
       run: ./gradlew clean build  # Gradle의 clean 및 build 명령 실행
       working-directory: ${{ env.working-directory }}
-      
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-        token: ${{ secrets.CAPO_TOKEN }}
         
     # docker hub 로그인 
     - name: docker login
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}      
+        password: ${{ secrets.DOCKERHUB_PASSWORD }} 
+        
   # Docker 이미지 빌드 
     - name: Docker build & Push
       run: |
