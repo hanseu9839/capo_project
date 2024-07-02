@@ -94,7 +94,7 @@ jsypt:
   encryptor:
     bean: jasyptStringEncryptor
 jwt:
-  secret: n42VY/OqNLyuiwq5wr+f+Ko5ozRqwlRHCOyufbkhvgo=
+  secret: ${JWT_KET}
 
 cloud:
   aws:
