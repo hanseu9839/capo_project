@@ -9,7 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  
+
+    env:
+      GOOGLE_SERVICES_JSON: ${{ secrets.FIREBASE_JSON }}
+    
     steps:
     - name: Checkout repository  # Step 1: 코드 저장소 체크아웃
       uses: actions/checkout@v3  # 최신 버전(v3)의 checkout 액션 사용
@@ -29,10 +32,7 @@ jobs:
         
     - name: create secrets file
       run: |
-          cd ./src/main/resources
-          ls -a .
-          touch ./photocard-firebase-adminsdk.json 
-          echo "${{secrets.FIREBASE_JSON}}" > ./photocard-firebase-adminsdk.json 
+          echo "GOOGLE_SERVICES_JSON" > ./src/main/resources/photocard-firebase-adminsdk.json 
       shell: bash
       
     - name: Cache Gradle packages  # Step 3: Gradle 패키지 캐시
