@@ -60,7 +60,7 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
     //uuid
     implementation group: 'com.fasterxml.uuid', name: 'java-uuid-generator', version: '4.3.0'
-    implementation 'com.google.firebase:firebase-admin:9.2.0'
+//    implementation 'com.google.firebase:firebase-admin:9.2.0'
     //aws
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 

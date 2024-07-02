@@ -19,7 +19,7 @@ public class AwsService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    
+
     public String uploadS3Bucket(InputStream inputStream, String key, long fileSize, String contentType) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(fileSize);
@@ -30,6 +30,10 @@ public class AwsService {
         amazonS3.putObject(putObjectRequest);
 
         return amazonS3.getUrl(bucket, key).toString();
+    }
+
+    public String getFile(String fileName) {
+        return amazonS3.getUrl(bucket, fileName).toString();
     }
 
     public void deleteS3Bucket(String key) {
