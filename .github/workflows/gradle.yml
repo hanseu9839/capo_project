@@ -65,7 +65,7 @@ jobs:
                     --build-arg MYSQL_USER=$MYSQL_USER \
                     --build-arg MYSQL_PASSWORD=$MYSQL_PASSWORD \
                     --build-arg MYSQL_URL=$.MYSQL_URL \
-        -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
 
