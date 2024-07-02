@@ -57,14 +57,14 @@ jobs:
   # Docker 이미지 빌드 
     - name: Docker build & Push
       run: |
-        docker build --build-args G_CLIENT_ID = "${{ env.G_CLIENT_ID }}" \
-        --build-args G_CLIENT_SECRET="${{ env.G_CLIENT_SECRET }}" \
-        --build-args K_CLIENT_ID="${{ env.K_CLIENT_ID }}" \
-        --build-args K_CLIENT_SECRET="${{ env.K_CLIENT_SECRET }}" \
-        --build-args JWT_SECRET_KEY="${{ env.JWT_SECRET_KEY }}" \
-        --build-args MYSQL_USER="${{ env.MYSQL_USER }}" \
-        --build-args MYSQL_PASSWORD="${{ env.MYSQL_PASSWORD }}" \
-        --build-args MYSQL_URL="${{ env.MYSQL_URL }}" \
+        docker build --build-arg G_CLIENT_ID=$G_CLIENT_ID \
+                    --build-arg G_CLIENT_SECRET=$G_CLIENT_SECRET \
+                    --build-arg K_CLIENT_ID=$K_CLIENT_ID \
+                    --build-arg K_CLIENT_SECRET=$K_CLIENT_SECRET \
+                    --build-arg JWT_SECRET_KEY=$JWT_SECRET_KEY \
+                    --build-arg MYSQL_USER=$MYSQL_USER \
+                    --build-arg MYSQL_PASSWORD=$MYSQL_PASSWORD \
+                    --build-arg MYSQL_URL=$.MYSQL_URL \
         -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
