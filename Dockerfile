@@ -11,7 +11,7 @@ RUN ./gradlew bootJar
 FROM eclipse-temurin:17
 WORKDIR /app
 COPY --from=builder /app/build/libs/PhotoCardTradeProjectBack-0.0.1-SNAPSHOT.jar photocard.jar
-COPY ./photocard_security/photocard-firebase-adminsdk.json /app/photocard-firebase-adminsdk.json
+COPY src/main/resources/photocard-firebase-adminsdk.json /app/photocard-firebase-adminsdk.json
 ENTRYPOINT ["java","-jar", "photocard.jar", "-Dspring.profiles.active=dev", "-Djava.security.egd=file:/dev/./urandom"]
 
 VOLUME /tmp
