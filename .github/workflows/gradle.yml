@@ -30,7 +30,7 @@ jobs:
     - name: create secrets file
       run: |
           touch src/main/resources/photocard-firebase-adminsdk.json 
-          echo ${{secrets.FIREBASE_JSON}} >> $(GITHUB_WORKSPACE}/src/main/resources/photocard-firebase-adminsdk.json 
+          echo ${{secrets.FIREBASE_JSON}} > $GITHUB_WORKSPACE/src/main/resources/photocard-firebase-adminsdk.json 
     - name: Cache Gradle packages  # Step 3: Gradle 패키지 캐시
       uses: actions/cache@v3  # 최신 버전(v3)의 캐싱 액션 사용
       with:
