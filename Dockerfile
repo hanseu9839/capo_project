@@ -7,13 +7,10 @@ COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
-RUN ls -l /app/build/libs #debuggin line
 
 FROM eclipse-temurin:17
 WORKDIR /app
-COPY /build/libs/*.jar photocard.jar
-RUN ls -l /app
-
+COPY --from=builder /app/build/libs/PhotoCardTradeProjectBack-0.0.1-SNAPSHOT.jar photocard.jar
 ENTRYPOINT ["java","-jar", "photocard.jar", "-Dspring.profiles.active=dev", "-Djava.security.egd=file:/dev/./urandom"]
 
 VOLUME /tmp
