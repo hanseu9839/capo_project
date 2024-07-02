@@ -57,7 +57,7 @@ jobs:
   # Docker 이미지 빌드 
     - name: Docker build & Push
       run: |
-        docker build --build-arg  G_CLIENT_ID = "${{ env.G_CLIENT_ID }}" \
+        docker build --build-arg G_CLIENT_ID = "${{ env.G_CLIENT_ID }}" \
         --build-arg G_CLIENT_SECRET="${{ env.G_CLIENT_SECRET }}" \
         --build-arg K_CLIENT_ID="${{ env.K_CLIENT_ID }}" \
         --build-arg K_CLIENT_SECRET="${{ env.K_CLIENT_SECRET }}" \
