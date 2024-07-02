@@ -50,7 +50,7 @@ spring:
             user-name-attribute: id
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://13.124.217.23:3306/photocard?serverTimezone=UTC&characterEncoding=UTF-8 # 추후 암호화 예정
+    url: ${MYSQL_URL} # 추후 암호화 예정
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD} # 추후 encrypt를 사용하여 암호화할 예정
   jpa:
