@@ -39,4 +39,6 @@ out/
 
 
 ## Dockerfile
+application-dev.yml
+application-local.yml
 *.pem
