@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
+    env: # 환경설정
        G_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
        G_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
        K_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
