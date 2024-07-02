@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  -name: Sey yml file
-    uses:
     env:
        G_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
        G_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -22,7 +20,7 @@ jobs:
        MYSQL_URL: ${{ secrets.MYSQL_URL }}
        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    working-directory: ./capo/work
+       working-directory: ./capo/work
     
     steps:
     - name: Checkout repository  # Step 1: 코드 저장소 체크아웃
