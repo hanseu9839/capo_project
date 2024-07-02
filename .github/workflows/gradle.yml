@@ -30,6 +30,7 @@ jobs:
     - name: create secrets file
       run: |
           cd ./src/main/resources
+          ls -a .
           touch ./photocard-firebase-adminsdk.json 
           echo "${{secrets.FIREBASE_JSON}}" > ./photocard-firebase-adminsdk.json 
       shell: bash
