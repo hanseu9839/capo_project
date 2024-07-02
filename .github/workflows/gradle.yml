@@ -57,34 +57,34 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}      
   # Docker 이미지 빌드 
-    - name: Docker build & Push
-      run: |
-        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+#    - name: Docker build & Push
+#      run: |
+#        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
+#        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
         
-    - name: Push Docker image to Docker Hub  # Step 7: Docker 이미지를 Docker Hub에 푸시
-      run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }}
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+#    - name: Push Docker image to Docker Hub  # Step 7: Docker 이미지를 Docker Hub에 푸시
+#      run: |
+#        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }}
+#        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
         
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v1.0.3
-      id: deploy
-      env:
-        APP: "back"
-        COMPOSE: "/home/capo_project/docker-compose.yml"
-      with:
-        host: ${{ secrets.EC2_HOST }} # EC2_HOST 키
-        username: ubuntu
-        key: ${{ secrets.EC2_PRIVATE_KEY }} # PRIVATE_KEY
-        port: 22
-        envs: COMPOSE
-        script: |
-          sudo docker rm -f $(docker ps -qa)
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
-          sudo docker stop back || true
-          sudo docker rm back || true
-          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
-          sudo docker-compose -f $COMPOSE up -d
-          sudo docker image prune -f
+#    - name: Deploy to server
+#      uses: appleboy/ssh-action@v1.0.3
+#      id: deploy
+#      env:
+#        APP: "back"
+#        COMPOSE: "/home/capo_project/docker-compose.yml"
+#      with:
+#        host: ${{ secrets.EC2_HOST }} # EC2_HOST 키
+#        username: ubuntu
+#        key: ${{ secrets.EC2_PRIVATE_KEY }} # PRIVATE_KEY
+#        port: 22
+#        envs: COMPOSE
+#        script: |
+#          sudo docker rm -f $(docker ps -qa)
+#          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
+#          sudo docker stop back || true
+#          sudo docker rm back || true
+#         sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
+#          sudo docker-compose -f $COMPOSE up -d
+#          sudo docker image prune -f
         
