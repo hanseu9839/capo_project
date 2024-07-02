@@ -69,7 +69,7 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
-   # AWS 자격증명 부분
+   # AWS 자격증명 부분 추가
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
