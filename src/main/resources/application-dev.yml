@@ -101,8 +101,8 @@ cloud:
     s3:
       bucket: photocardsite
     credentials:
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
+      access-key: ${AWS_BUCKET_KEY}
+      secret-key: ${AWS_BUCKET_SECRET_KEY}
     region:
       static: ap-northeast-2
       auto: false
