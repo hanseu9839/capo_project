@@ -9,9 +9,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+  -name: Sey yml file
+    uses:
     env:
-      GOOGLE_SERVICES_JSON: ${{ secrets.FIREBASE_JSON }}
+       G_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+       G_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+       K_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+       K_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+       JWT_SECRET_KEY: ${{ secrets.JWT_KET }}
+       MYSQL_USER: ${{ secrets.JWT_KET }}
+       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+       MYSQL_URL: ${{ secrets.MYSQL_URL }}
+       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    working-directory: ./capo/work
     
     steps:
     - name: Checkout repository  # Step 1: 코드 저장소 체크아웃
@@ -29,12 +40,7 @@ jobs:
         server-username: ${{ github.actor }}  # GitHub 액터의 사용자 이름 사용
         server-password: ${{ secrets.GITHUB_TOKEN }}  # GitHub 토큰 사용
         overwrite-settings: true  # 기존 설정 덮어쓰기
-        
-    - name: create secrets file
-      run: |
-          mkdir -p src/main/resources
-          echo "$GOOGLE_SERVICES_JSON" > src/main/resources/photocard-firebase-adminsdk.json 
-      shell: bash
+        working-directory: ./be/stackoverflow-be
       
     - name: Cache Gradle packages  # Step 3: Gradle 패키지 캐시
       uses: actions/cache@v3  # 최신 버전(v3)의 캐싱 액션 사용
@@ -42,10 +48,12 @@ jobs:
         path: ~/.gradle  # Gradle 패키지의 캐시 경로
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  # Gradle 파일의 해시를 기반으로한 캐시 키
         restore-keys: ${{ runner.os }}-gradle  # 캐시 복원 키
-        
+      working-directory: ${{ env.working-directory }}
+      
     - name: Build with Gradle  # Step 4: Gradle로 프로젝트 빌드
       run: ./gradlew clean build  # Gradle의 clean 및 build 명령 실행
-
+      working-directory: ${{ env.working-directory }}
+      
     - uses: actions/checkout@v3
       with:
         submodules: true
@@ -60,13 +68,25 @@ jobs:
   # Docker 이미지 빌드 
     - name: Docker build & Push
       run: |
-        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
+        docker build --build-arg  G_CLIENT_ID = "${{ env.G_CLIENT_ID }}" \
+        --build-arg G_CLIENT_SECRET="${{ env.G_CLIENT_SECRET }}" \
+        --build-arg K_CLIENT_ID="${{ env.K_CLIENT_ID }}" \
+        --build-arg K_CLIENT_SECRET="${{ env.K_CLIENT_SECRET }}" \
+        --build-arg JWT_SECRET_KEY="${{ env.JWT_SECRET_KEY }}" \
+        --build-arg MYSQL_USER="${{ env.MYSQL_USER }}" \
+        --build-args MYSQL_PASSWORD="${{ env.MYSQL_PASSWORD }}" \
+        --build-args MYSQL_URL="${{ env.MYSQL_URL }}" \
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} 
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
-        
-    - name: Push Docker image to Docker Hub  # Step 7: Docker 이미지를 Docker Hub에 푸시
-      run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }}
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+      working-directory: ${{ env.working-directory }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@cv1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-region: ap-northeast-2
         
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.3
@@ -81,11 +101,11 @@ jobs:
         port: 22
         envs: COMPOSE
         script: |
-          sudo docker rm -f $(docker ps -qa)
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
           sudo docker stop back || true
           sudo docker rm back || true
-          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }}
+          sudo docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} back
+          sudo docker run -d -p --name back -e TZ=Asia/Seoul 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
           sudo docker-compose -f $COMPOSE up -d
-          sudo docker image prune -f
+        
         
