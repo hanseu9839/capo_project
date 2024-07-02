@@ -14,8 +14,8 @@ jobs:
        G_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
        K_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
        K_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
-       JWT_SECRET_KEY: ${{ secrets.JWT_KET }}
-       MYSQL_USER: ${{ secrets.JWT_KET }}
+       JWT_SECRET_KEY: ${{ secrets.JWT_KEY }}
+       MYSQL_USER: ${{ secrets.MYSQL_USER }}
        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
        MYSQL_URL: ${{ secrets.MYSQL_URL }}
        AWS_BUCKET_KEY: ${{ secrets.AWS_BUCKET_KEY }}
