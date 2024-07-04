@@ -1,6 +1,5 @@
 package com.realworld.feature.signup;
 
-import com.realworld.feature.file.domain.File;
 import com.realworld.feature.file.service.StorageService;
 import com.realworld.feature.member.controller.request.RegisterMemberRequest;
 import com.realworld.feature.member.controller.response.MemberResponse;
@@ -9,7 +8,6 @@ import com.realworld.feature.member.service.MemberCommandService;
 import com.realworld.feature.member.service.MemberQueryService;
 import com.realworld.global.code.SuccessCode;
 import com.realworld.global.response.ApiResponse;
-import com.realworld.global.utils.FileUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -51,20 +46,20 @@ public class SignUpController {
      */
     @Transactional
     @PostMapping("/member")
-    public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestPart("request") @Valid RegisterMemberRequest request, @RequestPart("multipartFile") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestBody @Valid RegisterMemberRequest request) throws IOException {
 
-        File file = FileUtil.fileSetting(multipartFile);
-        UUID fileId = null;
-
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            fileId = cloudStorageService.upload(inputStream, request.getUserId(), file).getId();
-        }
+//        File file = FileUtil.fileSetting(multipartFile);
+//        UUID fileId = null;
+//
+//        try (InputStream inputStream = multipartFile.getInputStream()) {
+//            fileId = cloudStorageService.upload(inputStream, request.getUserId(), file).getId();
+//        }
 
         Member member = Member.builder()
                 .userId(request.getUserId())
                 .password(request.getPassword())
                 .phoneNumber(request.getPhoneNumber())
-                .file(file)
+//                .file(file)
                 .userEmail(request.getUserEmail())
                 .build();
 
@@ -76,7 +71,7 @@ public class SignUpController {
                 .phoneNumber(savedMember.getPhoneNumber())
                 .nickname(savedMember.getNickname())
                 .userEmail(savedMember.getUserEmail())
-                .fileId(fileId)
+//                .fileId(fileId)
                 .build();
 
         ApiResponse<MemberResponse> memberApiResponse = new ApiResponse<>(response,
