@@ -72,9 +72,10 @@ jobs:
                     --build-arg MYSQL_PASSWORD=$MYSQL_PASSWORD \
                     --build-arg AWS_BUCKET_KEY=$AWS_BUCKET_KEY \
                     --build-arg AWS_BUCKET_SECRET_KEY=$AWS_BUCKET_SECRET_KEY \
-        -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} .
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
    # AWS 자격증명 부분 추가
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -96,9 +97,9 @@ jobs:
         port: 22
         envs: COMPOSE
         script: |
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
           sudo docker stop back || true
           sudo docker rm back || true
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
           sudo docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7} back
           sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
           sudo docker-compose -f /home/capo_project/docker-compose.yml up -d
