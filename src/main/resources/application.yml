@@ -1,9 +1,10 @@
 server:
   port: 8080
-jasypt:
-  encryptor:
-    bean: jasyptEncryptorAES
 spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
   profiles:
     active: dev # default
     group:
