@@ -67,4 +67,4 @@ jobs:
           sudo docker stop back || true
           sudo docker rm -f back || true
           sudo docker run --name back -p 8080:8080 -d ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
-          sudo docker-compose -f $COMPOSE up -d || true
+          sudo docker-compose -f $COMPOSE up -d
