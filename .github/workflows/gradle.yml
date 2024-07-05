@@ -65,6 +65,6 @@ jobs:
           sudo docker ps
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
           sudo docker stop back
-          sudo docker rm back
+          sudo docker rm -f back
           sudo docker run -it -d -p 8080:8080 --name back ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
           sudo docker-compose -f $COMPOSE up -d
