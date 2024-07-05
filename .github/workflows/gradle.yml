@@ -38,8 +38,7 @@ jobs:
       run: |
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back
   
    # AWS 자격증명 부분 추가
     - name: Configure AWS credentials
@@ -62,9 +61,7 @@ jobs:
         port: 22
         envs: COMPOSE
         script: |
-          sudo docker-compose -f $COMPOSE down
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
-          sudo docker stop back || true
-          sudo docker rm -f back || true
-          sudo docker run --name back -p 8080:8080 -d ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
+          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          sudo docker rm -f $(docker ps -qa)
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
           sudo docker-compose -f $COMPOSE up -d
