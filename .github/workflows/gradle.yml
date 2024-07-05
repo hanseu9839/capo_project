@@ -6,23 +6,14 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: # 환경설정
-       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-       KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
-       KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
-       JWT_SECRET_KEY: ${{ secrets.JWT_KEY }}
-       MYSQL_USER: ${{ secrets.MYSQL_USER }}
-       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-       AWS_BUCKET_KEY: ${{ secrets.AWS_BUCKET_KEY }}
-       AWS_BUCKET_SECRET_KEY: ${{ secrets.AWS_BUCKET_SECRET_KEY }}
-    steps:
-    - name: Checkout repository  # Step 1: 코드 저장소 체크아웃
-      uses: actions/checkout@v3  # 최신 버전(v3)의 checkout 액션 사용
-      
+    
+    steps:    
     - uses: actions/checkout@v4
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -30,52 +21,26 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         java-package: 'jdk'  # JDK 패키지 설치
-        check-latest: false  # 최신 버전 확인 안 함
-        server-id: 'github'  # GitHub 서버 ID 설정
-        server-username: ${{ github.actor }}  # GitHub 액터의 사용자 이름 사용
-        server-password: ${{ secrets.GITHUB_TOKEN }}  # GitHub 토큰 사용
-        overwrite-settings: true  # 기존 설정 덮어쓰기
+    - name: make application-dev.yml
+      run: |
+        cd ./src/main/resources
+        touch ./application-dev.yml
+        echo "${{ secrets.APPLICATION_DEV }}" > ./application-dev.yml
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
     - name: Build with Gradle # Gradle 설정
-      env:
-       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-       KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
-       KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
-       JWT_SECRET_KEY: ${{ secrets.JWT_KEY }}
-       MYSQL_USER: ${{ secrets.MYSQL_USER }}
-       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-       AWS_BUCKET_KEY: ${{ secrets.AWS_BUCKET_KEY }}
-       AWS_BUCKET_SECRET_KEY: ${{ secrets.AWS_BUCKET_SECRET_KEY }}
       run: ./gradlew build
       
-
-    # docker hub 로그인 
-    - name: docker login
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }} 
-        
   # Docker 이미지 빌드 
     - name: Docker build & Push
       run: |
-        docker build --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
-                    --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
-                    --build-arg KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID \
-                    --build-arg KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET \
-                    --build-arg JWT_SECRET_KEY=$JWT_SECRET_KEY \
-                    --build-arg MYSQL_USER=$MYSQL_USER \
-                    --build-arg MYSQL_PASSWORD=$MYSQL_PASSWORD \
-                    --build-arg AWS_BUCKET_KEY=$AWS_BUCKET_KEY \
-                    --build-arg AWS_BUCKET_SECRET_KEY=$AWS_BUCKET_SECRET_KEY \
-        -t ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }} .
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:${{ github.sha }}
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+  
    # AWS 자격증명 부분 추가
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -85,7 +50,7 @@ jobs:
         aws-region: ap-northeast-2
         
     - name: Deploy to server
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@master
       id: deploy
       env:
         APP: "back"
@@ -97,9 +62,7 @@ jobs:
         port: 22
         envs: COMPOSE
         script: |
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7}
-          sudo docker stop back || true
-          sudo docker rm back || true
-          sudo docker tag ${{ secrets.DOCKERHUB_USERNAME }}/back:${GITHUB_SHA::7} back
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back:latest
+          sudo docker stop $(docker ps -a -q)
           sudo docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/back # 도커런
           sudo docker-compose -f /home/capo_project/docker-compose.yml up -d
