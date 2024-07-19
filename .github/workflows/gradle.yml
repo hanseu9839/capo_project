@@ -64,4 +64,4 @@ jobs:
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back
-          sudo docker-compose -f $COMPOSE up -d
+          sudo docker-compose -f $COMPOSE up -d #docker-compose up -d
