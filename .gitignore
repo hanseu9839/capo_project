@@ -42,5 +42,5 @@ out/
 *.pem
 /src/main/resources/*.json
 src/main/resources/.env
-.env*
+/.env
 
