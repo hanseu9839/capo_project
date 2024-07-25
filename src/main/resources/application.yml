@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dev # default
+    active: local # default
     group:
       local: "local, datasource, jpa, mail, logging, jasypt"
       dev: "dev, datasource, jpa, mail, logging, jasypt"
