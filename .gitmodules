@@ -1,4 +1,0 @@
-[submodule "photocard_security"]
-	path = photocard_security
-	url = https://github.com/hanseu9839/photocard_security.git
-	branch = main

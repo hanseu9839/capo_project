@@ -55,7 +55,7 @@ public class FileController {
                                                                 @PathVariable String fileId,
                                                                 HttpServletResponse response) throws IOException {
 
-        String url = cloudStorageService.getFile(fileId, response.getOutputStream());
+        String url = cloudStorageService.getFile(fileId);
         GetFileResponse fileResponse = GetFileResponse.builder()
                 .imageUrl(url)
                 .build();
