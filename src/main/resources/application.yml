@@ -6,7 +6,7 @@ spring:
     hibernate:
       ddl-auto: update
   profiles:
-    active: local # default
+    active: dev # default
     group:
       local: "local, datasource, jpa, mail, logging, jasypt"
       dev: "dev, datasource, jpa, mail, logging, jasypt"
