@@ -39,12 +39,12 @@ public class OAuthAttributes {
     public static OAuthAttributes of(SocialType socialType, String userNameAttributeName, Map<String, Object> attributes) {
         log.info("Extracting OAuthAttributes for socialType: {}", socialType);
         log.info("attributes :: {}", attributes);
+
         if (socialType == SocialType.KAKAO) {
+            log.info("forKakao");
             return ofKakao(userNameAttributeName, attributes);
         }
-//        else if (socialType == SocialType.NAVER) {
-//            return ofNaver(userNameAttributeName, attributes);
-//        }
+
         return ofGoogle(userNameAttributeName, attributes);
     }
 

@@ -103,10 +103,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private SocialType getSocialType(String registrationId) {
-        if (NAVER.equals(registrationId.toUpperCase())) {
-            return SocialType.NAVER;
-        }
-        if (KAKAO.equals(registrationId.toUpperCase())) {
+
+        if (registrationId.toUpperCase().equals("KAKAO")) {
             return SocialType.KAKAO;
         }
 
