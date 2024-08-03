@@ -48,7 +48,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 .build().toUriString();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        
+
         response.sendRedirect(redirectUrl);
     }
 }
