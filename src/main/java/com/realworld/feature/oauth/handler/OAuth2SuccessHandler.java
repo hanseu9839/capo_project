@@ -5,6 +5,7 @@ import com.realworld.feature.token.domain.Token;
 import com.realworld.feature.token.service.TokenCommandService;
 import com.realworld.global.config.jwt.JwtTokenProvider;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import java.io.IOException;
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    private static final String URI = "/";
+    private static final String URI = "https://photocard.site";
     private final JwtTokenProvider tokenProvider;
     private final TokenCommandService tokenCommandService;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,14 +37,18 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         token.setUserId(authentication.getName());
 
         tokenCommandService.saveToken(token);
+
+        Cookie cookie = new Cookie("accessToken", token.getAccessToken());
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
         String redirectUrl = UriComponentsBuilder.fromUriString(URI)
                 .build().toUriString();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-
-        String result = objectMapper.writeValueAsString(token);
-
-        response.getWriter().write(result);
+        
         response.sendRedirect(redirectUrl);
     }
 }

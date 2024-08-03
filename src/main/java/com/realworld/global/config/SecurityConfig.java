@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -74,9 +75,12 @@ public class SecurityConfig {
                         .authenticated()
                 )
                 .oauth2Login(oauth ->
-                        oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService))
+                        oauth
+                                .redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/login/oauth2/code/*"))
+                                .userInfoEndpoint(c -> c.userService(oAuth2UserService))
                                 .successHandler(oAuth2SuccessHandler)
                                 .failureHandler(oAuth2LoginFailureHandler)
+
                 )
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
         return http.build();
@@ -97,4 +101,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
 }
