@@ -151,4 +151,11 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         ProductJpaEntity product = repository.findById(productSeq).orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT));
         product.setViews(product.getViews() + 1);
     }
+
+    @Override
+    public void createChat(Long productSeq) {
+        ProductJpaEntity product = repository.findById(productSeq).orElseThrow(() -> new CustomProductExceptionHandler(ErrorCode.NOT_EXISTS_PRODUCT));
+
+
+    }
 }

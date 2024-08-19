@@ -2,6 +2,7 @@ package com.realworld.feature.product.entity;
 
 import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
+import com.realworld.feature.message.entity.ChatRoomEntity;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.global.category.GroupCategory;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 /**
  * TODO: ProductJpaEntity Image, Like 좋아요 기능 컬럼 미구현 (추후 개발)
  */
+@ToString
 @Slf4j
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -80,6 +82,9 @@ public class ProductJpaEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LikeJpaEntity> likes;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<ChatRoomEntity> chatRooms;
+
     @Builder
     public ProductJpaEntity(Long productSeq, String userId, String title, int likeCount, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, String thumbnailUrl, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
         this.productSeq = productSeq;
@@ -100,7 +105,6 @@ public class ProductJpaEntity {
     public Product toDomain() {
         return Product.builder()
                 .productSeq(this.productSeq)
-//                .images(this.images.stream().map(ProductFileJpaEntity::toDomain).collect(Collectors.toList()))
                 .title(this.title)
                 .likeCount(this.likeCount)
                 .userId(this.userId)
@@ -152,6 +156,24 @@ public class ProductJpaEntity {
     }
 
     public Product searchToDomain() {
+        return Product.builder()
+                .productSeq(this.productSeq)
+                .images(this.images.stream().map(ProductFileJpaEntity::searchToDomain).collect(Collectors.toList()))
+                .title(this.title)
+                .userId(this.userId)
+                .member(this.member.productToDomain())
+                .content(this.content)
+                .price(this.price)
+                .likeCount(this.likeCount)
+                .category(this.category)
+                .views(this.views)
+                .thumbnailUrl(this.thumbnailUrl)
+                .createdAt(this.createAt)
+                .modifiedAt(this.modifiedAt)
+                .build();
+    }
+
+    public Product chatToDomain() {
         return Product.builder()
                 .productSeq(this.productSeq)
                 .images(this.images.stream().map(ProductFileJpaEntity::searchToDomain).collect(Collectors.toList()))

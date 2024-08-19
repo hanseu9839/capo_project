@@ -24,7 +24,7 @@ public class LikeJpaEntity {
     @Column(name = "like_seq")
     private Long likeSeq;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private MemberJpaEntity member;
 

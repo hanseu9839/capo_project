@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.realworld.feature.member.domain.Member;
+import com.realworld.feature.message.domain.CreateChatRoom;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.global.category.GroupCategory;
 import lombok.Builder;
@@ -53,7 +54,7 @@ public class Product {
 
     private Member member;
 
-
+    private List<CreateChatRoom> chatRooms;
     public ProductJpaEntity toEntity() {
         return ProductJpaEntity.builder()
                 .userId(this.userId)

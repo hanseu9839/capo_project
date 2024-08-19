@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+
+
     // 비밀번호 변경에 실패한 경우
     FAIL_PASSWORD_CHANGE(400, "패스워드 변경에 실패하였습니다."),
     // 유저 아이디가 존재하지 않은 경우
@@ -87,7 +89,12 @@ public enum ErrorCode {
     UPDATE_ERROR(200, "Update Transaction Error Exception"),
 
     // Transaction Delete Error
-    DELETE_ERROR(200, "Delete Transaction Error Exception");
+    DELETE_ERROR(200, "Delete Transaction Error Exception"),
+
+    // 채팅방 생성 동일한 유저
+    CHAT_DUPLICATE_USER(404, "채팅하려는 유저가 본인입니다."),
+    //  채팅방 생성 유저 불일치
+    CHAT_USER_NOT_FOUND(404, "채팅방 유저 정보가 불일치");
 
     private final int status;
     private final String message;

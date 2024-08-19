@@ -25,5 +25,6 @@ public interface ProductCommandService {
 
     void raiseViews(Long productSeq);
 
+    void createChat(Long productSeq);
 }
 

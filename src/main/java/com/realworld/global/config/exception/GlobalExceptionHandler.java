@@ -211,5 +211,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CustomChatExceptionHandler.class)
+    protected ResponseEntity<ErrorResponse> handleChatCustomException(CustomChatExceptionHandler ex){
+        log.error("Exception ", ex);
+        ErrorResponse response = null;
+        if(ex.getMessage().equals(ErrorCode.CHAT_USER_NOT_FOUND.getMessage()))
+            response = ErrorResponse.of(ErrorCode.CHAT_USER_NOT_FOUND, ex.getMessage());
 
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

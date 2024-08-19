@@ -42,6 +42,7 @@ public class ProductFileJpaEntity {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
+
     public ProductFile toDomain() {
         return ProductFile.builder()
                 .userId(this.userId)

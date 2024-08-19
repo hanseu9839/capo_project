@@ -3,11 +3,14 @@ package com.realworld.feature.member.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.feature.auth.Authority;
 import com.realworld.feature.file.domain.File;
+import com.realworld.feature.like.domain.Like;
+import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -45,6 +48,8 @@ public class Member {
 
     private String oauthImage;
 
+    private List<Like> like;
+
     public MemberJpaEntity toEntity() {
         return MemberJpaEntity.builder()
                 .userId(getUserId())
@@ -58,9 +63,14 @@ public class Member {
                 .file(Objects.isNull(getFile()) ? null : getFile().toEntity())
                 .oauthImage(getOauthImage())
                 .authority(getAuthority())
+                .likes(Objects.isNull(getLike()) ? null : makeLikeToEntity(this.like))
                 .build();
     }
 
+
+    List<LikeJpaEntity> makeLikeToEntity(List<Like> likes){
+        return likes.stream().map(Like::toEntity).toList();
+    }
     public MemberJpaEntity productToEntity() {
         return MemberJpaEntity.builder()
                 .userId(this.userId)
