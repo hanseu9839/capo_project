@@ -1,8 +1,6 @@
 package com.realworld.feature.message.domain;
 
 
-import com.realworld.feature.message.controller.request.ChatMessageRequest;
-import com.realworld.feature.message.controller.request.CreateChatRoomRequest;
 import com.realworld.feature.message.entity.MessageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,22 +20,24 @@ public class Message {
     private String message;
 
 
-    public static Message createEnterMessage(ChatMessageRequest request) {
+    public static Message createEnterMessage() {
 
-        return Message.builder()
-                .roomId(request.getRoomId())
-                .sender(request.getSender())
-                .message(request.getSender() + "님이 채팅방에 참여하였습니다.")
-                .build();
+//        return Message.builder()
+//                .roomId(request.getRoomId())
+//                .sender(request.getSender())
+//                .message(request.getSender() + "님이 채팅방에 참여하였습니다.")
+//                .build();
+        return null;
     }
 
-    public static Message createMessage(ChatMessageRequest request) {
+    public static Message createMessage() {
 
-        return Message.builder()
-                .roomId(request.getRoomId())
-                .sender(request.getSender())
-                .message(request.getSender())
-                .build();
+//        return Message.builder()
+//                .roomId(request.getRoomId())
+//                .sender(request.getSender())
+//                .message(request.getSender())
+//                .build();
+        return null;
     }
     public MessageEntity toEntity(){
         return MessageEntity.builder()

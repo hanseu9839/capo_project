@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.realworld.feature.like.entity.QLikeJpaEntity;
 import com.realworld.feature.member.entity.QMemberJpaEntity;
+import com.realworld.feature.message.entity.QChatRoomEntity;
 import com.realworld.feature.product.domain.Product;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import com.realworld.feature.product.entity.QProductJpaEntity;
@@ -24,6 +25,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final QProductJpaEntity product = QProductJpaEntity.productJpaEntity;
     private final QMemberJpaEntity member = QMemberJpaEntity.memberJpaEntity;
     private final QLikeJpaEntity like = QLikeJpaEntity.likeJpaEntity;
+
+    private final QChatRoomEntity room = QChatRoomEntity.chatRoomEntity;
 
     @Override
     public List<Product> getSearchProductList(Pageable pageable, String search, GroupCategory category, Long seq) {

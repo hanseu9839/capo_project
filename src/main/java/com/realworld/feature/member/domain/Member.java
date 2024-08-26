@@ -53,6 +53,7 @@ public class Member {
     public MemberJpaEntity toEntity() {
         return MemberJpaEntity.builder()
                 .userId(getUserId())
+                .content(getContent())
                 .userEmail(getUserEmail())
                 .password(getPassword())
                 .phoneNumber(getPhoneNumber())
@@ -63,14 +64,9 @@ public class Member {
                 .file(Objects.isNull(getFile()) ? null : getFile().toEntity())
                 .oauthImage(getOauthImage())
                 .authority(getAuthority())
-                .likes(Objects.isNull(getLike()) ? null : makeLikeToEntity(this.like))
                 .build();
     }
 
-
-    List<LikeJpaEntity> makeLikeToEntity(List<Like> likes){
-        return likes.stream().map(Like::toEntity).toList();
-    }
     public MemberJpaEntity productToEntity() {
         return MemberJpaEntity.builder()
                 .userId(this.userId)

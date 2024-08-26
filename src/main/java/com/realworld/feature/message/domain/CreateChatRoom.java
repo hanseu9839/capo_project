@@ -2,19 +2,20 @@ package com.realworld.feature.message.domain;
 
 import com.realworld.feature.member.domain.Member;
 import com.realworld.feature.message.entity.ChatRoomEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.realworld.feature.product.entity.ProductJpaEntity;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateChatRoom {
+
+    private ProductJpaEntity product;
 
     private String roomId;
 
@@ -38,9 +39,10 @@ public class CreateChatRoom {
 
     public ChatRoomEntity toEntity() {
         return ChatRoomEntity.builder()
+                .product(product)
                 .roomId(UUID.fromString(this.getRoomId()))
                 .roomMaker(this.getRoomMaker())
-                .guest(this.getRoomMaker())
+                .guest(this.getGuest())
                 .build();
     }
 }

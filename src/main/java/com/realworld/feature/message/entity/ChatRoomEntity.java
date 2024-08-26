@@ -16,7 +16,6 @@ import java.util.UUID;
 @Builder
 @Entity
 @Getter
-@Setter
 @Table(name="chat_rooms")
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
@@ -35,8 +34,8 @@ public class ChatRoomEntity {
     @Column(name = "create_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "product_seq", referencedColumnName = "product_seq")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_seq")
     private ProductJpaEntity product;
 
     @Column(name = "room_maker_id")

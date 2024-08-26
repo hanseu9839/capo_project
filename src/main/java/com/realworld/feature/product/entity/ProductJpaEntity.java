@@ -22,9 +22,8 @@ import java.util.stream.Collectors;
 /**
  * TODO: ProductJpaEntity Image, Like 좋아요 기능 컬럼 미구현 (추후 개발)
  */
-@ToString
-@Slf4j
-@EqualsAndHashCode
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
@@ -82,25 +81,6 @@ public class ProductJpaEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LikeJpaEntity> likes;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<ChatRoomEntity> chatRooms;
-
-    @Builder
-    public ProductJpaEntity(Long productSeq, String userId, String title, int likeCount, MemberJpaEntity member, String content, Long price, GroupCategory category, int views, String thumbnailUrl, List<ProductFileJpaEntity> images, LocalDateTime createAt, LocalDateTime modifiedAt) {
-        this.productSeq = productSeq;
-        this.userId = userId;
-        this.title = title;
-        this.likeCount = likeCount;
-        this.member = member;
-        this.content = content;
-        this.price = price;
-        this.category = category;
-        this.views = views;
-        this.thumbnailUrl = thumbnailUrl;
-        this.images = images;
-        this.createAt = createAt;
-        this.modifiedAt = modifiedAt;
-    }
 
     public Product toDomain() {
         return Product.builder()
