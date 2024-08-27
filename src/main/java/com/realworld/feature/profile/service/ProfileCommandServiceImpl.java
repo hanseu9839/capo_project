@@ -36,9 +36,12 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
     @Override
     public Member updateProfileImage(String userId, File file) {
         MemberJpaEntity member = repository.findById(userId).orElseThrow(() -> new CustomMemberExceptionHandler(ErrorCode.NOT_EXISTS_USERID));
-        int lastIndex = member.getProfileImage().lastIndexOf("/");
 
-        cloudStorageService.delete(userId, member.getProfileImage().substring(lastIndex+1)); // 해당 버킷 파일 삭제
+        if(member.getProfileImage() != null){
+            int lastIndex = member.getProfileImage().lastIndexOf("/");
+            cloudStorageService.delete(userId, member.getProfileImage().substring(lastIndex+1)); // 해당 버킷 파일 삭제
+        }
+
         member.setProfileImage(file.getPath()); // 파일 변경
 
         return member.toDomain();
