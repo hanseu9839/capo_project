@@ -56,13 +56,11 @@ public class ProfileController {
         File savedFile = null;
         try (InputStream inputStream = multipartFile.getInputStream()) {
             savedFile = cloudStorageService.upload(inputStream, user.getUsername(), file);
-
         }
 
         Member member = profileCommandService.updateProfileImage(user.getUsername(), savedFile);
-
         UpdateProfileImageResponse response = UpdateProfileImageResponse.builder()
-                .fileId(member.getFile().getId())
+                .profileImage(member.getProfileImage())
                 .build();
 
         ApiResponse<UpdateProfileImageResponse> apiResponse = new ApiResponse<>(response, SuccessCode.UPDATE_SUCCESS.getStatus(), SuccessCode.UPDATE_SUCCESS.getMessage());

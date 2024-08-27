@@ -3,7 +3,7 @@ package com.realworld.feature.member.service;
 import com.realworld.feature.member.domain.Member;
 
 public interface MemberCommandService {
-    Member saveMember(Member memberDto);
+    Member saveMember(Member member);
 
     void remove(String userId, String password);
 

@@ -48,30 +48,20 @@ public class SignUpController {
     @PostMapping("/member")
     public ResponseEntity<ApiResponse<MemberResponse>> signUp(@RequestBody @Valid RegisterMemberRequest request) throws IOException {
 
-//        File file = FileUtil.fileSetting(multipartFile);
-//        UUID fileId = null;
-//
-//        try (InputStream inputStream = multipartFile.getInputStream()) {
-//            fileId = cloudStorageService.upload(inputStream, request.getUserId(), file).getId();
-//        }
-
         Member member = Member.builder()
                 .userId(request.getUserId())
                 .password(request.getPassword())
                 .phoneNumber(request.getPhoneNumber())
-//                .file(file)
                 .userEmail(request.getUserEmail())
                 .build();
 
         Member savedMember = memberCommandService.saveMember(member);
-
 
         MemberResponse response = MemberResponse.builder()
                 .userId(savedMember.getUserId())
                 .phoneNumber(savedMember.getPhoneNumber())
                 .nickname(savedMember.getNickname())
                 .userEmail(savedMember.getUserEmail())
-//                .fileId(fileId)
                 .build();
 
         ApiResponse<MemberResponse> memberApiResponse = new ApiResponse<>(response,

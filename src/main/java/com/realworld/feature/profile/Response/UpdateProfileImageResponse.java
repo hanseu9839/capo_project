@@ -11,5 +11,5 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateProfileImageResponse {
-    private UUID fileId;
+    private String profileImage;
 }

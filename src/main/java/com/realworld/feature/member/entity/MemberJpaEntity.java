@@ -45,9 +45,7 @@ public class MemberJpaEntity {
 
     private String content;
 
-    @OneToOne
-    @JoinColumn(name = "file_id")
-    private FileJpaEntity file;
+    private String profileImage;
 
     @LastModifiedDate
     private LocalDateTime regDt;
@@ -70,7 +68,7 @@ public class MemberJpaEntity {
                 .userId(getUserId())
                 .userEmail(getUserEmail())
                 .phoneNumber(getPhoneNumber())
-                .file(Objects.isNull(getFile()) ? null : getFile().toDomain())
+                .profileImage(getProfileImage())
                 .nickname(getNickname())
                 .content(getContent())
                 .createDt(getCreateDt())

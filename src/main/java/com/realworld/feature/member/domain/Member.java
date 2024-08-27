@@ -2,16 +2,12 @@ package com.realworld.feature.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.realworld.feature.auth.Authority;
-import com.realworld.feature.file.domain.File;
 import com.realworld.feature.like.domain.Like;
-import com.realworld.feature.like.entity.LikeJpaEntity;
 import com.realworld.feature.member.entity.MemberJpaEntity;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Getter
@@ -30,6 +26,7 @@ public class Member {
     private String newPassword;
 
     private String content;
+
     private String phoneNumber;
 
     private String userEmail;
@@ -44,7 +41,7 @@ public class Member {
 
     private String nickname;
 
-    private File file;
+    private String profileImage;
 
     private String oauthImage;
 
@@ -56,12 +53,12 @@ public class Member {
                 .content(getContent())
                 .userEmail(getUserEmail())
                 .password(getPassword())
+                .profileImage(getProfileImage())
                 .phoneNumber(getPhoneNumber())
                 .nickname(getNickname())
                 .createDt(getCreateDt())
                 .regDt(getRegDt())
                 .delYn(getDelYn())
-                .file(Objects.isNull(getFile()) ? null : getFile().toEntity())
                 .oauthImage(getOauthImage())
                 .authority(getAuthority())
                 .build();
