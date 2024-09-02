@@ -34,6 +34,7 @@ public class ChatRoomCommandCommandServiceImpl implements ChatRoomCommandService
     private final ProductRepository productRepository;
     private final ChatRoomQueryService chatRoomQueryService;
     private final MemberRepository memberRepository;
+
     @Transactional
     @Override
     public  CreateChatRoomResponse createChatRoomForPersonal(String userId, CreateChatRoomRequest request) {

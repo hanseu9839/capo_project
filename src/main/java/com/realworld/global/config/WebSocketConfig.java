@@ -18,9 +18,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/chat")
+        registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
+
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*");
     }
 
     @Override
@@ -32,10 +35,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 메모리 기반 메시지 브로커가 해당 api를 구독하고 있는 클라이언트에게 메시지를 전달한다.
         // to subscriber
-        registry.setApplicationDestinationPrefixes("/api/pub");
+        registry.setApplicationDestinationPrefixes("/pub");
 
         // 클라이언트부터 메시지를 받을 api의 prefix를 설정한다.
         // publish
-        registry.enableSimpleBroker("/api/sub");
+        registry.enableSimpleBroker("/sub");
     }
 }

@@ -1,5 +1,6 @@
 package com.realworld.feature.message.entity;
 
+import com.realworld.feature.message.domain.message.Message;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class MessageEntity {
     private String roomId;
 
     @JoinColumn(name="user_id", insertable = false, updatable = false)
-    private String sender;
+    private String writer;
 
 
     private String message;
@@ -36,4 +37,13 @@ public class MessageEntity {
     @Column(name="create_at")
     private LocalDateTime createAt;
 
+
+    public Message toDomain(MessageEntity entity) {
+        return Message.builder()
+                .roomId(this.roomId)
+                .message(this.message)
+                .writer(this.writer)
+                .createAt(this.createAt)
+                .build();
+    }
 }
