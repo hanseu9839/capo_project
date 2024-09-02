@@ -217,7 +217,8 @@ public class GlobalExceptionHandler {
         ErrorResponse response = null;
         if(ex.getMessage().equals(ErrorCode.CHAT_USER_NOT_FOUND.getMessage()))
             response = ErrorResponse.of(ErrorCode.CHAT_USER_NOT_FOUND, ex.getMessage());
-
+        else if(ex.getMessage().equals(ErrorCode.CHAT_DUPLICATE_USER.getMessage()))
+            response = ErrorResponse.of(ErrorCode.CHAT_DUPLICATE_USER, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

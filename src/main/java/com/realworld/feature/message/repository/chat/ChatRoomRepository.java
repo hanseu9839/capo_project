@@ -7,6 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoomEntity, UUID>, CustomChatRepository {
-    List<ChatRoomEntity> findDistinctByRoomMakerOrGuest(String roomMaker, String guest);
 
 }

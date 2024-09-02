@@ -1,13 +1,12 @@
 package com.realworld.feature.message.entity;
 
 
-import com.realworld.feature.message.domain.CreateChatRoom;
+import com.realworld.feature.message.domain.chat.CreateChatRoom;
 import com.realworld.feature.product.entity.ProductJpaEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -43,6 +42,7 @@ public class ChatRoomEntity {
 
     @Column(name = "guest_id")
     private String guest;
+
 
     public CreateChatRoom createToDomain(){
         return CreateChatRoom.builder()
