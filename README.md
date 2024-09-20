@@ -28,6 +28,7 @@
 ## 프로젝트 구조
 <hr/>
 
+```
 capo
 ├── feature
 │   ├── auth
@@ -66,3 +67,4 @@ capo
 │   ├── firebase
 │   └── mail
 └── ProjectApplication
+```
