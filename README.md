@@ -24,3 +24,45 @@
 - 주요 기능 
 - 아키텍처
 - 기타사항
+
+## 프로젝트 구조
+<hr/>
+
+capo
+├── feature
+│   ├── auth
+│   ├── file
+│   ├── image
+│   ├── like
+│   ├── logout
+│   ├── member
+│   ├── message
+│   ├── oauth
+│   ├── product
+│   ├── profile
+│   ├── signup
+│   ├── temporarily_product
+│   └── token
+├── global
+│   ├── category
+│   │   ├── GroupCategory
+│   │   └── SocialType
+│   ├── code
+│   │   ├── ErrorCode
+│   │   ├── NickName
+│   │   ├── ResultErrorMsgCode
+│   │   ├── ResultMsgCode
+│   │   └── SuccessCode
+│   └── config
+│       ├── exception
+│       ├── handler
+│       └── jwt
+├── response
+│   ├── ApiResponse
+│   └── ErrorResponse
+├── utils
+├── infra
+│   ├── aws
+│   ├── firebase
+│   └── mail
+└── ProjectApplication
