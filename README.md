@@ -25,6 +25,20 @@
 - 아키텍처
 - 기타사항
 
+
+## 실행 방법 
+
+## 기술스택
+
+- Backend: Java, Spring Boot, Spring Data JPA, Spring Security, OAuth2, JWT, Stomp, QueryDSL
+- Frontend : React
+- Database : Mysql
+- CI/CD : GitHubActions
+- Cloud Platform: AWS
+- Email : Google SMTP
+- Web Server : nginx
+- Langague : JAVA
+
 ## 프로젝트 구조
 <hr/>
 
