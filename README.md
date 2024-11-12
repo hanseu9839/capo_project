@@ -31,7 +31,7 @@
 ## 기술스택
 
 - Backend: Java, Spring Boot, Spring Data JPA, Spring Security, OAuth2, JWT, Stomp, QueryDSL
-- Frontend : React
+- Frontend : React, NextJS
 - Database : Mysql
 - CI/CD : GitHubActions
 - Cloud Platform: AWS
