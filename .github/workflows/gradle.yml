@@ -1,5 +1,4 @@
 name: Java CI/CD pipeline
-
 on:
   push:
     branches: [ "main" ]
